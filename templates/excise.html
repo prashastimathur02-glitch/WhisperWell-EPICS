@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exercise Recommender</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #d9a7c7, #fffcdc);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    h1 {
+      margin: 40px 0 10px;
+      font-size: 2.5rem;
+      color: #333;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    #loaderGif {
+      margin-top: 20px;
+    }
+
+    #inputSection {
+      margin-bottom: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 12px;
+      width: 300px;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    button {
+      padding: 12px 20px;
+      background: #ff6a88;
+      background: linear-gradient(135deg, #ff6a88, #ff99ac);
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #e85d75, #ff7891);
+      transform: scale(1.05);
+    }
+
+    #exerciseContainer {
+      max-width: 1200px;
+      width: 90%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      padding-bottom: 40px;
+    }
+
+    .exercise {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .exercise:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .exercise-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ff4f6d;
+      margin-bottom: 10px;
+    }
+
+    .benefits {
+      font-size: 15px;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      border: none;
+    }
+
+    .condition-tag {
+      display: inline-block;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .condition-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      background: linear-gradient(135deg, #5a6fd8, #6a4c93);
+    }
+
+    @media (max-width: 600px) {
+      input[type="text"], button {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏅 Smart Exercise Recommender</h1>
+  <p style="text-align: center; color: #555; font-size: 18px; margin-bottom: 30px; max-width: 800px;">
+    Get personalized exercise recommendations based on your health conditions. 
+    Our comprehensive database includes over 60 exercises with instructional videos for various health conditions and fitness goals.
+  </p>
+
+  <!-- Loader GIF -->
+  
+
+  <div id="inputSection">
+    <input type="text" id="diseaseInput" placeholder="Enter your condition (e.g., diabetes, arthritis, anxiety)" />
+    <button onclick="recommendExercises()">Find Exercises</button>
+    <button onclick="showAllExercises()" style="background: linear-gradient(135deg, #4CAF50, #66BB6A);">Show All Exercises</button>
+  </div>
+  
+  <!-- Disease Suggestions -->
+  <div id="suggestions" style="max-width: 1000px; margin: 20px auto; padding: 20px; background: rgba(255,255,255,0.7); border-radius: 15px; text-align: center;">
+    <h3 style="color: #333; margin-bottom: 15px;">💡 Supported Conditions:</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+      <span class="condition-tag" onclick="searchCondition('diabetes')">Diabetes</span>
+      <span class="condition-tag" onclick="searchCondition('arthritis')">Arthritis</span>
+      <span class="condition-tag" onclick="searchCondition('hypertension')">Hypertension</span>
+      <span class="condition-tag" onclick="searchCondition('back pain')">Back Pain</span>
+      <span class="condition-tag" onclick="searchCondition('anxiety')">Anxiety</span>
+      <span class="condition-tag" onclick="searchCondition('depression')">Depression</span>
+      <span class="condition-tag" onclick="searchCondition('heart disease')">Heart Disease</span>
+      <span class="condition-tag" onclick="searchCondition('obesity')">Obesity</span>
+      <span class="condition-tag" onclick="searchCondition('asthma')">Asthma</span>
+      <span class="condition-tag" onclick="searchCondition('osteoporosis')">Osteoporosis</span>
+      <span class="condition-tag" onclick="searchCondition('fibromyalgia')">Fibromyalgia</span>
+      <span class="condition-tag" onclick="searchCondition('seniors')">Seniors</span>
+      <span class="condition-tag" onclick="searchCondition('pregnancy')">Pregnancy</span>
+      <span class="condition-tag" onclick="searchCondition('knee pain')">Knee Pain</span>
+      <span class="condition-tag" onclick="searchCondition('stress')">Stress</span>
+    </div>
+  </div>
+  <!-- Loader GIF -->
+  <div id="loaderGif">
+    <img src="IMAGE/totoro-exercising-100-days-of-gifs-cl-terryart-4-578f80f479349__605.gif" alt="Loading..." width="600" />
+  </div>
+
+
+  <div id="exerciseContainer"></div>
+
+  <script>
+   const allExercises = {
+  "Walking": {
+    benefits: "Improves cardiovascular health, aids weight loss, reduces stress.",
+    video: "https://www.youtube.com/watch?v=jRWKYOhcWWU"
+  },
+  "Running": {
+    benefits: "Boosts cardiovascular fitness, burns calories, strengthens muscles.",
+    video: "https://www.youtube.com/watch?v=5swqLti2KUg"
+  },
+  "Cycling": {
+    benefits: "Improves leg strength, joint mobility, and cardiovascular health.",
+    video: "https://www.youtube.com/watch?v=YKCy0HlH55M"
+  },
+  "Jump Rope": {
+    benefits: "Enhances coordination, burns calories, improves heart health.",
+    video: "https://www.youtube.com/watch?v=c8kH0nksA9M"
+  },
+  "Swimming": {
+    benefits: "Full-body workout, improves lung capacity, joint-friendly.",
+    video: "https://www.youtube.com/watch?v=XmFQE-PsBl0"
+  },
+  "Dancing": {
+    benefits: "Boosts mood, improves coordination, burns calories.",
+    video: "https://www.youtube.com/watch?v=Lv4UrJ_fYF0"
+  },
+  "Zumba": {
+    benefits: "Fun way to burn calories, improves cardiovascular health.",
+    video: "https://www.youtube.com/watch?v=Vf0q6qtThF4"
+  },
+  "Hiking": {
+    benefits: "Strengthens lower body, improves balance, boosts mood.",
+    video: "https://www.youtube.com/watch?v=BtDpzYd8Q2s"
+  },
+  "Power Walking": {
+    benefits: "Enhances cardiovascular health, strengthens muscles.",
+    video: "https://www.youtube.com/watch?v=dmYwZH_BNd0"
+  },
+  "Rowing": {
+    benefits: "Full-body workout, improves endurance, strengthens back and arms.",
+    video: "https://www.youtube.com/watch?v=8F9jXYOH2c0"
+  },
+  "Push-Ups": {
+    benefits: "Strengthens chest, shoulders, and triceps.",
+    video: "https://www.youtube.com/watch?v=_l3ySVKYVJ8"
+  },
+  "Pull-Ups": {
+    benefits: "Builds upper body strength, improves grip.",
+    video: "https://www.youtube.com/watch?v=eGo4IYlbE5g"
+  },
+  "Squats": {
+    benefits: "Strengthens legs and glutes, improves balance.",
+    video: "https://www.youtube.com/watch?v=aclHkVaku9U"
+  },
+  "Lunges": {
+    benefits: "Enhances leg strength, improves balance.",
+    video: "https://www.youtube.com/watch?v=QOVaHwm-Q6U"
+  },
+  "Deadlifts": {
+    benefits: "Strengthens back, glutes, and hamstrings.",
+    video: "https://www.youtube.com/watch?v=op9kVnSso6Q"
+  },
+  "Bench Press": {
+    benefits: "Builds chest, shoulders, and triceps.",
+    video: "https://www.youtube.com/watch?v=gRVjAtPip0Y"
+  },
+  "Bicep Curls": {
+    benefits: "Isolates and strengthens biceps.",
+    video: "https://www.youtube.com/watch?v=in7PaeYlhrM"
+  },
+  "Tricep Dips": {
+    benefits: "Targets triceps, improves arm strength.",
+    video: "https://www.youtube.com/watch?v=tKjcgfu44sI"
+  },
+  "Shoulder Press": {
+    benefits: "Strengthens shoulders and upper back.",
+    video: "https://www.youtube.com/watch?v=qEwKCR5JCog"
+  },
+  "Leg Press": {
+    benefits: "Builds leg muscles, enhances lower body strength.",
+    video: "https://www.youtube.com/watch?v=IZxyjW7MPJQ"
+  },
+  "Static Stretching": {
+    benefits: "Improves flexibility, reduces muscle stiffness.",
+    video: "https://www.youtube.com/watch?v=5T0zqj3_jdM"
+  },
+  "Dynamic Stretching": {
+    benefits: "Prepares muscles for activity, improves range of motion.",
+    video: "https://www.youtube.com/watch?v=2L2lnxIcNmo"
+  },
+  "Foam Rolling": {
+    benefits: "Relieves muscle tightness, improves blood flow.",
+    video: "https://www.youtube.com/watch?v=8caF1Keg2XU"
+  },
+  "Yoga": {
+    benefits: "Enhances flexibility, reduces stress, improves balance and strength.",
+    video: "https://www.youtube.com/watch?v=v7AYKMP6rOE"
+  },
+  "Pilates": {
+    benefits: "Strengthens core, improves posture and flexibility.",
+    video: "https://www.youtube.com/watch?v=lCg_gh_fppI"
+  },
+  "Tai Chi": {
+    benefits: "Enhances balance, reduces stress, improves flexibility.",
+    video: "https://www.youtube.com/watch?v=opGwGWJg98o"
+  },
+  "Qigong": {
+    benefits: "Promotes relaxation, improves balance and flexibility.",
+    video: "https://www.youtube.com/watch?v=7MLz39LALnI"
+  },
+  "Mobility Drills": {
+    benefits: "Improves joint function, reduces injury risk.",
+    video: "https://www.youtube.com/watch?v=2tM1LFFxeKg"
+  },
+  "Resistance Band Stretching": {
+    benefits: "Enhances flexibility, strengthens muscles.",
+    video: "https://www.youtube.com/watch?v=rzk6_pEw3XQ"
+  },
+  "PNF Stretching": {
+    benefits: "Increases flexibility, improves muscular strength.",
+    video: "https://www.youtube.com/watch?v=1ULugUCu2j0"
+  },
+  "Mountain Pose": {
+    benefits: "Improves posture, strengthens thighs, knees, and ankles.",
+    video: "https://www.youtube.com/watch?v=rs7_r4bVGHU"
+  },
+  "Downward Dog": {
+    benefits: "Stretches shoulders, hamstrings, calves; strengthens arms and legs.",
+    video: "https://www.youtube.com/watch?v=rs7_r4bVGHU"
+  },
+  "Warrior I": {
+    benefits: "Strengthens legs, opens hips and chest, improves focus.",
+    video: "https://www.youtube.com/watch?v=rs7_r4bVGHU"
+  },
+  "Warrior II": {
+    benefits: "Enhances stamina, strengthens legs and arms.",
+    video: "https://www.youtube.com/watch?v=rs7_r4bVGHU"
+  },
+  "Triangle Pose": {
+    benefits: "Stretches legs, hips, spine; stimulates abdominal organs.",
+    video: "https://www.youtube.com/watch?v=rs7_r4bVGHU"
+  },
+  "Cat-Cow Pose": {
+    benefits: "Increases spinal flexibility, improves posture.",
+    video: "https://www.youtube.com/watch?v=kqnua4rHVVA"
+  },
+  "Bridge Pose": {
+    benefits: "Strengthens back, glutes, and hamstrings.",
+    video: "https://www.youtube.com/watch?v=wKZ3s8tsX0E"
+  },
+  "Child's Pose": {
+    benefits: "Gently stretches back, hips, thighs; calming for mind and body.",
+    video: "https://www.youtube.com/watch?v=rlobC2U_Fgo"
+  },
+  "Plank": {
+    benefits: "Strengthens core, shoulders, and back.",
+    video: "https://www.youtube.com/watch?v=pSHjTRCQxIw"
+  },
+  "Bird-Dog": {
+    benefits: "Improves core stability and balance.",
+    video: "https://www.youtube.com/watch?v=vzD3AJX2U4Q"
+  },
+  "Glute Bridge": {
+    benefits: "Strengthens glutes and lower back.",
+    video: "https://www.youtube.com/watch?v=m2Zx-57cSok"
+  },
+  "Burpees": {
+    benefits: "Full-body cardio and strength training.",
+    video: "https://www.youtube.com/watch?v=TU8QYVW0gDU"
+  },
+  "Deep Breathing": {
+    benefits: "Reduces anxiety, improves oxygen flow, calms the nervous system.",
+    video: "https://www.youtube.com/watch?v=aNXKjGFUlMs"
+  },
+  "High Intensity Interval Training": {
+    benefits: "Burns fat efficiently, improves cardiovascular fitness, saves time.",
+    video: "https://www.youtube.com/watch?v=ml6cT4AZdqI"
+  },
+  "Kettlebell Swings": {
+    benefits: "Improves power, burns calories, strengthens posterior chain.",
+    video: "https://www.youtube.com/watch?v=YSxHifyI6s8"
+  },
+  "Battle Ropes": {
+    benefits: "Full-body cardio, improves coordination, builds strength.",
+    video: "https://www.youtube.com/watch?v=lsJ4XrGOAJk"
+  },
+  "Box Jumps": {
+    benefits: "Builds explosive power, improves athletic performance.",
+    video: "https://www.youtube.com/watch?v=NBY9-kTuHEk"
+  },
+  "Medicine Ball Exercises": {
+    benefits: "Improves functional strength, coordination, and power.",
+    video: "https://www.youtube.com/watch?v=7MCJhHiGNZw"
+  },
+  "TRX Suspension Training": {
+    benefits: "Full-body workout using body weight, improves stability.",
+    video: "https://www.youtube.com/watch?v=w1D2nDPd8kI"
+  },
+  "Rock Climbing": {
+    benefits: "Builds full-body strength, improves problem-solving skills.",
+    video: "https://www.youtube.com/watch?v=Usee0F_Ya98"
+  },
+  "Martial Arts": {
+    benefits: "Improves self-defense, flexibility, mental discipline.",
+    video: "https://www.youtube.com/watch?v=rBkA3a7fk1Y"
+  },
+  "CrossFit": {
+    benefits: "Builds functional fitness, improves overall conditioning.",
+    video: "https://www.youtube.com/watch?v=mlVrkiCoKkg"
+  },
+  "Calisthenics": {
+    benefits: "Builds strength using body weight, improves mobility.",
+    video: "https://www.youtube.com/watch?v=IODxDxX7oi4"
+  },
+  "Elliptical Training": {
+    benefits: "Low-impact cardio, targets multiple muscle groups.",
+    video: "https://www.youtube.com/watch?v=hX2_2EhDq4M"
+  },
+  "Stair Climbing": {
+    benefits: "Improves lower body strength, cardiovascular fitness.",
+    video: "https://www.youtube.com/watch?v=7j1VduLnJy4"
+  },
+  "Aqua Aerobics": {
+    benefits: "Low-impact workout, improves cardiovascular health, joint-friendly.",
+    video: "https://www.youtube.com/watch?v=rGvMPZ0sDpE"
+  },
+  "Balance Training": {
+    benefits: "Improves stability, reduces fall risk, enhances coordination.",
+    video: "https://www.youtube.com/watch?v=g_tea8ZNk5A"
+  },
+  "Wall Push-ups": {
+    benefits: "Beginner-friendly chest exercise, builds upper body strength.",
+    video: "https://www.youtube.com/watch?v=1J1vLKZZqVs"
+  },
+  "Chair Exercises": {
+    benefits: "Perfect for seniors or mobility-limited individuals.",
+    video: "https://www.youtube.com/watch?v=A6DuA6_LePw"
+  },
+  "Resistance Band Training": {
+    benefits: "Portable strength training, improves muscle tone.",
+    video: "https://www.youtube.com/watch?v=rqjGq6o7JjM"
+  },
+  "Step Aerobics": {
+    benefits: "Improves cardiovascular fitness, coordination, and leg strength.",
+    video: "https://www.youtube.com/watch?v=pN_1btO_S_s"
+  },
+  "Flexibility Training": {
+    benefits: "Improves range of motion, reduces injury risk.",
+    video: "https://www.youtube.com/watch?v=g_tea8ZNk5A"
+  },
+  "Core Strengthening": {
+    benefits: "Improves posture, reduces back pain, enhances athletic performance.",
+    video: "https://www.youtube.com/watch?v=2pLT-olgUJs"
+  },
+  "Low Impact Cardio": {
+    benefits: "Joint-friendly cardiovascular exercise, suitable for all ages.",
+    video: "https://www.youtube.com/watch?v=YlSqBGvWU8o"
+  }
+};
+
+
+const diseaseToExercises = {
+  "diabetes": [
+    "Walking", "Cycling", "Swimming", "Yoga", "Resistance Band Training", 
+    "Pilates", "Resistance Band Stretching", "Tai Chi", "Zumba", "Rowing"
+  ],
+  "asthma": [
+    "Swimming", "Yoga", "Walking", "Deep Breathing", "Tai Chi", 
+    "Qigong", "Static Stretching", "Flexibility Training", "Child's Pose", "Cat-Cow Pose"
+  ],
+  "arthritis": [
+    "Tai Chi", "Swimming", "Yoga", "Aqua Aerobics", "Walking", 
+    "Resistance Band Stretching", "Pilates", "Foam Rolling", "Mobility Drills", "Qigong"
+  ],
+  "hypertension": [
+    "Walking", "Yoga", "Tai Chi", "Cycling", "Deep Breathing", 
+    "Qigong", "Low Impact Cardio", "Zumba", "Swimming", "Foam Rolling"
+  ],
+  "obesity": [
+    "Walking", "Cycling", "High Intensity Interval Training", "Swimming", "Yoga", 
+    "Jump Rope", "Dancing", "Burpees", "Plank", "Lunges"
+  ],
+  "back pain": [
+    "Yoga", "Cat-Cow Pose", "Child's Pose", "Bridge Pose", "Foam Rolling", 
+    "Glute Bridge", "Plank", "Bird-Dog", "Tai Chi", "Core Strengthening"
+  ],
+  "depression": [
+    "Walking", "Running", "Yoga", "Tai Chi", "Qigong", 
+    "Dancing", "Zumba", "Pilates", "Deep Breathing", "Boxing"
+  ],
+  "anxiety": [
+    "Yoga", "Deep Breathing", "Tai Chi", "Walking", "Qigong", 
+    "Meditation", "Pilates", "Swimming", "Flexibility Training", "Child's Pose"
+  ],
+  "heart disease": [
+    "Walking", "Swimming", "Cycling", "Tai Chi", "Yoga", 
+    "Low Impact Cardio", "Elliptical Training", "Deep Breathing", "Aqua Aerobics", "Rowing"
+  ],
+  "osteoporosis": [
+    "Walking", "Resistance Band Training", "Weight Training", "Tai Chi", "Dancing", 
+    "Balance Training", "Yoga", "Step Aerobics", "Hiking", "Pilates"
+  ],
+  "fibromyalgia": [
+    "Yoga", "Swimming", "Tai Chi", "Walking", "Aqua Aerobics", 
+    "Pilates", "Deep Breathing", "Flexibility Training", "Qigong", "Gentle Stretching"
+  ],
+  "copd": [
+    "Walking", "Yoga", "Deep Breathing", "Tai Chi", "Swimming", 
+    "Chair Exercises", "Upper Body Exercises", "Flexibility Training", "Pulmonary Rehabilitation", "Qigong"
+  ],
+  "stroke recovery": [
+    "Chair Exercises", "Balance Training", "Tai Chi", "Walking", "Swimming", 
+    "Flexibility Training", "Range of Motion Exercises", "Yoga", "Water Therapy", "Resistance Band Training"
+  ],
+  "parkinson's disease": [
+    "Tai Chi", "Dancing", "Balance Training", "Walking", "Yoga", 
+    "Martial Arts", "Boxing", "Swimming", "Cycling", "Rock Climbing"
+  ],
+  "multiple sclerosis": [
+    "Swimming", "Yoga", "Tai Chi", "Balance Training", "Chair Exercises", 
+    "Flexibility Training", "Aqua Aerobics", "Walking", "Pilates", "Core Strengthening"
+  ],
+  "chronic fatigue": [
+    "Gentle Yoga", "Walking", "Tai Chi", "Deep Breathing", "Stretching", 
+    "Chair Exercises", "Qigong", "Low Impact Cardio", "Pilates", "Flexibility Training"
+  ],
+  "insomnia": [
+    "Yoga", "Deep Breathing", "Tai Chi", "Walking", "Qigong", 
+    "Meditation", "Gentle Stretching", "Pilates", "Progressive Muscle Relaxation", "Child's Pose"
+  ],
+  "stress": [
+    "Yoga", "Deep Breathing", "Tai Chi", "Walking", "Dancing", 
+    "Meditation", "Qigong", "Swimming", "Martial Arts", "Running"
+  ],
+  "chronic pain": [
+    "Yoga", "Swimming", "Tai Chi", "Walking", "Aqua Aerobics", 
+    "Deep Breathing", "Pilates", "Gentle Stretching", "Qigong", "Foam Rolling"
+  ],
+  "knee pain": [
+    "Swimming", "Aqua Aerobics", "Cycling", "Chair Exercises", "Yoga", 
+    "Tai Chi", "Wall Push-ups", "Upper Body Exercises", "Core Strengthening", "Flexibility Training"
+  ],
+  "shoulder pain": [
+    "Gentle Yoga", "Swimming", "Walking", "Tai Chi", "Flexibility Training", 
+    "Range of Motion Exercises", "Lower Body Exercises", "Core Strengthening", "Deep Breathing", "Pilates"
+  ],
+  "hip pain": [
+    "Swimming", "Aqua Aerobics", "Chair Exercises", "Yoga", "Tai Chi", 
+    "Upper Body Exercises", "Flexibility Training", "Core Strengthening", "Hip Flexor Stretches", "Pilates"
+  ],
+  "seniors": [
+    "Chair Exercises", "Tai Chi", "Walking", "Balance Training", "Swimming", 
+    "Yoga", "Flexibility Training", "Resistance Band Training", "Water Aerobics", "Dancing"
+  ],
+  "pregnancy": [
+    "Prenatal Yoga", "Walking", "Swimming", "Pelvic Floor Exercises", "Prenatal Pilates", 
+    "Stationary Cycling", "Modified Strength Training", "Stretching", "Water Aerobics", "Breathing Exercises"
+  ],
+  "postpartum": [
+    "Walking", "Pelvic Floor Exercises", "Core Rehabilitation", "Yoga", "Pilates", 
+    "Swimming", "Deep Breathing", "Flexibility Training", "Low Impact Cardio", "Strength Training"
+  ]
+};
+
+
+    function recommendExercises() {
+      const input = document.getElementById("diseaseInput").value.toLowerCase().trim();
+      const container = document.getElementById("exerciseContainer");
+      const loader = document.getElementById("loaderGif");
+
+      container.innerHTML = "";
+      loader.style.display = "block";
+
+      // Hide loader after showing exercises
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 1000);
+
+      let recommendations = diseaseToExercises[input];
+
+      if (!recommendations) {
+        // Check for partial matches
+        const partialMatch = Object.keys(diseaseToExercises).find(disease => 
+          disease.includes(input) || input.includes(disease)
+        );
+        
+        if (partialMatch) {
+          recommendations = diseaseToExercises[partialMatch];
+          showInfoMessage(`Found exercises for: ${partialMatch}`);
+        } else {
+          // Show random exercises if no match found
+          const allNames = Object.keys(allExercises);
+          recommendations = [];
+          while (recommendations.length < 8) {
+            const rand = allNames[Math.floor(Math.random() * allNames.length)];
+            if (!recommendations.includes(rand)) recommendations.push(rand);
+          }
+          showInfoMessage("No specific match found. Here are some general exercises:");
+        }
+      } else {
+        showInfoMessage(`Found ${recommendations.length} exercises for ${input}:`);
+      }
+
+      displayExercises(recommendations);
+    }
+
+    function showAllExercises() {
+      const container = document.getElementById("exerciseContainer");
+      const loader = document.getElementById("loaderGif");
+      
+      container.innerHTML = "";
+      loader.style.display = "block";
+      
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 1000);
+      
+      const allExerciseNames = Object.keys(allExercises);
+      showInfoMessage(`Showing all ${allExerciseNames.length} available exercises:`);
+      displayExercises(allExerciseNames);
+    }
+
+    function displayExercises(exerciseNames) {
+      const container = document.getElementById("exerciseContainer");
+      
+      exerciseNames.forEach(name => {
+        const exercise = allExercises[name];
+        if (!exercise) return; // Skip if exercise doesn't exist
+        
+        const videoID = extractVideoID(exercise.video);
+        if (!videoID) return; // Skip if video ID can't be extracted
+
+        const div = document.createElement("div");
+        div.className = "exercise";
+
+        const title = document.createElement("div");
+        title.className = "exercise-title";
+        title.textContent = name;
+
+        const benefitText = document.createElement("div");
+        benefitText.className = "benefits";
+        benefitText.textContent = exercise.benefits;
+
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${videoID}?rel=0&modestbranding=1`;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.allowFullscreen = true;
+        iframe.loading = "lazy"; // Improve performance
+
+        div.appendChild(title);
+        div.appendChild(benefitText);
+        div.appendChild(iframe);
+        container.appendChild(div);
+      });
+    }
+
+    function extractVideoID(url) {
+      // Handle different YouTube URL formats
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]+)/,
+        /youtube\.com\/watch\?.*v=([\w-]+)/
+      ];
+      
+      for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) return match[1];
+      }
+      
+      return null;
+    }
+
+    function showInfoMessage(message) {
+      const container = document.getElementById("exerciseContainer");
+      const infoDiv = document.createElement("div");
+      infoDiv.style.cssText = `
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      `;
+      infoDiv.textContent = message;
+      container.appendChild(infoDiv);
+    }
+
+    function searchCondition(condition) {
+      document.getElementById("diseaseInput").value = condition;
+      recommendExercises();
+    }
+  </script>
+</body>
+</html>
