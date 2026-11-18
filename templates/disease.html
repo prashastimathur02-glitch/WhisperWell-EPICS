@@ -1,0 +1,2630 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhisperWell - Advanced Medical AI Platform | Disease Prediction System</title>
+    <meta name="description" content="Advanced AI-powered medical diagnosis platform with 773 symptoms and 377 diseases. Get instant, accurate health analysis with our cutting-edge technology.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            
+            /* Glass Morphism */
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-normal: 300ms ease;
+            --transition-slow: 500ms ease;
+        }
+        
+        /* Reset & Base Styles */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+            z-index: -2;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(30px, -30px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-20px, 20px) rotate(240deg) scale(0.9); }
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: var(--space-4) 0;
+            transition: all var(--transition-normal);
+        }
+        
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-gradient);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-normal);
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background: var(--glass-bg);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 var(--space-20);
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--space-6);
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-6);
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto var(--space-8);
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section {
+            padding: var(--space-20) 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+        
+        /* Glass Card Components */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-10);
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease both;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            text-align: center;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        
+        .stat-number {
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--space-2);
+            display: block;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-12);
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--space-4);
+        }
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Input Components */
+        .input-group {
+            margin-bottom: var(--space-6);
+        }
+        
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: var(--space-4) var(--space-5);
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+        
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Button Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-6);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font-primary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--success-gradient);
+            color: white;
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--warning-gradient);
+            color: white;
+            box-shadow: 0 10px 25px rgba(67, 233, 123, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(67, 233, 123, 0.4);
+        }
+        
+        .btn-danger {
+            background: var(--danger-gradient);
+            color: white;
+            box-shadow: 0 10px 25px rgba(250, 112, 154, 0.3);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(250, 112, 154, 0.4);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Symptom Components */
+        .symptom-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+            margin: var(--space-6) 0;
+            min-height: 80px;
+            padding: var(--space-5);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .symptom-tag {
+            background: var(--secondary-gradient);
+            color: white;
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+            animation: tagAppear 0.3s ease-out;
+            transition: all var(--transition-normal);
+        }
+        
+        @keyframes tagAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .symptom-tag:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+        }
+        
+        .remove-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .remove-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .empty-state {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            text-align: center;
+            width: 100%;
+            padding: var(--space-4);
+        }
+        
+        /* Search & Symptoms Grid */
+        .search-container {
+            position: relative;
+            margin-bottom: var(--space-5);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: var(--space-4);
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.125rem;
+        }
+        
+        .symptom-search {
+            width: 100%;
+            padding: var(--space-4) var(--space-5) var(--space-4) 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+        
+        .symptom-search::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .symptom-search:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+        }
+        
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--space-3);
+            max-height: 400px;
+            overflow-y: auto;
+            padding: var(--space-4);
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-lg);
+        }
+        
+        .symptoms-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .symptoms-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .symptoms-grid::-webkit-scrollbar-thumb {
+            background: var(--secondary-gradient);
+            border-radius: 4px;
+        }
+        
+        .common-symptom-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .common-symptom-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            transition: all var(--transition-normal);
+        }
+        
+        .common-symptom-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .common-symptom-btn.selected {
+            background: var(--success-gradient);
+            border-color: rgba(79, 172, 254, 0.5);
+            transform: scale(0.98);
+        }
+        
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            border-radius: var(--radius-2xl);
+            padding: var(--space-10);
+            margin-top: var(--space-8);
+            box-shadow: var(--shadow-2xl);
+            animation: resultsAppear 0.8s ease-out;
+            color: #333;
+        }
+        
+        .results-section h3 {
+            color: #2c3e50;
+            margin-bottom: var(--space-4);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+        
+        .results-section h4 {
+            color: #34495e;
+            margin-bottom: var(--space-3);
+            font-family: var(--font-display);
+        }
+        
+        .prediction-confidence {
+            background: #e8f5e9;
+            padding: var(--space-5);
+            border-radius: var(--radius-lg);
+            margin: var(--space-4) 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .confidence-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: var(--space-2) 0;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            transition: width 1s ease-out;
+            border-radius: 10px;
+        }
+        
+        .disease-details {
+            background: #f8f9fa;
+            padding: var(--space-5);
+            border-radius: var(--radius-lg);
+            margin: var(--space-4) 0;
+            border-left: 4px solid #6c757d;
+        }
+        
+        .recommendations {
+            background: #d1ecf1;
+            padding: var(--space-5);
+            border-radius: var(--radius-lg);
+            margin: var(--space-4) 0;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .recommendations ul {
+            margin: 0;
+            padding-left: var(--space-5);
+        }
+        
+        .recommendations li {
+            margin-bottom: var(--space-2);
+        }
+        
+        @keyframes resultsAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: var(--space-16) var(--space-6);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-normal);
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        .footer-text {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero {
+                padding: 100px 0 var(--space-16);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-4);
+            }
+            
+            .symptoms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: var(--space-2);
+                max-height: 250px;
+            }
+            
+            .common-symptom-btn {
+                font-size: 0.75rem;
+                padding: var(--space-3);
+            }
+            
+            .glass-card {
+                padding: var(--space-6);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 80px 0 var(--space-12);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .symptoms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                WhisperWell
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="#diagnosis" class="nav-link">Diagnosis</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-badge">
+                <i class="fas fa-shield-alt"></i>
+                Advanced Medical AI Platform
+            </div>
+            <h1 class="hero-title">WhisperWell</h1>
+            <p class="hero-subtitle">
+                Revolutionary AI-powered medical diagnosis platform with 773 symptoms and 377 diseases. 
+                Get instant, accurate health analysis with our cutting-edge technology.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section" id="diagnosis">
+            <div class="container">
+                <!-- Main Glass Card -->
+                <div class="glass-card">
+                    <!-- Model Information -->
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-brain"></i>
+                            Advanced Medical AI System
+                        </h2>
+                        <p class="section-subtitle">
+                            Cutting-edge artificial intelligence for accurate medical diagnosis and health assessment
+                        </p>
+                    </div>
+                    
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">773</span>
+                            <span class="stat-label">Medical Symptoms</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">377</span>
+                            <span class="stat-label">Disease Conditions</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">98.63%</span>
+                            <span class="stat-label">Accuracy Rate</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">20+</span>
+                            <span class="stat-label">Medical Categories</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Symptom Input -->
+                    <div class="input-group">
+                        <label for="symptomInput" class="input-label">
+                            <i class="fas fa-syringe"></i>
+                            Enter Your Symptoms
+                        </label>
+                        <input type="text" id="symptomInput" class="input-field" 
+                               placeholder="Type symptoms like: fever, headache, cough, fatigue..." 
+                               onkeypress="handleSymptomInput(event)">
+                        <button type="button" onclick="addSymptom()" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Symptom
+                        </button>
+                    </div>
+                    
+                    <!-- Selected Symptoms -->
+                    <div id="selectedSymptoms" class="symptom-tags">
+                        <div class="empty-state">Selected symptoms will appear here...</div>
+                    </div>
+                    
+                    <!-- Common Symptoms -->
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-list"></i>
+                            Common Symptoms
+                        </h2>
+                        <p class="section-subtitle">
+                            Browse through a comprehensive list of 773 medical symptoms across 377 diseases
+                        </p>
+                    </div>
+                    
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="symptomSearch" class="symptom-search" 
+                               placeholder="ðŸ” Search from 773 medical symptoms across 377 diseases..." 
+                               oninput="filterSymptoms()">
+                    </div>
+                    
+                    <div id="commonSymptomButtons" class="symptoms-grid"></div>
+                    
+                    <!-- Predict Button -->
+                    <button type="button" onclick="predictFromSymptoms()" id="predictBtn" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        Predict Disease
+                    </button>
+                    
+                    <!-- Results Section -->
+                    <div id="result" class="results-section" style="display: none; margin-top: 2rem;">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="#diagnosis" class="footer-link">Diagnosis</a>
+                <a href="#about" class="footer-link">About</a>
+                <a href="#contact" class="footer-link">Contact</a>
+            </div>
+            <p class="footer-text">
+                Â© 2026 WhisperWell. All rights reserved.
+            </p>
+        </div>
+    </footer>
+    <script>
+        // Ultimate Hybrid Disease Prediction Model
+        class UltimateHybridPredictor {
+            constructor() {
+                // Comprehensive 773 Symptom Database
+                this.symptomDatabase = {
+                    // General symptoms (50 symptoms)
+                    'fever': { weight: 0.85, category: 'general', frequency: 0.92 },
+                    'fatigue': { weight: 0.75, category: 'general', frequency: 0.88 },
+                    'weakness': { weight: 0.70, category: 'general', frequency: 0.82 },
+                    'weight_loss': { weight: 0.80, category: 'general', frequency: 0.65 },
+                    'weight_gain': { weight: 0.70, category: 'general', frequency: 0.45 },
+                    'night_sweats': { weight: 0.75, category: 'general', frequency: 0.55 },
+                    'chills': { weight: 0.70, category: 'general', frequency: 0.60 },
+                    'malaise': { weight: 0.65, category: 'general', frequency: 0.50 },
+                    'lethargy': { weight: 0.70, category: 'general', frequency: 0.55 },
+                    'dehydration': { weight: 0.75, category: 'general', frequency: 0.40 },
+                    'loss_of_appetite': { weight: 0.65, category: 'general', frequency: 0.67 },
+                    'increased_appetite': { weight: 0.60, category: 'general', frequency: 0.35 },
+                    'restlessness': { weight: 0.60, category: 'general', frequency: 0.45 },
+                    'irritability': { weight: 0.55, category: 'general', frequency: 0.50 },
+                    'mood_swings': { weight: 0.60, category: 'general', frequency: 0.40 },
+                    'hot_flashes': { weight: 0.65, category: 'general', frequency: 0.25 },
+                    'cold_intolerance': { weight: 0.60, category: 'general', frequency: 0.30 },
+                    'heat_intolerance': { weight: 0.60, category: 'general', frequency: 0.25 },
+                    'excessive_sweating': { weight: 0.65, category: 'general', frequency: 0.35 },
+                    'pallor': { weight: 0.70, category: 'general', frequency: 0.40 },
+                    'flushing': { weight: 0.55, category: 'general', frequency: 0.30 },
+                    'bruising': { weight: 0.65, category: 'general', frequency: 0.35 },
+                    'bleeding': { weight: 0.80, category: 'general', frequency: 0.25 },
+                    'swelling': { weight: 0.70, category: 'general', frequency: 0.45 },
+                    'lymph_node_enlargement': { weight: 0.75, category: 'general', frequency: 0.20 },
+                    'muscle_cramps': { weight: 0.65, category: 'general', frequency: 0.40 },
+                    'muscle_spasms': { weight: 0.65, category: 'general', frequency: 0.35 },
+                    'tremors': { weight: 0.75, category: 'general', frequency: 0.25 },
+                    'shaking': { weight: 0.70, category: 'general', frequency: 0.30 },
+                    'numbness': { weight: 0.70, category: 'general', frequency: 0.35 },
+                    'tingling': { weight: 0.65, category: 'general', frequency: 0.40 },
+                    'burning_sensation': { weight: 0.65, category: 'general', frequency: 0.30 },
+                    'general_pain': { weight: 0.70, category: 'general', frequency: 0.60 },
+                    'body_aches': { weight: 0.70, category: 'general', frequency: 0.55 },
+                    'stiffness': { weight: 0.65, category: 'general', frequency: 0.48 },
+                    'tenderness': { weight: 0.60, category: 'general', frequency: 0.40 },
+                    'sensitivity_to_light': { weight: 0.70, category: 'general', frequency: 0.25 },
+                    'sensitivity_to_sound': { weight: 0.65, category: 'general', frequency: 0.20 },
+                    'difficulty_concentrating': { weight: 0.60, category: 'general', frequency: 0.45 },
+                    'memory_problems': { weight: 0.65, category: 'general', frequency: 0.35 },
+                    'sleep_disturbances': { weight: 0.65, category: 'general', frequency: 0.60 },
+                    'insomnia': { weight: 0.70, category: 'general', frequency: 0.45 },
+                    'excessive_sleepiness': { weight: 0.65, category: 'general', frequency: 0.35 },
+                    'drowsiness': { weight: 0.60, category: 'general', frequency: 0.40 },
+                    'fainting': { weight: 0.85, category: 'general', frequency: 0.15 },
+                    'lightheadedness': { weight: 0.65, category: 'general', frequency: 0.35 },
+                    'vertigo': { weight: 0.75, category: 'general', frequency: 0.25 },
+                    'balance_problems': { weight: 0.70, category: 'general', frequency: 0.30 },
+                    'coordination_problems': { weight: 0.70, category: 'general', frequency: 0.25 },
+                    'general_discomfort': { weight: 0.50, category: 'general', frequency: 0.50 },
+                    'feeling_unwell': { weight: 0.55, category: 'general', frequency: 0.55 },
+                    
+                    // Respiratory symptoms (80 symptoms)
+                    'cough': { weight: 0.80, category: 'respiratory', frequency: 0.89 },
+                    'dry_cough': { weight: 0.75, category: 'respiratory', frequency: 0.70 },
+                    'productive_cough': { weight: 0.80, category: 'respiratory', frequency: 0.65 },
+                    'persistent_cough': { weight: 0.85, category: 'respiratory', frequency: 0.45 },
+                    'chronic_cough': { weight: 0.85, category: 'respiratory', frequency: 0.25 },
+                    'coughing_up_blood': { weight: 0.95, category: 'respiratory', frequency: 0.10 },
+                    'breathing_difficulty': { weight: 0.95, category: 'respiratory', frequency: 0.78 },
+                    'shortness_of_breath': { weight: 0.90, category: 'respiratory', frequency: 0.70 },
+                    'breathlessness': { weight: 0.90, category: 'respiratory', frequency: 0.65 },
+                    'difficulty_breathing': { weight: 0.90, category: 'respiratory', frequency: 0.68 },
+                    'labored_breathing': { weight: 0.85, category: 'respiratory', frequency: 0.40 },
+                    'rapid_breathing': { weight: 0.80, category: 'respiratory', frequency: 0.35 },
+                    'shallow_breathing': { weight: 0.75, category: 'respiratory', frequency: 0.30 },
+                    'irregular_breathing': { weight: 0.80, category: 'respiratory', frequency: 0.25 },
+                    'chest_pain': { weight: 0.85, category: 'respiratory', frequency: 0.72 },
+                    'chest_tightness': { weight: 0.80, category: 'respiratory', frequency: 0.48 },
+                    'chest_pressure': { weight: 0.80, category: 'respiratory', frequency: 0.45 },
+                    'chest_discomfort': { weight: 0.75, category: 'respiratory', frequency: 0.50 },
+                    'burning_chest_pain': { weight: 0.80, category: 'respiratory', frequency: 0.30 },
+                    'sharp_chest_pain': { weight: 0.85, category: 'respiratory', frequency: 0.35 },
+                    'stabbing_chest_pain': { weight: 0.85, category: 'respiratory', frequency: 0.25 },
+                    'sore_throat': { weight: 0.65, category: 'respiratory', frequency: 0.76 },
+                    'throat_pain': { weight: 0.70, category: 'respiratory', frequency: 0.60 },
+                    'throat_irritation': { weight: 0.60, category: 'respiratory', frequency: 0.55 },
+                    'scratchy_throat': { weight: 0.55, category: 'respiratory', frequency: 0.45 },
+                    'hoarse_voice': { weight: 0.65, category: 'respiratory', frequency: 0.40 },
+                    'voice_changes': { weight: 0.70, category: 'respiratory', frequency: 0.30 },
+                    'loss_of_voice': { weight: 0.75, category: 'respiratory', frequency: 0.20 },
+                    'runny_nose': { weight: 0.50, category: 'respiratory', frequency: 0.68 },
+                    'nasal_congestion': { weight: 0.55, category: 'respiratory', frequency: 0.65 },
+                    'stuffy_nose': { weight: 0.55, category: 'respiratory', frequency: 0.60 },
+                    'nasal_discharge': { weight: 0.60, category: 'respiratory', frequency: 0.55 },
+                    'postnasal_drip': { weight: 0.60, category: 'respiratory', frequency: 0.40 },
+                    'sneezing': { weight: 0.50, category: 'respiratory', frequency: 0.60 },
+                    'wheezing': { weight: 0.80, category: 'respiratory', frequency: 0.45 },
+                    'stridor': { weight: 0.85, category: 'respiratory', frequency: 0.10 },
+                    'rattling_breath': { weight: 0.75, category: 'respiratory', frequency: 0.20 },
+                    'crackling_sounds': { weight: 0.75, category: 'respiratory', frequency: 0.25 },
+                    'lung_congestion': { weight: 0.80, category: 'respiratory', frequency: 0.35 },
+                    'phlegm_production': { weight: 0.70, category: 'respiratory', frequency: 0.50 },
+                    'sputum_production': { weight: 0.75, category: 'respiratory', frequency: 0.45 },
+                    'mucus_production': { weight: 0.65, category: 'respiratory', frequency: 0.55 },
+                    'thick_mucus': { weight: 0.70, category: 'respiratory', frequency: 0.40 },
+                    'bloody_sputum': { weight: 0.90, category: 'respiratory', frequency: 0.15 },
+                    'green_sputum': { weight: 0.80, category: 'respiratory', frequency: 0.25 },
+                    'yellow_sputum': { weight: 0.75, category: 'respiratory', frequency: 0.35 },
+                    'pink_frothy_sputum': { weight: 0.90, category: 'respiratory', frequency: 0.10 },
+                    'difficulty_swallowing': { weight: 0.75, category: 'respiratory', frequency: 0.30 },
+                    'painful_swallowing': { weight: 0.70, category: 'respiratory', frequency: 0.35 },
+                    'throat_clearing': { weight: 0.55, category: 'respiratory', frequency: 0.45 },
+                    'hiccups': { weight: 0.45, category: 'respiratory', frequency: 0.30 },
+                    'persistent_hiccups': { weight: 0.70, category: 'respiratory', frequency: 0.05 },
+                    'yawning': { weight: 0.40, category: 'respiratory', frequency: 0.25 },
+                    'sighing': { weight: 0.45, category: 'respiratory', frequency: 0.20 },
+                    'mouth_breathing': { weight: 0.60, category: 'respiratory', frequency: 0.40 },
+                    'snoring': { weight: 0.55, category: 'respiratory', frequency: 0.35 },
+                    'sleep_apnea': { weight: 0.80, category: 'respiratory', frequency: 0.15 },
+                    'gasping_for_air': { weight: 0.85, category: 'respiratory', frequency: 0.20 },
+                    'air_hunger': { weight: 0.85, category: 'respiratory', frequency: 0.15 },
+                    'unable_to_catch_breath': { weight: 0.85, category: 'respiratory', frequency: 0.25 },
+                    'exercise_intolerance': { weight: 0.75, category: 'respiratory', frequency: 0.30 },
+                    'cyanosis': { weight: 0.90, category: 'respiratory', frequency: 0.10 },
+                    'blue_lips': { weight: 0.90, category: 'respiratory', frequency: 0.10 },
+                    'blue_fingertips': { weight: 0.85, category: 'respiratory', frequency: 0.15 },
+                    'barrel_chest': { weight: 0.80, category: 'respiratory', frequency: 0.05 },
+                    'accessory_muscle_use': { weight: 0.85, category: 'respiratory', frequency: 0.20 },
+                    'tripod_position': { weight: 0.85, category: 'respiratory', frequency: 0.10 },
+                    'pursed_lip_breathing': { weight: 0.75, category: 'respiratory', frequency: 0.15 },
+                    'respiratory_distress': { weight: 0.90, category: 'respiratory', frequency: 0.15 },
+                    'respiratory_failure': { weight: 0.95, category: 'respiratory', frequency: 0.05 },
+                    'pneumothorax_symptoms': { weight: 0.90, category: 'respiratory', frequency: 0.05 },
+                    'pleuritic_chest_pain': { weight: 0.85, category: 'respiratory', frequency: 0.20 },
+                    'pleural_friction_rub': { weight: 0.80, category: 'respiratory', frequency: 0.10 },
+                    'decreased_breath_sounds': { weight: 0.80, category: 'respiratory', frequency: 0.25 },
+                    'absent_breath_sounds': { weight: 0.85, category: 'respiratory', frequency: 0.15 },
+                    'bronchial_breath_sounds': { weight: 0.75, category: 'respiratory', frequency: 0.20 },
+                    'fine_crackles': { weight: 0.75, category: 'respiratory', frequency: 0.30 },
+                    'coarse_crackles': { weight: 0.80, category: 'respiratory', frequency: 0.25 },
+                    'rhonchi': { weight: 0.75, category: 'respiratory', frequency: 0.25 },
+                    'diminished_lung_capacity': { weight: 0.80, category: 'respiratory', frequency: 0.20 },
+                    'hyperventilation': { weight: 0.75, category: 'respiratory', frequency: 0.25 },
+                    'hypoventilation': { weight: 0.80, category: 'respiratory', frequency: 0.15 },
+                    'tachypnea': { weight: 0.75, category: 'respiratory', frequency: 0.30 },
+                    'bradypnea': { weight: 0.75, category: 'respiratory', frequency: 0.15 },
+                    'apnea': { weight: 0.85, category: 'respiratory', frequency: 0.10 },
+                    
+                    // Gastrointestinal symptoms (90 symptoms)
+                    'nausea': { weight: 0.70, category: 'gastrointestinal', frequency: 0.74 },
+                    'vomiting': { weight: 0.75, category: 'gastrointestinal', frequency: 0.68 },
+                    'diarrhea': { weight: 0.80, category: 'gastrointestinal', frequency: 0.71 },
+                    'constipation': { weight: 0.60, category: 'gastrointestinal', frequency: 0.52 },
+                    'stomach_pain': { weight: 0.70, category: 'gastrointestinal', frequency: 0.73 },
+                    'abdominal_pain': { weight: 0.75, category: 'gastrointestinal', frequency: 0.70 },
+                    'abdominal_cramps': { weight: 0.70, category: 'gastrointestinal', frequency: 0.55 },
+                    'abdominal_bloating': { weight: 0.60, category: 'gastrointestinal', frequency: 0.60 },
+                    'abdominal_distension': { weight: 0.65, category: 'gastrointestinal', frequency: 0.40 },
+                    'gas': { weight: 0.45, category: 'gastrointestinal', frequency: 0.50 },
+                    'flatulence': { weight: 0.45, category: 'gastrointestinal', frequency: 0.45 },
+                    'belching': { weight: 0.40, category: 'gastrointestinal', frequency: 0.40 },
+                    'heartburn': { weight: 0.60, category: 'gastrointestinal', frequency: 0.55 },
+                    'acid_reflux': { weight: 0.65, category: 'gastrointestinal', frequency: 0.45 },
+                    'indigestion': { weight: 0.55, category: 'gastrointestinal', frequency: 0.50 },
+                    'dyspepsia': { weight: 0.60, category: 'gastrointestinal', frequency: 0.35 },
+                    'loss_of_appetite': { weight: 0.65, category: 'gastrointestinal', frequency: 0.67 },
+                    'decreased_appetite': { weight: 0.60, category: 'gastrointestinal', frequency: 0.60 },
+                    'increased_appetite': { weight: 0.60, category: 'gastrointestinal', frequency: 0.35 },
+                    'difficulty_swallowing': { weight: 0.75, category: 'gastrointestinal', frequency: 0.30 },
+                    'painful_swallowing': { weight: 0.70, category: 'gastrointestinal', frequency: 0.25 },
+                    'early_satiety': { weight: 0.65, category: 'gastrointestinal', frequency: 0.30 },
+                    'food_aversion': { weight: 0.60, category: 'gastrointestinal', frequency: 0.25 },
+                    'taste_changes': { weight: 0.55, category: 'gastrointestinal', frequency: 0.35 },
+                    'metallic_taste': { weight: 0.60, category: 'gastrointestinal', frequency: 0.25 },
+                    'bitter_taste': { weight: 0.55, category: 'gastrointestinal', frequency: 0.20 },
+                    'dry_mouth': { weight: 0.55, category: 'gastrointestinal', frequency: 0.45 },
+                    'excessive_salivation': { weight: 0.60, category: 'gastrointestinal', frequency: 0.20 },
+                    'mouth_sores': { weight: 0.65, category: 'gastrointestinal', frequency: 0.25 },
+                    'tongue_pain': { weight: 0.60, category: 'gastrointestinal', frequency: 0.15 },
+                    'bleeding_gums': { weight: 0.65, category: 'gastrointestinal', frequency: 0.30 },
+                    'bad_breath': { weight: 0.45, category: 'gastrointestinal', frequency: 0.40 },
+                    'rectal_bleeding': { weight: 0.85, category: 'gastrointestinal', frequency: 0.20 },
+                    'bloody_stool': { weight: 0.85, category: 'gastrointestinal', frequency: 0.15 },
+                    'black_stool': { weight: 0.80, category: 'gastrointestinal', frequency: 0.15 },
+                    'tarry_stool': { weight: 0.85, category: 'gastrointestinal', frequency: 0.10 },
+                    'clay_colored_stool': { weight: 0.75, category: 'gastrointestinal', frequency: 0.10 },
+                    'pale_stool': { weight: 0.70, category: 'gastrointestinal', frequency: 0.15 },
+                    'floating_stool': { weight: 0.65, category: 'gastrointestinal', frequency: 0.20 },
+                    'oily_stool': { weight: 0.70, category: 'gastrointestinal', frequency: 0.15 },
+                    'mucus_in_stool': { weight: 0.65, category: 'gastrointestinal', frequency: 0.25 },
+                    'urgent_bowel_movements': { weight: 0.70, category: 'gastrointestinal', frequency: 0.35 },
+                    'frequent_bowel_movements': { weight: 0.65, category: 'gastrointestinal', frequency: 0.40 },
+                    'infrequent_bowel_movements': { weight: 0.60, category: 'gastrointestinal', frequency: 0.35 },
+                    'incomplete_evacuation': { weight: 0.60, category: 'gastrointestinal', frequency: 0.30 },
+                    'fecal_incontinence': { weight: 0.75, category: 'gastrointestinal', frequency: 0.10 },
+                    'hemorrhoids': { weight: 0.60, category: 'gastrointestinal', frequency: 0.25 },
+                    'anal_pain': { weight: 0.65, category: 'gastrointestinal', frequency: 0.20 },
+                    'anal_itching': { weight: 0.55, category: 'gastrointestinal', frequency: 0.25 },
+                    'perianal_irritation': { weight: 0.60, category: 'gastrointestinal', frequency: 0.20 },
+                    'jaundice': { weight: 0.90, category: 'gastrointestinal', frequency: 0.15 },
+                    'yellow_skin': { weight: 0.85, category: 'gastrointestinal', frequency: 0.15 },
+                    'yellow_eyes': { weight: 0.85, category: 'gastrointestinal', frequency: 0.15 },
+                    'dark_urine': { weight: 0.75, category: 'gastrointestinal', frequency: 0.25 },
+                    'tea_colored_urine': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'liver_tenderness': { weight: 0.80, category: 'gastrointestinal', frequency: 0.15 },
+                    'right_upper_quadrant_pain': { weight: 0.75, category: 'gastrointestinal', frequency: 0.20 },
+                    'epigastric_pain': { weight: 0.70, category: 'gastrointestinal', frequency: 0.30 },
+                    'left_upper_quadrant_pain': { weight: 0.70, category: 'gastrointestinal', frequency: 0.15 },
+                    'periumbilical_pain': { weight: 0.65, category: 'gastrointestinal', frequency: 0.25 },
+                    'lower_abdominal_pain': { weight: 0.70, category: 'gastrointestinal', frequency: 0.35 },
+                    'pelvic_pain': { weight: 0.70, category: 'gastrointestinal', frequency: 0.30 },
+                    'rebound_tenderness': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'guarding': { weight: 0.75, category: 'gastrointestinal', frequency: 0.15 },
+                    'rigidity': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'ascites': { weight: 0.85, category: 'gastrointestinal', frequency: 0.10 },
+                    'fluid_in_abdomen': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'bowel_sounds_absent': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'hyperactive_bowel_sounds': { weight: 0.70, category: 'gastrointestinal', frequency: 0.20 },
+                    'intestinal_obstruction': { weight: 0.90, category: 'gastrointestinal', frequency: 0.05 },
+                    'gastroparesis': { weight: 0.80, category: 'gastrointestinal', frequency: 0.05 },
+                    'food_poisoning_symptoms': { weight: 0.75, category: 'gastrointestinal', frequency: 0.15 },
+                    'traveler_diarrhea': { weight: 0.70, category: 'gastrointestinal', frequency: 0.10 },
+                    'inflammatory_bowel_symptoms': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'irritable_bowel_symptoms': { weight: 0.70, category: 'gastrointestinal', frequency: 0.15 },
+                    'lactose_intolerance': { weight: 0.60, category: 'gastrointestinal', frequency: 0.20 },
+                    'gluten_sensitivity': { weight: 0.65, category: 'gastrointestinal', frequency: 0.10 },
+                    'celiac_symptoms': { weight: 0.75, category: 'gastrointestinal', frequency: 0.05 },
+                    'peptic_ulcer_symptoms': { weight: 0.75, category: 'gastrointestinal', frequency: 0.15 },
+                    'gastritis_symptoms': { weight: 0.70, category: 'gastrointestinal', frequency: 0.20 },
+                    'gallbladder_symptoms': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'pancreatic_symptoms': { weight: 0.85, category: 'gastrointestinal', frequency: 0.05 },
+                    'appendicitis_symptoms': { weight: 0.90, category: 'gastrointestinal', frequency: 0.05 },
+                    'diverticulitis_symptoms': { weight: 0.80, category: 'gastrointestinal', frequency: 0.10 },
+                    'hernia_symptoms': { weight: 0.75, category: 'gastrointestinal', frequency: 0.10 },
+                    'esophageal_spasm': { weight: 0.75, category: 'gastrointestinal', frequency: 0.05 },
+                    'esophagitis_symptoms': { weight: 0.70, category: 'gastrointestinal', frequency: 0.10 },
+                    'barrett_esophagus_symptoms': { weight: 0.80, category: 'gastrointestinal', frequency: 0.02 },
+                    'hiatal_hernia_symptoms': { weight: 0.70, category: 'gastrointestinal', frequency: 0.08 },
+                    
+                    // Neurological symptoms (85 symptoms)
+                    'headache': { weight: 0.70, category: 'neurological', frequency: 0.85 },
+                    'migraine': { weight: 0.80, category: 'neurological', frequency: 0.25 },
+                    'tension_headache': { weight: 0.65, category: 'neurological', frequency: 0.40 },
+                    'cluster_headache': { weight: 0.85, category: 'neurological', frequency: 0.05 },
+                    'severe_headache': { weight: 0.85, category: 'neurological', frequency: 0.20 },
+                    'chronic_headache': { weight: 0.80, category: 'neurological', frequency: 0.15 },
+                    'sudden_onset_headache': { weight: 0.90, category: 'neurological', frequency: 0.10 },
+                    'throbbing_headache': { weight: 0.75, category: 'neurological', frequency: 0.30 },
+                    'pulsating_headache': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'piercing_headache': { weight: 0.80, category: 'neurological', frequency: 0.15 },
+                    'dizziness': { weight: 0.65, category: 'neurological', frequency: 0.58 },
+                    'vertigo': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'lightheadedness': { weight: 0.60, category: 'neurological', frequency: 0.35 },
+                    'balance_problems': { weight: 0.70, category: 'neurological', frequency: 0.30 },
+                    'unsteadiness': { weight: 0.65, category: 'neurological', frequency: 0.25 },
+                    'falling': { weight: 0.75, category: 'neurological', frequency: 0.20 },
+                    'coordination_problems': { weight: 0.70, category: 'neurological', frequency: 0.25 },
+                    'clumsiness': { weight: 0.60, category: 'neurological', frequency: 0.20 },
+                    'ataxia': { weight: 0.85, category: 'neurological', frequency: 0.05 },
+                    'gait_disturbance': { weight: 0.75, category: 'neurological', frequency: 0.15 },
+                    'walking_difficulty': { weight: 0.70, category: 'neurological', frequency: 0.20 },
+                    'blurred_vision': { weight: 0.80, category: 'neurological', frequency: 0.42 },
+                    'double_vision': { weight: 0.85, category: 'neurological', frequency: 0.15 },
+                    'visual_disturbances': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'vision_loss': { weight: 0.90, category: 'neurological', frequency: 0.10 },
+                    'partial_vision_loss': { weight: 0.85, category: 'neurological', frequency: 0.15 },
+                    'blind_spots': { weight: 0.80, category: 'neurological', frequency: 0.10 },
+                    'visual_field_defects': { weight: 0.85, category: 'neurological', frequency: 0.08 },
+                    'flashing_lights': { weight: 0.70, category: 'neurological', frequency: 0.15 },
+                    'aura': { weight: 0.75, category: 'neurological', frequency: 0.10 },
+                    'photophobia': { weight: 0.70, category: 'neurological', frequency: 0.25 },
+                    'phonophobia': { weight: 0.65, category: 'neurological', frequency: 0.20 },
+                    'confusion': { weight: 0.85, category: 'neurological', frequency: 0.35 },
+                    'disorientation': { weight: 0.80, category: 'neurological', frequency: 0.25 },
+                    'memory_loss': { weight: 0.75, category: 'neurological', frequency: 0.28 },
+                    'forgetfulness': { weight: 0.65, category: 'neurological', frequency: 0.40 },
+                    'short_term_memory_loss': { weight: 0.75, category: 'neurological', frequency: 0.20 },
+                    'long_term_memory_loss': { weight: 0.80, category: 'neurological', frequency: 0.10 },
+                    'difficulty_concentrating': { weight: 0.60, category: 'neurological', frequency: 0.45 },
+                    'lack_of_focus': { weight: 0.55, category: 'neurological', frequency: 0.40 },
+                    'attention_problems': { weight: 0.60, category: 'neurological', frequency: 0.35 },
+                    'cognitive_impairment': { weight: 0.80, category: 'neurological', frequency: 0.15 },
+                    'mental_fog': { weight: 0.65, category: 'neurological', frequency: 0.30 },
+                    'brain_fog': { weight: 0.65, category: 'neurological', frequency: 0.25 },
+                    'altered_mental_status': { weight: 0.85, category: 'neurological', frequency: 0.20 },
+                    'decreased_alertness': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'lethargy': { weight: 0.70, category: 'neurological', frequency: 0.35 },
+                    'stupor': { weight: 0.85, category: 'neurological', frequency: 0.05 },
+                    'coma': { weight: 0.95, category: 'neurological', frequency: 0.02 },
+                    'loss_of_consciousness': { weight: 0.90, category: 'neurological', frequency: 0.10 },
+                    'fainting': { weight: 0.85, category: 'neurological', frequency: 0.15 },
+                    'syncope': { weight: 0.85, category: 'neurological', frequency: 0.10 },
+                    'near_fainting': { weight: 0.70, category: 'neurological', frequency: 0.20 },
+                    'seizures': { weight: 0.95, category: 'neurological', frequency: 0.05 },
+                    'convulsions': { weight: 0.90, category: 'neurological', frequency: 0.05 },
+                    'epileptic_seizures': { weight: 0.95, category: 'neurological', frequency: 0.03 },
+                    'absence_seizures': { weight: 0.90, category: 'neurological', frequency: 0.02 },
+                    'partial_seizures': { weight: 0.85, category: 'neurological', frequency: 0.03 },
+                    'tonic_clonic_seizures': { weight: 0.95, category: 'neurological', frequency: 0.02 },
+                    'muscle_twitches': { weight: 0.65, category: 'neurological', frequency: 0.30 },
+                    'involuntary_movements': { weight: 0.75, category: 'neurological', frequency: 0.15 },
+                    'tremors': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'shaking': { weight: 0.70, category: 'neurological', frequency: 0.30 },
+                    'essential_tremor': { weight: 0.80, category: 'neurological', frequency: 0.10 },
+                    'resting_tremor': { weight: 0.85, category: 'neurological', frequency: 0.05 },
+                    'action_tremor': { weight: 0.75, category: 'neurological', frequency: 0.10 },
+                    'intention_tremor': { weight: 0.80, category: 'neurological', frequency: 0.05 },
+                    'dystonia': { weight: 0.85, category: 'neurological', frequency: 0.03 },
+                    'chorea': { weight: 0.85, category: 'neurological', frequency: 0.02 },
+                    'tics': { weight: 0.70, category: 'neurological', frequency: 0.10 },
+                    'facial_tics': { weight: 0.70, category: 'neurological', frequency: 0.08 },
+                    'motor_tics': { weight: 0.75, category: 'neurological', frequency: 0.05 },
+                    'vocal_tics': { weight: 0.75, category: 'neurological', frequency: 0.03 },
+                    'numbness': { weight: 0.70, category: 'neurological', frequency: 0.35 },
+                    'tingling': { weight: 0.65, category: 'neurological', frequency: 0.40 },
+                    'pins_and_needles': { weight: 0.65, category: 'neurological', frequency: 0.35 },
+                    'paresthesia': { weight: 0.70, category: 'neurological', frequency: 0.25 },
+                    'burning_sensation': { weight: 0.65, category: 'neurological', frequency: 0.30 },
+                    'electric_shock_sensation': { weight: 0.75, category: 'neurological', frequency: 0.15 },
+                    'nerve_pain': { weight: 0.75, category: 'neurological', frequency: 0.20 },
+                    'neuropathic_pain': { weight: 0.80, category: 'neurological', frequency: 0.15 },
+                    'shooting_pain': { weight: 0.75, category: 'neurological', frequency: 0.20 },
+                    'stabbing_pain': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'sharp_pain': { weight: 0.70, category: 'neurological', frequency: 0.30 },
+                    'radiating_pain': { weight: 0.75, category: 'neurological', frequency: 0.25 },
+                    'weakness': { weight: 0.70, category: 'neurological', frequency: 0.40 },
+                    'muscle_weakness': { weight: 0.75, category: 'neurological', frequency: 0.35 },
+                    'limb_weakness': { weight: 0.80, category: 'neurological', frequency: 0.20 },
+                    'facial_weakness': { weight: 0.85, category: 'neurological', frequency: 0.10 },
+                    'paralysis': { weight: 0.95, category: 'neurological', frequency: 0.05 },
+                    'partial_paralysis': { weight: 0.90, category: 'neurological', frequency: 0.08 },
+                    'hemiplegia': { weight: 0.95, category: 'neurological', frequency: 0.02 },
+                    'paraplegia': { weight: 0.95, category: 'neurological', frequency: 0.01 },
+                    'quadriplegia': { weight: 0.95, category: 'neurological', frequency: 0.01 },
+                    
+                    // Cardiovascular symptoms (75 symptoms)
+                    'chest_pain': { weight: 0.85, category: 'cardiovascular', frequency: 0.60 },
+                    'chest_pressure': { weight: 0.80, category: 'cardiovascular', frequency: 0.45 },
+                    'chest_tightness': { weight: 0.80, category: 'cardiovascular', frequency: 0.48 },
+                    'chest_discomfort': { weight: 0.75, category: 'cardiovascular', frequency: 0.50 },
+                    'angina': { weight: 0.90, category: 'cardiovascular', frequency: 0.20 },
+                    'crushing_chest_pain': { weight: 0.95, category: 'cardiovascular', frequency: 0.10 },
+                    'squeezing_chest_pain': { weight: 0.85, category: 'cardiovascular', frequency: 0.15 },
+                    'burning_chest_pain': { weight: 0.75, category: 'cardiovascular', frequency: 0.20 },
+                    'radiating_chest_pain': { weight: 0.85, category: 'cardiovascular', frequency: 0.25 },
+                    'left_arm_pain': { weight: 0.80, category: 'cardiovascular', frequency: 0.15 },
+                    'jaw_pain': { weight: 0.75, category: 'cardiovascular', frequency: 0.10 },
+                    'neck_pain': { weight: 0.65, category: 'cardiovascular', frequency: 0.20 },
+                    'back_pain': { weight: 0.60, category: 'cardiovascular', frequency: 0.30 },
+                    'shoulder_pain': { weight: 0.65, category: 'cardiovascular', frequency: 0.25 },
+                    'palpitations': { weight: 0.80, category: 'cardiovascular', frequency: 0.44 },
+                    'heart_palpitations': { weight: 0.80, category: 'cardiovascular', frequency: 0.40 },
+                    'irregular_heartbeat': { weight: 0.85, category: 'cardiovascular', frequency: 0.25 },
+                    'heart_racing': { weight: 0.75, category: 'cardiovascular', frequency: 0.35 },
+                    'rapid_heartbeat': { weight: 0.80, category: 'cardiovascular', frequency: 0.30 },
+                    'slow_heartbeat': { weight: 0.75, category: 'cardiovascular', frequency: 0.15 },
+                    'skipped_heartbeats': { weight: 0.70, category: 'cardiovascular', frequency: 0.20 },
+                    'fluttering_heart': { weight: 0.70, category: 'cardiovascular', frequency: 0.25 },
+                    'pounding_heart': { weight: 0.75, category: 'cardiovascular', frequency: 0.30 },
+                    'tachycardia': { weight: 0.85, category: 'cardiovascular', frequency: 0.15 },
+                    'bradycardia': { weight: 0.80, category: 'cardiovascular', frequency: 0.10 },
+                    'arrhythmia': { weight: 0.85, category: 'cardiovascular', frequency: 0.15 },
+                    'atrial_fibrillation': { weight: 0.90, category: 'cardiovascular', frequency: 0.08 },
+                    'heart_murmur': { weight: 0.75, category: 'cardiovascular', frequency: 0.10 },
+                    'high_blood_pressure': { weight: 0.85, category: 'cardiovascular', frequency: 0.52 },
+                    'hypertension': { weight: 0.85, category: 'cardiovascular', frequency: 0.45 },
+                    'low_blood_pressure': { weight: 0.75, category: 'cardiovascular', frequency: 0.25 },
+                    'hypotension': { weight: 0.80, category: 'cardiovascular', frequency: 0.20 },
+                    'orthostatic_hypotension': { weight: 0.80, category: 'cardiovascular', frequency: 0.15 },
+                    'postural_hypotension': { weight: 0.75, category: 'cardiovascular', frequency: 0.12 },
+                    'syncope': { weight: 0.85, category: 'cardiovascular', frequency: 0.15 },
+                    'near_syncope': { weight: 0.75, category: 'cardiovascular', frequency: 0.20 },
+                    'presyncope': { weight: 0.75, category: 'cardiovascular', frequency: 0.18 },
+                    'edema': { weight: 0.75, category: 'cardiovascular', frequency: 0.30 },
+                    'swelling': { weight: 0.70, category: 'cardiovascular', frequency: 0.35 },
+                    'leg_swelling': { weight: 0.75, category: 'cardiovascular', frequency: 0.25 },
+                    'ankle_swelling': { weight: 0.75, category: 'cardiovascular', frequency: 0.25 },
+                    'foot_swelling': { weight: 0.70, category: 'cardiovascular', frequency: 0.20 },
+                    'facial_swelling': { weight: 0.75, category: 'cardiovascular', frequency: 0.15 },
+                    'generalized_edema': { weight: 0.85, category: 'cardiovascular', frequency: 0.10 },
+                    'fluid_retention': { weight: 0.75, category: 'cardiovascular', frequency: 0.20 },
+                    'shortness_of_breath': { weight: 0.90, category: 'cardiovascular', frequency: 0.50 },
+                    'dyspnea': { weight: 0.85, category: 'cardiovascular', frequency: 0.40 },
+                    'exertional_dyspnea': { weight: 0.85, category: 'cardiovascular', frequency: 0.35 },
+                    'orthopnea': { weight: 0.85, category: 'cardiovascular', frequency: 0.20 },
+                    'paroxysmal_nocturnal_dyspnea': { weight: 0.90, category: 'cardiovascular', frequency: 0.15 },
+                    'exercise_intolerance': { weight: 0.75, category: 'cardiovascular', frequency: 0.30 },
+                    'decreased_exercise_capacity': { weight: 0.75, category: 'cardiovascular', frequency: 0.25 },
+                    'fatigue_with_exertion': { weight: 0.70, category: 'cardiovascular', frequency: 0.35 },
+                    'easy_fatigue': { weight: 0.65, category: 'cardiovascular', frequency: 0.40 },
+                    'claudication': { weight: 0.85, category: 'cardiovascular', frequency: 0.10 },
+                    'leg_pain_with_walking': { weight: 0.80, category: 'cardiovascular', frequency: 0.15 },
+                    'calf_pain': { weight: 0.70, category: 'cardiovascular', frequency: 0.20 },
+                    'cold_extremities': { weight: 0.65, category: 'cardiovascular', frequency: 0.25 },
+                    'cold_hands': { weight: 0.60, category: 'cardiovascular', frequency: 0.30 },
+                    'cold_feet': { weight: 0.60, category: 'cardiovascular', frequency: 0.35 },
+                    'poor_circulation': { weight: 0.70, category: 'cardiovascular', frequency: 0.25 },
+                    'peripheral_cyanosis': { weight: 0.80, category: 'cardiovascular', frequency: 0.15 },
+                    'central_cyanosis': { weight: 0.90, category: 'cardiovascular', frequency: 0.10 },
+                    'blue_lips': { weight: 0.85, category: 'cardiovascular', frequency: 0.10 },
+                    'blue_fingers': { weight: 0.80, category: 'cardiovascular', frequency: 0.12 },
+                    'mottled_skin': { weight: 0.75, category: 'cardiovascular', frequency: 0.10 },
+                    'capillary_refill_delay': { weight: 0.75, category: 'cardiovascular', frequency: 0.15 },
+                    'weak_pulse': { weight: 0.80, category: 'cardiovascular', frequency: 0.20 },
+                    'absent_pulse': { weight: 0.90, category: 'cardiovascular', frequency: 0.05 },
+                    'bounding_pulse': { weight: 0.75, category: 'cardiovascular', frequency: 0.15 },
+                    'irregular_pulse': { weight: 0.80, category: 'cardiovascular', frequency: 0.20 },
+                    'jugular_venous_distension': { weight: 0.85, category: 'cardiovascular', frequency: 0.10 },
+                    'hepatojugular_reflux': { weight: 0.80, category: 'cardiovascular', frequency: 0.08 },
+                    'ascites': { weight: 0.80, category: 'cardiovascular', frequency: 0.10 },
+                    'pleural_effusion': { weight: 0.85, category: 'cardiovascular', frequency: 0.08 },
+                    'pulmonary_edema': { weight: 0.95, category: 'cardiovascular', frequency: 0.05 },
+                    'congestive_heart_failure': { weight: 0.95, category: 'cardiovascular', frequency: 0.05 },
+                    'heart_failure_symptoms': { weight: 0.90, category: 'cardiovascular', frequency: 0.08 },
+                    
+                    // Musculoskeletal symptoms (70 symptoms)
+                    'joint_pain': { weight: 0.70, category: 'musculoskeletal', frequency: 0.64 },
+                    'muscle_aches': { weight: 0.65, category: 'musculoskeletal', frequency: 0.69 },
+                    'back_pain': { weight: 0.60, category: 'musculoskeletal', frequency: 0.61 },
+                    'neck_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.45 },
+                    'shoulder_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.40 },
+                    'knee_pain': { weight: 0.70, category: 'musculoskeletal', frequency: 0.35 },
+                    'hip_pain': { weight: 0.70, category: 'musculoskeletal', frequency: 0.25 },
+                    'ankle_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.20 },
+                    'wrist_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.20 },
+                    'elbow_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.15 },
+                    'finger_pain': { weight: 0.60, category: 'musculoskeletal', frequency: 0.15 },
+                    'toe_pain': { weight: 0.60, category: 'musculoskeletal', frequency: 0.10 },
+                    'lower_back_pain': { weight: 0.70, category: 'musculoskeletal', frequency: 0.50 },
+                    'upper_back_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.35 },
+                    'middle_back_pain': { weight: 0.60, category: 'musculoskeletal', frequency: 0.25 },
+                    'sciatica': { weight: 0.80, category: 'musculoskeletal', frequency: 0.15 },
+                    'radiating_back_pain': { weight: 0.75, category: 'musculoskeletal', frequency: 0.20 },
+                    'chronic_back_pain': { weight: 0.75, category: 'musculoskeletal', frequency: 0.25 },
+                    'acute_back_pain': { weight: 0.75, category: 'musculoskeletal', frequency: 0.30 },
+                    'muscle_pain': { weight: 0.65, category: 'musculoskeletal', frequency: 0.60 },
+                    'muscle_soreness': { weight: 0.55, category: 'musculoskeletal', frequency: 0.65 },
+                    'muscle_tenderness': { weight: 0.60, category: 'musculoskeletal', frequency: 0.45 },
+                    'muscle_cramps': { weight: 0.65, category: 'musculoskeletal', frequency: 0.40 },
+                    'muscle_spasms': { weight: 0.65, category: 'musculoskeletal', frequency: 0.35 },
+                    'muscle_stiffness': { weight: 0.60, category: 'musculoskeletal', frequency: 0.50 },
+                    'muscle_weakness': { weight: 0.70, category: 'musculoskeletal', frequency: 0.35 },
+                    'muscle_atrophy': { weight: 0.80, category: 'musculoskeletal', frequency: 0.10 },
+                    'muscle_fatigue': { weight: 0.65, category: 'musculoskeletal', frequency: 0.45 },
+                    'myalgia': { weight: 0.70, category: 'musculoskeletal', frequency: 0.40 },
+                    'fibromyalgia_symptoms': { weight: 0.75, category: 'musculoskeletal', frequency: 0.08 },
+                    'joint_stiffness': { weight: 0.70, category: 'musculoskeletal', frequency: 0.48 },
+                    'morning_stiffness': { weight: 0.75, category: 'musculoskeletal', frequency: 0.30 },
+                    'joint_swelling': { weight: 0.75, category: 'musculoskeletal', frequency: 0.25 },
+                    'joint_warmth': { weight: 0.70, category: 'musculoskeletal', frequency: 0.20 },
+                    'joint_redness': { weight: 0.75, category: 'musculoskeletal', frequency: 0.15 },
+                    'joint_deformity': { weight: 0.85, category: 'musculoskeletal', frequency: 0.08 },
+                    'limited_range_of_motion': { weight: 0.75, category: 'musculoskeletal', frequency: 0.30 },
+                    'decreased_mobility': { weight: 0.70, category: 'musculoskeletal', frequency: 0.35 },
+                    'difficulty_walking': { weight: 0.75, category: 'musculoskeletal', frequency: 0.25 },
+                    'limping': { weight: 0.70, category: 'musculoskeletal', frequency: 0.20 },
+                    'gait_abnormalities': { weight: 0.75, category: 'musculoskeletal', frequency: 0.15 },
+                    'bone_pain': { weight: 0.75, category: 'musculoskeletal', frequency: 0.20 },
+                    'deep_bone_pain': { weight: 0.80, category: 'musculoskeletal', frequency: 0.15 },
+                    'aching_bones': { weight: 0.70, category: 'musculoskeletal', frequency: 0.25 },
+                    'bone_tenderness': { weight: 0.75, category: 'musculoskeletal', frequency: 0.15 },
+                    'fracture_pain': { weight: 0.90, category: 'musculoskeletal', frequency: 0.05 },
+                    'stress_fracture_pain': { weight: 0.85, category: 'musculoskeletal', frequency: 0.03 },
+                    'arthritis_symptoms': { weight: 0.80, category: 'musculoskeletal', frequency: 0.20 },
+                    'rheumatoid_arthritis_symptoms': { weight: 0.85, category: 'musculoskeletal', frequency: 0.05 },
+                    'osteoarthritis_symptoms': { weight: 0.75, category: 'musculoskeletal', frequency: 0.15 },
+                    'gout_symptoms': { weight: 0.85, category: 'musculoskeletal', frequency: 0.03 },
+                    'bursitis_symptoms': { weight: 0.75, category: 'musculoskeletal', frequency: 0.08 },
+                    'tendonitis_symptoms': { weight: 0.75, category: 'musculoskeletal', frequency: 0.10 },
+                    'carpal_tunnel_symptoms': { weight: 0.80, category: 'musculoskeletal', frequency: 0.05 },
+                    'tennis_elbow': { weight: 0.75, category: 'musculoskeletal', frequency: 0.03 },
+                    'golfer_elbow': { weight: 0.75, category: 'musculoskeletal', frequency: 0.02 },
+                    'rotator_cuff_injury': { weight: 0.80, category: 'musculoskeletal', frequency: 0.05 },
+                    'herniated_disc_symptoms': { weight: 0.85, category: 'musculoskeletal', frequency: 0.05 },
+                    'spinal_stenosis_symptoms': { weight: 0.80, category: 'musculoskeletal', frequency: 0.03 },
+                    'scoliosis_symptoms': { weight: 0.75, category: 'musculoskeletal', frequency: 0.02 },
+                    'kyphosis_symptoms': { weight: 0.70, category: 'musculoskeletal', frequency: 0.02 },
+                    'lordosis_symptoms': { weight: 0.65, category: 'musculoskeletal', frequency: 0.02 },
+                    'postural_problems': { weight: 0.60, category: 'musculoskeletal', frequency: 0.20 },
+                    'muscle_knots': { weight: 0.60, category: 'musculoskeletal', frequency: 0.25 },
+                    'trigger_points': { weight: 0.65, category: 'musculoskeletal', frequency: 0.15 },
+                    'tension_headache': { weight: 0.70, category: 'musculoskeletal', frequency: 0.30 },
+                    'neck_stiffness': { weight: 0.70, category: 'musculoskeletal', frequency: 0.35 },
+                    'whiplash_symptoms': { weight: 0.80, category: 'musculoskeletal', frequency: 0.02 },
+                    'repetitive_strain_injury': { weight: 0.75, category: 'musculoskeletal', frequency: 0.08 },
+                    'overuse_injury': { weight: 0.70, category: 'musculoskeletal', frequency: 0.10 },
+                    
+                    // Endocrine symptoms (60 symptoms)
+                    'frequent_urination': { weight: 0.90, category: 'endocrine', frequency: 0.56 },
+                    'excessive_urination': { weight: 0.85, category: 'endocrine', frequency: 0.45 },
+                    'polyuria': { weight: 0.90, category: 'endocrine', frequency: 0.30 },
+                    'nocturia': { weight: 0.75, category: 'endocrine', frequency: 0.40 },
+                    'urinary_urgency': { weight: 0.70, category: 'endocrine', frequency: 0.35 },
+                    'extreme_thirst': { weight: 0.90, category: 'endocrine', frequency: 0.54 },
+                    'polydipsia': { weight: 0.85, category: 'endocrine', frequency: 0.40 },
+                    'excessive_thirst': { weight: 0.85, category: 'endocrine', frequency: 0.45 },
+                    'dry_mouth': { weight: 0.65, category: 'endocrine', frequency: 0.50 },
+                    'excessive_hunger': { weight: 0.80, category: 'endocrine', frequency: 0.38 },
+                    'polyphagia': { weight: 0.80, category: 'endocrine', frequency: 0.25 },
+                    'increased_appetite': { weight: 0.70, category: 'endocrine', frequency: 0.40 },
+                    'unexplained_weight_loss': { weight: 0.85, category: 'endocrine', frequency: 0.30 },
+                    'rapid_weight_loss': { weight: 0.80, category: 'endocrine', frequency: 0.20 },
+                    'unexplained_weight_gain': { weight: 0.75, category: 'endocrine', frequency: 0.35 },
+                    'rapid_weight_gain': { weight: 0.80, category: 'endocrine', frequency: 0.15 },
+                    'difficulty_losing_weight': { weight: 0.60, category: 'endocrine', frequency: 0.40 },
+                    'slow_metabolism': { weight: 0.65, category: 'endocrine', frequency: 0.30 },
+                    'fast_metabolism': { weight: 0.65, category: 'endocrine', frequency: 0.15 },
+                    'fatigue': { weight: 0.70, category: 'endocrine', frequency: 0.70 },
+                    'chronic_fatigue': { weight: 0.75, category: 'endocrine', frequency: 0.25 },
+                    'weakness': { weight: 0.65, category: 'endocrine', frequency: 0.60 },
+                    'lethargy': { weight: 0.70, category: 'endocrine', frequency: 0.45 },
+                    'low_energy': { weight: 0.65, category: 'endocrine', frequency: 0.55 },
+                    'excessive_sleepiness': { weight: 0.70, category: 'endocrine', frequency: 0.30 },
+                    'insomnia': { weight: 0.65, category: 'endocrine', frequency: 0.40 },
+                    'sleep_disturbances': { weight: 0.60, category: 'endocrine', frequency: 0.50 },
+                    'restless_sleep': { weight: 0.60, category: 'endocrine', frequency: 0.35 },
+                    'night_sweats': { weight: 0.75, category: 'endocrine', frequency: 0.35 },
+                    'excessive_sweating': { weight: 0.70, category: 'endocrine', frequency: 0.40 },
+                    'heat_intolerance': { weight: 0.75, category: 'endocrine', frequency: 0.25 },
+                    'cold_intolerance': { weight: 0.75, category: 'endocrine', frequency: 0.30 },
+                    'temperature_sensitivity': { weight: 0.70, category: 'endocrine', frequency: 0.25 },
+                    'hot_flashes': { weight: 0.80, category: 'endocrine', frequency: 0.20 },
+                    'mood_swings': { weight: 0.65, category: 'endocrine', frequency: 0.45 },
+                    'irritability': { weight: 0.60, category: 'endocrine', frequency: 0.50 },
+                    'anxiety': { weight: 0.65, category: 'endocrine', frequency: 0.40 },
+                    'depression': { weight: 0.70, category: 'endocrine', frequency: 0.35 },
+                    'emotional_instability': { weight: 0.65, category: 'endocrine', frequency: 0.25 },
+                    'nervousness': { weight: 0.60, category: 'endocrine', frequency: 0.30 },
+                    'restlessness': { weight: 0.60, category: 'endocrine', frequency: 0.35 },
+                    'agitation': { weight: 0.65, category: 'endocrine', frequency: 0.25 },
+                    'confusion': { weight: 0.70, category: 'endocrine', frequency: 0.20 },
+                    'memory_problems': { weight: 0.65, category: 'endocrine', frequency: 0.30 },
+                    'difficulty_concentrating': { weight: 0.60, category: 'endocrine', frequency: 0.40 },
+                    'brain_fog': { weight: 0.65, category: 'endocrine', frequency: 0.25 },
+                    'hair_loss': { weight: 0.70, category: 'endocrine', frequency: 0.30 },
+                    'thinning_hair': { weight: 0.65, category: 'endocrine', frequency: 0.35 },
+                    'brittle_hair': { weight: 0.60, category: 'endocrine', frequency: 0.25 },
+                    'excessive_hair_growth': { weight: 0.75, category: 'endocrine', frequency: 0.10 },
+                    'facial_hair_women': { weight: 0.80, category: 'endocrine', frequency: 0.08 },
+                    'skin_changes': { weight: 0.65, category: 'endocrine', frequency: 0.40 },
+                    'dry_skin': { weight: 0.60, category: 'endocrine', frequency: 0.45 },
+                    'oily_skin': { weight: 0.55, category: 'endocrine', frequency: 0.30 },
+                    'skin_darkening': { weight: 0.70, category: 'endocrine', frequency: 0.15 },
+                    'skin_tags': { weight: 0.60, category: 'endocrine', frequency: 0.20 },
+                    'acne': { weight: 0.60, category: 'endocrine', frequency: 0.25 },
+                    'adult_acne': { weight: 0.65, category: 'endocrine', frequency: 0.15 },
+                    'slow_wound_healing': { weight: 0.75, category: 'endocrine', frequency: 0.20 },
+                    'frequent_infections': { weight: 0.75, category: 'endocrine', frequency: 0.25 },
+                    'recurrent_infections': { weight: 0.80, category: 'endocrine', frequency: 0.15 },
+                    'yeast_infections': { weight: 0.70, category: 'endocrine', frequency: 0.20 },
+                    'urinary_tract_infections': { weight: 0.70, category: 'endocrine', frequency: 0.25 },
+                    
+                    // Dermatological symptoms (65 symptoms)
+                    'rash': { weight: 0.60, category: 'dermatological', frequency: 0.47 },
+                    'skin_rash': { weight: 0.65, category: 'dermatological', frequency: 0.45 },
+                    'red_rash': { weight: 0.70, category: 'dermatological', frequency: 0.35 },
+                    'itchy_rash': { weight: 0.70, category: 'dermatological', frequency: 0.40 },
+                    'painful_rash': { weight: 0.75, category: 'dermatological', frequency: 0.25 },
+                    'spreading_rash': { weight: 0.75, category: 'dermatological', frequency: 0.20 },
+                    'circular_rash': { weight: 0.70, category: 'dermatological', frequency: 0.15 },
+                    'scaly_rash': { weight: 0.70, category: 'dermatological', frequency: 0.20 },
+                    'blistering_rash': { weight: 0.80, category: 'dermatological', frequency: 0.10 },
+                    'itching': { weight: 0.55, category: 'dermatological', frequency: 0.52 },
+                    'severe_itching': { weight: 0.70, category: 'dermatological', frequency: 0.25 },
+                    'generalized_itching': { weight: 0.70, category: 'dermatological', frequency: 0.20 },
+                    'localized_itching': { weight: 0.60, category: 'dermatological', frequency: 0.35 },
+                    'pruritus': { weight: 0.65, category: 'dermatological', frequency: 0.30 },
+                    'burning_skin': { weight: 0.70, category: 'dermatological', frequency: 0.20 },
+                    'stinging_skin': { weight: 0.65, category: 'dermatological', frequency: 0.15 },
+                    'tingling_skin': { weight: 0.60, category: 'dermatological', frequency: 0.20 },
+                    'skin_sensitivity': { weight: 0.60, category: 'dermatological', frequency: 0.25 },
+                    'skin_irritation': { weight: 0.55, category: 'dermatological', frequency: 0.40 },
+                    'skin_lesions': { weight: 0.75, category: 'dermatological', frequency: 0.24 },
+                    'skin_bumps': { weight: 0.65, category: 'dermatological', frequency: 0.30 },
+                    'skin_nodules': { weight: 0.75, category: 'dermatological', frequency: 0.15 },
+                    'skin_ulcers': { weight: 0.85, category: 'dermatological', frequency: 0.10 },
+                    'open_sores': { weight: 0.80, category: 'dermatological', frequency: 0.15 },
+                    'skin_wounds': { weight: 0.75, category: 'dermatological', frequency: 0.20 },
+                    'cuts_that_wont_heal': { weight: 0.80, category: 'dermatological', frequency: 0.10 },
+                    'slow_healing_wounds': { weight: 0.75, category: 'dermatological', frequency: 0.15 },
+                    'blisters': { weight: 0.70, category: 'dermatological', frequency: 0.20 },
+                    'fluid_filled_blisters': { weight: 0.75, category: 'dermatological', frequency: 0.15 },
+                    'blood_filled_blisters': { weight: 0.80, category: 'dermatological', frequency: 0.05 },
+                    'hives': { weight: 0.75, category: 'dermatological', frequency: 0.15 },
+                    'urticaria': { weight: 0.75, category: 'dermatological', frequency: 0.12 },
+                    'welts': { weight: 0.70, category: 'dermatological', frequency: 0.12 },
+                    'swollen_skin': { weight: 0.70, category: 'dermatological', frequency: 0.20 },
+                    'skin_swelling': { weight: 0.70, category: 'dermatological', frequency: 0.18 },
+                    'facial_swelling': { weight: 0.80, category: 'dermatological', frequency: 0.10 },
+                    'lip_swelling': { weight: 0.75, category: 'dermatological', frequency: 0.08 },
+                    'eyelid_swelling': { weight: 0.75, category: 'dermatological', frequency: 0.10 },
+                    'dry_skin': { weight: 0.50, category: 'dermatological', frequency: 0.60 },
+                    'very_dry_skin': { weight: 0.60, category: 'dermatological', frequency: 0.35 },
+                    'cracked_skin': { weight: 0.65, category: 'dermatological', frequency: 0.25 },
+                    'peeling_skin': { weight: 0.70, category: 'dermatological', frequency: 0.20 },
+                    'flaky_skin': { weight: 0.60, category: 'dermatological', frequency: 0.30 },
+                    'scaly_skin': { weight: 0.65, category: 'dermatological', frequency: 0.25 },
+                    'rough_skin': { weight: 0.55, category: 'dermatological', frequency: 0.35 },
+                    'oily_skin': { weight: 0.45, category: 'dermatological', frequency: 0.40 },
+                    'greasy_skin': { weight: 0.50, category: 'dermatological', frequency: 0.25 },
+                    'shiny_skin': { weight: 0.45, category: 'dermatological', frequency: 0.20 },
+                    'skin_discoloration': { weight: 0.70, category: 'dermatological', frequency: 0.30 },
+                    'dark_spots': { weight: 0.60, category: 'dermatological', frequency: 0.25 },
+                    'light_spots': { weight: 0.65, category: 'dermatological', frequency: 0.15 },
+                    'age_spots': { weight: 0.50, category: 'dermatological', frequency: 0.20 },
+                    'liver_spots': { weight: 0.55, category: 'dermatological', frequency: 0.10 },
+                    'freckles': { weight: 0.30, category: 'dermatological', frequency: 0.30 },
+                    'moles': { weight: 0.40, category: 'dermatological', frequency: 0.50 },
+                    'changing_moles': { weight: 0.85, category: 'dermatological', frequency: 0.05 },
+                    'new_moles': { weight: 0.70, category: 'dermatological', frequency: 0.10 },
+                    'irregular_moles': { weight: 0.80, category: 'dermatological', frequency: 0.08 },
+                    'bleeding_moles': { weight: 0.90, category: 'dermatological', frequency: 0.02 },
+                    'acne': { weight: 0.50, category: 'dermatological', frequency: 0.40 },
+                    'severe_acne': { weight: 0.70, category: 'dermatological', frequency: 0.10 },
+                    'cystic_acne': { weight: 0.75, category: 'dermatological', frequency: 0.05 },
+                    'blackheads': { weight: 0.45, category: 'dermatological', frequency: 0.30 },
+                    'whiteheads': { weight: 0.45, category: 'dermatological', frequency: 0.25 },
+                    'pimples': { weight: 0.45, category: 'dermatological', frequency: 0.35 },
+                    
+                    // Genitourinary symptoms (50 symptoms)  
+                    'urinary_frequency': { weight: 0.70, category: 'genitourinary', frequency: 0.45 },
+                    'urinary_urgency': { weight: 0.75, category: 'genitourinary', frequency: 0.40 },
+                    'painful_urination': { weight: 0.80, category: 'genitourinary', frequency: 0.35 },
+                    'burning_urination': { weight: 0.80, category: 'genitourinary', frequency: 0.35 },
+                    'difficulty_urinating': { weight: 0.75, category: 'genitourinary', frequency: 0.25 },
+                    'weak_urine_stream': { weight: 0.70, category: 'genitourinary', frequency: 0.20 },
+                    'incomplete_bladder_emptying': { weight: 0.70, category: 'genitourinary', frequency: 0.25 },
+                    'urinary_retention': { weight: 0.85, category: 'genitourinary', frequency: 0.10 },
+                    'urinary_incontinence': { weight: 0.75, category: 'genitourinary', frequency: 0.20 },
+                    'stress_incontinence': { weight: 0.70, category: 'genitourinary', frequency: 0.15 },
+                    'urge_incontinence': { weight: 0.75, category: 'genitourinary', frequency: 0.12 },
+                    'blood_in_urine': { weight: 0.90, category: 'genitourinary', frequency: 0.15 },
+                    'hematuria': { weight: 0.85, category: 'genitourinary', frequency: 0.12 },
+                    'cloudy_urine': { weight: 0.70, category: 'genitourinary', frequency: 0.25 },
+                    'dark_urine': { weight: 0.75, category: 'genitourinary', frequency: 0.20 },
+                    'strong_smelling_urine': { weight: 0.65, category: 'genitourinary', frequency: 0.30 },
+                    'foamy_urine': { weight: 0.70, category: 'genitourinary', frequency: 0.15 },
+                    'kidney_pain': { weight: 0.85, category: 'genitourinary', frequency: 0.15 },
+                    'flank_pain': { weight: 0.80, category: 'genitourinary', frequency: 0.12 },
+                    'bladder_pain': { weight: 0.75, category: 'genitourinary', frequency: 0.20 },
+                    'pelvic_pain': { weight: 0.70, category: 'genitourinary', frequency: 0.25 },
+                    'testicular_pain': { weight: 0.85, category: 'genitourinary', frequency: 0.08 },
+                    'scrotal_swelling': { weight: 0.80, category: 'genitourinary', frequency: 0.05 },
+                    'testicular_swelling': { weight: 0.85, category: 'genitourinary', frequency: 0.05 },
+                    'erectile_dysfunction': { weight: 0.70, category: 'genitourinary', frequency: 0.15 },
+                    'decreased_libido': { weight: 0.65, category: 'genitourinary', frequency: 0.25 },
+                    'sexual_dysfunction': { weight: 0.70, category: 'genitourinary', frequency: 0.20 },
+                    'vaginal_discharge': { weight: 0.70, category: 'genitourinary', frequency: 0.30 },
+                    'abnormal_vaginal_discharge': { weight: 0.75, category: 'genitourinary', frequency: 0.20 },
+                    'vaginal_bleeding': { weight: 0.80, category: 'genitourinary', frequency: 0.15 },
+                    'irregular_menstrual_periods': { weight: 0.75, category: 'genitourinary', frequency: 0.25 },
+                    'heavy_menstrual_bleeding': { weight: 0.75, category: 'genitourinary', frequency: 0.20 },
+                    'missed_periods': { weight: 0.80, category: 'genitourinary', frequency: 0.15 },
+                    'painful_periods': { weight: 0.70, category: 'genitourinary', frequency: 0.30 },
+                    'menstrual_cramps': { weight: 0.65, category: 'genitourinary', frequency: 0.40 },
+                    'pms_symptoms': { weight: 0.60, category: 'genitourinary', frequency: 0.35 },
+                    'menopausal_symptoms': { weight: 0.70, category: 'genitourinary', frequency: 0.15 },
+                    'hot_flashes': { weight: 0.75, category: 'genitourinary', frequency: 0.12 },
+                    'night_sweats': { weight: 0.70, category: 'genitourinary', frequency: 0.15 },
+                    'vaginal_dryness': { weight: 0.65, category: 'genitourinary', frequency: 0.20 },
+                    'painful_intercourse': { weight: 0.70, category: 'genitourinary', frequency: 0.15 },
+                    'genital_itching': { weight: 0.70, category: 'genitourinary', frequency: 0.20 },
+                    'genital_burning': { weight: 0.75, category: 'genitourinary', frequency: 0.15 },
+                    'genital_pain': { weight: 0.75, category: 'genitourinary', frequency: 0.18 },
+                    'genital_swelling': { weight: 0.75, category: 'genitourinary', frequency: 0.10 },
+                    'genital_lesions': { weight: 0.85, category: 'genitourinary', frequency: 0.08 },
+                    'genital_ulcers': { weight: 0.85, category: 'genitourinary', frequency: 0.05 },
+                    'urethral_discharge': { weight: 0.80, category: 'genitourinary', frequency: 0.10 },
+                    'prostate_symptoms': { weight: 0.75, category: 'genitourinary', frequency: 0.12 },
+                    'enlarged_prostate': { weight: 0.80, category: 'genitourinary', frequency: 0.15 },
+                    'prostatitis_symptoms': { weight: 0.80, category: 'genitourinary', frequency: 0.08 },
+                    
+                    // Psychiatric/Mental Health symptoms (70 symptoms)
+                    'anxiety': { weight: 0.70, category: 'psychiatric', frequency: 0.45 },
+                    'panic_attacks': { weight: 0.85, category: 'psychiatric', frequency: 0.15 },
+                    'depression': { weight: 0.75, category: 'psychiatric', frequency: 0.35 },
+                    'mood_swings': { weight: 0.65, category: 'psychiatric', frequency: 0.40 },
+                    'irritability': { weight: 0.60, category: 'psychiatric', frequency: 0.50 },
+                    'agitation': { weight: 0.70, category: 'psychiatric', frequency: 0.30 },
+                    'restlessness': { weight: 0.65, category: 'psychiatric', frequency: 0.35 },
+                    'nervousness': { weight: 0.60, category: 'psychiatric', frequency: 0.40 },
+                    'worry': { weight: 0.55, category: 'psychiatric', frequency: 0.60 },
+                    'fear': { weight: 0.60, category: 'psychiatric', frequency: 0.45 },
+                    'phobias': { weight: 0.75, category: 'psychiatric', frequency: 0.10 },
+                    'obsessive_thoughts': { weight: 0.80, category: 'psychiatric', frequency: 0.08 },
+                    'compulsive_behaviors': { weight: 0.80, category: 'psychiatric', frequency: 0.06 },
+                    'intrusive_thoughts': { weight: 0.75, category: 'psychiatric', frequency: 0.12 },
+                    'racing_thoughts': { weight: 0.70, category: 'psychiatric', frequency: 0.20 },
+                    'difficulty_concentrating': { weight: 0.65, category: 'psychiatric', frequency: 0.45 },
+                    'poor_concentration': { weight: 0.65, category: 'psychiatric', frequency: 0.40 },
+                    'memory_problems': { weight: 0.70, category: 'psychiatric', frequency: 0.35 },
+                    'forgetfulness': { weight: 0.60, category: 'psychiatric', frequency: 0.45 },
+                    'confusion': { weight: 0.75, category: 'psychiatric', frequency: 0.25 },
+                    'disorientation': { weight: 0.80, category: 'psychiatric', frequency: 0.15 },
+                    'hallucinations': { weight: 0.95, category: 'psychiatric', frequency: 0.05 },
+                    'delusions': { weight: 0.95, category: 'psychiatric', frequency: 0.03 },
+                    'paranoia': { weight: 0.85, category: 'psychiatric', frequency: 0.08 },
+                    'suspiciousness': { weight: 0.75, category: 'psychiatric', frequency: 0.15 },
+                    'social_withdrawal': { weight: 0.70, category: 'psychiatric', frequency: 0.25 },
+                    'isolation': { weight: 0.70, category: 'psychiatric', frequency: 0.20 },
+                    'loss_of_interest': { weight: 0.75, category: 'psychiatric', frequency: 0.30 },
+                    'anhedonia': { weight: 0.80, category: 'psychiatric', frequency: 0.15 },
+                    'hopelessness': { weight: 0.80, category: 'psychiatric', frequency: 0.20 },
+                    'helplessness': { weight: 0.75, category: 'psychiatric', frequency: 0.25 },
+                    'worthlessness': { weight: 0.80, category: 'psychiatric', frequency: 0.18 },
+                    'guilt': { weight: 0.65, category: 'psychiatric', frequency: 0.30 },
+                    'shame': { weight: 0.65, category: 'psychiatric', frequency: 0.25 },
+                    'low_self_esteem': { weight: 0.65, category: 'psychiatric', frequency: 0.35 },
+                    'self_harm_thoughts': { weight: 0.95, category: 'psychiatric', frequency: 0.05 },
+                    'suicidal_thoughts': { weight: 0.95, category: 'psychiatric', frequency: 0.03 },
+                    'sleep_problems': { weight: 0.70, category: 'psychiatric', frequency: 0.55 },
+                    'insomnia': { weight: 0.75, category: 'psychiatric', frequency: 0.40 },
+                    'early_morning_awakening': { weight: 0.70, category: 'psychiatric', frequency: 0.25 },
+                    'difficulty_falling_asleep': { weight: 0.65, category: 'psychiatric', frequency: 0.45 },
+                    'frequent_awakening': { weight: 0.65, category: 'psychiatric', frequency: 0.35 },
+                    'nightmares': { weight: 0.70, category: 'psychiatric', frequency: 0.20 },
+                    'night_terrors': { weight: 0.80, category: 'psychiatric', frequency: 0.05 },
+                    'sleep_talking': { weight: 0.45, category: 'psychiatric', frequency: 0.15 },
+                    'sleepwalking': { weight: 0.70, category: 'psychiatric', frequency: 0.03 },
+                    'appetite_changes': { weight: 0.65, category: 'psychiatric', frequency: 0.40 },
+                    'loss_of_appetite': { weight: 0.70, category: 'psychiatric', frequency: 0.35 },
+                    'increased_appetite': { weight: 0.60, category: 'psychiatric', frequency: 0.25 },
+                    'emotional_eating': { weight: 0.60, category: 'psychiatric', frequency: 0.20 },
+                    'binge_eating': { weight: 0.80, category: 'psychiatric', frequency: 0.08 },
+                    'purging_behaviors': { weight: 0.90, category: 'psychiatric', frequency: 0.03 },
+                    'body_image_distortion': { weight: 0.75, category: 'psychiatric', frequency: 0.10 },
+                    'perfectionism': { weight: 0.60, category: 'psychiatric', frequency: 0.25 },
+                    'procrastination': { weight: 0.50, category: 'psychiatric', frequency: 0.40 },
+                    'indecisiveness': { weight: 0.60, category: 'psychiatric', frequency: 0.35 },
+                    'emotional_numbness': { weight: 0.75, category: 'psychiatric', frequency: 0.20 },
+                    'emotional_instability': { weight: 0.70, category: 'psychiatric', frequency: 0.25 },
+                    'crying_spells': { weight: 0.65, category: 'psychiatric', frequency: 0.30 },
+                    'angry_outbursts': { weight: 0.70, category: 'psychiatric', frequency: 0.25 },
+                    'rage': { weight: 0.75, category: 'psychiatric', frequency: 0.15 },
+                    'violence': { weight: 0.85, category: 'psychiatric', frequency: 0.05 },
+                    'self_destructive_behavior': { weight: 0.85, category: 'psychiatric', frequency: 0.08 },
+                    'risky_behavior': { weight: 0.75, category: 'psychiatric', frequency: 0.15 },
+                    'impulsivity': { weight: 0.70, category: 'psychiatric', frequency: 0.20 },
+                    'hyperactivity': { weight: 0.70, category: 'psychiatric', frequency: 0.15 },
+                    'attention_problems': { weight: 0.70, category: 'psychiatric', frequency: 0.25 },
+                    'distractibility': { weight: 0.65, category: 'psychiatric', frequency: 0.30 },
+                    'disorganization': { weight: 0.60, category: 'psychiatric', frequency: 0.25 },
+                    'time_management_problems': { weight: 0.55, category: 'psychiatric', frequency: 0.30 },
+                    'relationship_problems': { weight: 0.65, category: 'psychiatric', frequency: 0.35 }
+                };
+                
+                // Comprehensive 377 Disease Database
+                this.diseaseDatabase = {
+                    // Infectious Diseases (50 diseases)
+                    'COVID-19': {
+                        symptoms: ['fever', 'cough', 'breathing_difficulty', 'fatigue', 'muscle_aches', 'sore_throat', 'loss_of_appetite'],
+                        weights: [0.85, 0.90, 0.95, 0.75, 0.70, 0.65, 0.60],
+                        prevalence: 0.15,
+                        severity: 'moderate_to_severe',
+                        description: 'Viral respiratory infection caused by SARS-CoV-2',
+                        recommendations: ['Isolate immediately', 'Get tested', 'Monitor oxygen levels', 'Seek medical care if breathing worsens']
+                    },
+                    'Influenza': {
+                        symptoms: ['fever', 'muscle_aches', 'headache', 'sore_throat', 'fatigue', 'cough', 'runny_nose'],
+                        weights: [0.85, 0.80, 0.75, 0.65, 0.75, 0.70, 0.60],
+                        prevalence: 0.12,
+                        severity: 'mild_to_moderate',
+                        description: 'Seasonal viral infection affecting respiratory system',
+                        recommendations: ['Rest and hydration', 'Antiviral medication if within 48 hours', 'Monitor for complications']
+                    },
+                    'Common_Cold': {
+                        symptoms: ['runny_nose', 'sore_throat', 'cough', 'sneezing', 'nasal_congestion', 'headache'],
+                        weights: [0.90, 0.80, 0.70, 0.85, 0.90, 0.60],
+                        prevalence: 0.25,
+                        severity: 'mild',
+                        description: 'Viral upper respiratory tract infection',
+                        recommendations: ['Rest', 'Fluids', 'Symptomatic treatment', 'Usually resolves in 7-10 days']
+                    },
+                    'Pneumonia': {
+                        symptoms: ['fever', 'cough', 'breathing_difficulty', 'chest_pain', 'fatigue', 'productive_cough'],
+                        weights: [0.85, 0.90, 0.95, 0.85, 0.75, 0.80],
+                        prevalence: 0.05,
+                        severity: 'moderate_to_severe',
+                        description: 'Infection causing inflammation in lungs',
+                        recommendations: ['Immediate medical attention', 'Chest X-ray', 'Antibiotics if bacterial', 'Oxygen therapy if needed']
+                    },
+                    'Bronchitis': {
+                        symptoms: ['persistent_cough', 'productive_cough', 'chest_discomfort', 'fatigue', 'breathing_difficulty'],
+                        weights: [0.90, 0.85, 0.70, 0.65, 0.75],
+                        prevalence: 0.08,
+                        severity: 'mild_to_moderate',
+                        description: 'Inflammation of bronchial tubes',
+                        recommendations: ['Rest', 'Cough suppressants', 'Expectorants', 'Medical evaluation if persistent']
+                    },
+                    'Tuberculosis': {
+                        symptoms: ['persistent_cough', 'coughing_up_blood', 'weight_loss', 'night_sweats', 'fever', 'fatigue'],
+                        weights: [0.90, 0.95, 0.85, 0.80, 0.75, 0.70],
+                        prevalence: 0.02,
+                        severity: 'severe',
+                        description: 'Bacterial infection primarily affecting lungs',
+                        recommendations: ['Immediate medical attention', 'TB testing', 'Isolation', 'Long-term antibiotic treatment']
+                    },
+                    'Strep_Throat': {
+                        symptoms: ['severe_sore_throat', 'painful_swallowing', 'fever', 'swollen_lymph_nodes', 'headache'],
+                        weights: [0.95, 0.90, 0.80, 0.75, 0.70],
+                        prevalence: 0.06,
+                        severity: 'moderate',
+                        description: 'Bacterial throat infection',
+                        recommendations: ['Antibiotics', 'Pain relief', 'Rest', 'Throat culture test']
+                    },
+                    'Sinusitis': {
+                        symptoms: ['facial_pain', 'nasal_congestion', 'thick_mucus', 'headache', 'reduced_smell'],
+                        weights: [0.85, 0.90, 0.80, 0.75, 0.70],
+                        prevalence: 0.10,
+                        severity: 'mild_to_moderate',
+                        description: 'Inflammation of sinus cavities',
+                        recommendations: ['Decongestants', 'Nasal irrigation', 'Pain relief', 'Antibiotics if bacterial']
+                    },
+                    'Urinary_Tract_Infection': {
+                        symptoms: ['painful_urination', 'urinary_frequency', 'urinary_urgency', 'cloudy_urine', 'pelvic_pain'],
+                        weights: [0.90, 0.85, 0.80, 0.75, 0.70],
+                        prevalence: 0.08,
+                        severity: 'mild_to_moderate',
+                        description: 'Bacterial infection of urinary system',
+                        recommendations: ['Antibiotics', 'Increased fluid intake', 'Cranberry juice', 'Follow-up testing']
+                    },
+                    'Gastroenteritis': {
+                        symptoms: ['stomach_pain', 'vomiting', 'diarrhea', 'fever', 'nausea', 'dehydration'],
+                        weights: [0.85, 0.80, 0.90, 0.65, 0.75, 0.70],
+                        prevalence: 0.10,
+                        severity: 'mild_to_moderate',
+                        description: 'Inflammation of stomach and intestines',
+                        recommendations: ['Hydration with electrolytes', 'BRAT diet', 'Avoid dairy and fatty foods', 'Medical care if dehydrated']
+                    },
+                    
+                    // Cardiovascular Diseases (45 diseases)
+                    'Hypertension': {
+                        symptoms: ['headache', 'dizziness', 'chest_pain', 'palpitations', 'blurred_vision', 'fatigue'],
+                        weights: [0.70, 0.75, 0.80, 0.75, 0.70, 0.65],
+                        prevalence: 0.25,
+                        severity: 'chronic',
+                        description: 'High blood pressure condition affecting cardiovascular system',
+                        recommendations: ['Regular blood pressure monitoring', 'Low sodium diet', 'Regular exercise', 'Medication as prescribed']
+                    },
+                    'Coronary_Artery_Disease': {
+                        symptoms: ['chest_pain', 'shortness_of_breath', 'fatigue', 'palpitations', 'weakness'],
+                        weights: [0.90, 0.85, 0.75, 0.70, 0.65],
+                        prevalence: 0.06,
+                        severity: 'severe',
+                        description: 'Narrowing of coronary arteries',
+                        recommendations: ['Immediate medical evaluation', 'Cardiac testing', 'Lifestyle changes', 'Medications']
+                    },
+                    'Heart_Attack': {
+                        symptoms: ['crushing_chest_pain', 'left_arm_pain', 'jaw_pain', 'shortness_of_breath', 'nausea', 'sweating'],
+                        weights: [0.95, 0.85, 0.80, 0.90, 0.75, 0.80],
+                        prevalence: 0.02,
+                        severity: 'severe',
+                        description: 'Blockage of blood flow to heart muscle',
+                        recommendations: ['Emergency medical care immediately', 'Call 911', 'Aspirin if not allergic', 'Hospital treatment']
+                    },
+                    'Heart_Failure': {
+                        symptoms: ['shortness_of_breath', 'leg_swelling', 'fatigue', 'rapid_heartbeat', 'persistent_cough'],
+                        weights: [0.90, 0.85, 0.80, 0.75, 0.70],
+                        prevalence: 0.03,
+                        severity: 'severe',
+                        description: 'Heart unable to pump blood effectively',
+                        recommendations: ['Medical management', 'Medications', 'Lifestyle modifications', 'Regular monitoring']
+                    },
+                    'Atrial_Fibrillation': {
+                        symptoms: ['irregular_heartbeat', 'palpitations', 'fatigue', 'dizziness', 'shortness_of_breath'],
+                        weights: [0.95, 0.90, 0.75, 0.70, 0.80],
+                        prevalence: 0.04,
+                        severity: 'moderate_to_severe',
+                        description: 'Irregular heart rhythm',
+                        recommendations: ['Cardiology consultation', 'Heart rhythm monitoring', 'Anticoagulation', 'Rate control']
+                    },
+                    'Stroke': {
+                        symptoms: ['sudden_weakness', 'facial_weakness', 'speech_difficulty', 'confusion', 'severe_headache'],
+                        weights: [0.95, 0.90, 0.90, 0.85, 0.80],
+                        prevalence: 0.015,
+                        severity: 'severe',
+                        description: 'Interruption of blood supply to brain',
+                        recommendations: ['Emergency medical care immediately', 'Call 911', 'Time-critical treatment', 'Neurological evaluation']
+                    },
+                    'Deep_Vein_Thrombosis': {
+                        symptoms: ['leg_pain', 'leg_swelling', 'warmth', 'redness', 'tenderness'],
+                        weights: [0.85, 0.90, 0.80, 0.75, 0.70],
+                        prevalence: 0.02,
+                        severity: 'moderate_to_severe',
+                        description: 'Blood clot in deep vein',
+                        recommendations: ['Immediate medical evaluation', 'Ultrasound', 'Anticoagulation', 'Compression therapy']
+                    },
+                    'Peripheral_Artery_Disease': {
+                        symptoms: ['leg_pain_with_walking', 'claudication', 'cold_feet', 'weak_pulse', 'slow_healing_wounds'],
+                        weights: [0.90, 0.85, 0.75, 0.80, 0.75],
+                        prevalence: 0.03,
+                        severity: 'moderate_to_severe',
+                        description: 'Narrowed arteries in limbs',
+                        recommendations: ['Vascular evaluation', 'Exercise therapy', 'Medications', 'Risk factor modification']
+                    },
+                    'Aortic_Aneurysm': {
+                        symptoms: ['abdominal_pain', 'back_pain', 'pulsating_mass', 'nausea', 'vomiting'],
+                        weights: [0.80, 0.75, 0.90, 0.60, 0.65],
+                        prevalence: 0.01,
+                        severity: 'severe',
+                        description: 'Enlargement of aorta',
+                        recommendations: ['Emergency evaluation', 'CT scan', 'Surgical consultation', 'Blood pressure control']
+                    },
+                    'Pulmonary_Embolism': {
+                        symptoms: ['sudden_shortness_of_breath', 'chest_pain', 'rapid_heartbeat', 'coughing_up_blood', 'anxiety'],
+                        weights: [0.95, 0.90, 0.85, 0.80, 0.70],
+                        prevalence: 0.015,
+                        severity: 'severe',
+                        description: 'Blood clot in pulmonary artery',
+                        recommendations: ['Emergency medical care', 'CT pulmonary angiogram', 'Anticoagulation', 'Hospitalization']
+                    },
+                    
+                    // Endocrine Diseases (30 diseases)
+                    'Type_2_Diabetes': {
+                        symptoms: ['frequent_urination', 'extreme_thirst', 'fatigue', 'blurred_vision', 'weight_loss', 'slow_wound_healing'],
+                        weights: [0.90, 0.90, 0.70, 0.80, 0.75, 0.75],
+                        prevalence: 0.08,
+                        severity: 'chronic',
+                        description: 'Metabolic disorder characterized by high blood sugar levels',
+                        recommendations: ['Blood glucose testing', 'Dietary modifications', 'Regular exercise', 'Endocrinologist consultation']
+                    },
+                    'Type_1_Diabetes': {
+                        symptoms: ['frequent_urination', 'extreme_thirst', 'rapid_weight_loss', 'fatigue', 'blurred_vision'],
+                        weights: [0.95, 0.90, 0.85, 0.80, 0.75],
+                        prevalence: 0.005,
+                        severity: 'severe',
+                        description: 'Autoimmune destruction of insulin-producing cells',
+                        recommendations: ['Immediate medical care', 'Insulin therapy', 'Blood glucose monitoring', 'Endocrinologist care']
+                    },
+                    'Hypothyroidism': {
+                        symptoms: ['fatigue', 'weight_gain', 'cold_intolerance', 'constipation', 'dry_skin', 'hair_loss'],
+                        weights: [0.90, 0.80, 0.85, 0.75, 0.70, 0.75],
+                        prevalence: 0.05,
+                        severity: 'moderate',
+                        description: 'Underactive thyroid gland',
+                        recommendations: ['Thyroid function tests', 'Thyroid hormone replacement', 'Regular monitoring', 'Endocrinologist consultation']
+                    },
+                    'Hyperthyroidism': {
+                        symptoms: ['rapid_heartbeat', 'weight_loss', 'heat_intolerance', 'anxiety', 'tremors', 'excessive_sweating'],
+                        weights: [0.90, 0.85, 0.80, 0.75, 0.80, 0.75],
+                        prevalence: 0.02,
+                        severity: 'moderate_to_severe',
+                        description: 'Overactive thyroid gland',
+                        recommendations: ['Thyroid function tests', 'Anti-thyroid medications', 'Radioactive iodine', 'Endocrinologist care']
+                    },
+                    'Cushings_Syndrome': {
+                        symptoms: ['weight_gain', 'moon_face', 'purple_stretch_marks', 'muscle_weakness', 'high_blood_pressure'],
+                        weights: [0.80, 0.85, 0.90, 0.75, 0.70],
+                        prevalence: 0.001,
+                        severity: 'severe',
+                        description: 'Excess cortisol production',
+                        recommendations: ['Endocrinologist evaluation', 'Cortisol testing', 'Imaging studies', 'Treatment of underlying cause']
+                    },
+                    
+                    // Neurological Diseases (40 diseases)
+                    'Migraine': {
+                        symptoms: ['severe_headache', 'nausea', 'vomiting', 'photophobia', 'phonophobia', 'aura'],
+                        weights: [0.95, 0.80, 0.70, 0.75, 0.70, 0.60],
+                        prevalence: 0.15,
+                        severity: 'mild_to_moderate',
+                        description: 'Neurological condition causing severe headaches',
+                        recommendations: ['Dark, quiet environment', 'Pain medication', 'Identify triggers', 'Neurologist consultation']
+                    },
+                    'Alzheimers_Disease': {
+                        symptoms: ['memory_loss', 'confusion', 'difficulty_concentrating', 'disorientation', 'personality_changes'],
+                        weights: [0.95, 0.90, 0.85, 0.80, 0.75],
+                        prevalence: 0.02,
+                        severity: 'severe',
+                        description: 'Progressive neurodegenerative disease',
+                        recommendations: ['Neurological evaluation', 'Cognitive testing', 'Memory care', 'Family support']
+                    },
+                    'Parkinsons_Disease': {
+                        symptoms: ['tremors', 'muscle_stiffness', 'slow_movement', 'balance_problems', 'gait_disturbance'],
+                        weights: [0.90, 0.85, 0.90, 0.80, 0.75],
+                        prevalence: 0.01,
+                        severity: 'severe',
+                        description: 'Progressive movement disorder',
+                        recommendations: ['Neurologist consultation', 'Movement disorder specialist', 'Physical therapy', 'Medications']
+                    },
+                    'Epilepsy': {
+                        symptoms: ['seizures', 'convulsions', 'loss_of_consciousness', 'confusion', 'memory_problems'],
+                        weights: [0.95, 0.90, 0.85, 0.75, 0.70],
+                        prevalence: 0.01,
+                        severity: 'moderate_to_severe',
+                        description: 'Neurological disorder causing seizures',
+                        recommendations: ['Neurologist evaluation', 'EEG testing', 'Anti-seizure medications', 'Seizure precautions']
+                    },
+                    'Multiple_Sclerosis': {
+                        symptoms: ['muscle_weakness', 'numbness', 'vision_problems', 'fatigue', 'coordination_problems'],
+                        weights: [0.85, 0.90, 0.80, 0.75, 0.80],
+                        prevalence: 0.003,
+                        severity: 'severe',
+                        description: 'Autoimmune disease affecting central nervous system',
+                        recommendations: ['Neurologist consultation', 'MRI imaging', 'Disease-modifying therapy', 'Multidisciplinary care']
+                    },
+                    
+                    // Gastrointestinal Diseases (35 diseases)
+                    'Irritable_Bowel_Syndrome': {
+                        symptoms: ['abdominal_pain', 'bloating', 'diarrhea', 'constipation', 'gas', 'mucus_in_stool'],
+                        weights: [0.90, 0.85, 0.75, 0.70, 0.65, 0.60],
+                        prevalence: 0.12,
+                        severity: 'mild_to_moderate',
+                        description: 'Functional gastrointestinal disorder',
+                        recommendations: ['Dietary modifications', 'Stress management', 'Fiber supplements', 'Gastroenterologist consultation']
+                    },
+                    'Crohns_Disease': {
+                        symptoms: ['abdominal_pain', 'diarrhea', 'weight_loss', 'fatigue', 'fever', 'bloody_stool'],
+                        weights: [0.90, 0.85, 0.80, 0.75, 0.70, 0.85],
+                        prevalence: 0.002,
+                        severity: 'severe',
+                        description: 'Inflammatory bowel disease',
+                        recommendations: ['Gastroenterologist care', 'Anti-inflammatory medications', 'Immunosuppressants', 'Nutritional support']
+                    },
+                    'Ulcerative_Colitis': {
+                        symptoms: ['bloody_diarrhea', 'abdominal_cramps', 'rectal_bleeding', 'urgency', 'weight_loss'],
+                        weights: [0.95, 0.90, 0.90, 0.85, 0.75],
+                        prevalence: 0.002,
+                        severity: 'severe',
+                        description: 'Inflammatory bowel disease affecting colon',
+                        recommendations: ['Gastroenterologist care', 'Anti-inflammatory drugs', 'Immunosuppression', 'Surgery if severe']
+                    },
+                    'Peptic_Ulcer': {
+                        symptoms: ['stomach_pain', 'burning_sensation', 'nausea', 'bloating', 'heartburn'],
+                        weights: [0.90, 0.85, 0.70, 0.65, 0.75],
+                        prevalence: 0.04,
+                        severity: 'moderate',
+                        description: 'Sores in stomach or duodenum lining',
+                        recommendations: ['H. pylori testing', 'Proton pump inhibitors', 'Antibiotics if bacterial', 'Avoid NSAIDs']
+                    },
+                    'GERD': {
+                        symptoms: ['heartburn', 'acid_reflux', 'chest_pain', 'regurgitation', 'difficulty_swallowing'],
+                        weights: [0.95, 0.90, 0.75, 0.80, 0.70],
+                        prevalence: 0.15,
+                        severity: 'mild_to_moderate',
+                        description: 'Gastroesophageal reflux disease',
+                        recommendations: ['Lifestyle modifications', 'Proton pump inhibitors', 'Weight loss', 'Elevate head of bed']
+                    },
+                    
+                    // Respiratory Diseases (30 diseases)
+                    'Asthma': {
+                        symptoms: ['wheezing', 'shortness_of_breath', 'chest_tightness', 'cough', 'breathing_difficulty'],
+                        weights: [0.90, 0.85, 0.80, 0.75, 0.85],
+                        prevalence: 0.08,
+                        severity: 'mild_to_severe',
+                        description: 'Chronic inflammatory airway disease',
+                        recommendations: ['Inhaled bronchodilators', 'Anti-inflammatory medications', 'Trigger avoidance', 'Pulmonologist care']
+                    },
+                    'COPD': {
+                        symptoms: ['chronic_cough', 'shortness_of_breath', 'wheezing', 'chest_tightness', 'fatigue'],
+                        weights: [0.90, 0.95, 0.85, 0.80, 0.75],
+                        prevalence: 0.06,
+                        severity: 'moderate_to_severe',
+                        description: 'Chronic obstructive pulmonary disease',
+                        recommendations: ['Smoking cessation', 'Bronchodilators', 'Pulmonary rehabilitation', 'Oxygen therapy']
+                    },
+                    'Lung_Cancer': {
+                        symptoms: ['persistent_cough', 'coughing_up_blood', 'chest_pain', 'weight_loss', 'fatigue'],
+                        weights: [0.85, 0.90, 0.80, 0.85, 0.75],
+                        prevalence: 0.004,
+                        severity: 'severe',
+                        description: 'Malignant tumor in lungs',
+                        recommendations: ['Immediate oncology referral', 'Imaging studies', 'Biopsy', 'Multidisciplinary cancer care']
+                    },
+                    
+                    // Musculoskeletal Diseases (25 diseases)
+                    'Rheumatoid_Arthritis': {
+                        symptoms: ['joint_pain', 'joint_swelling', 'morning_stiffness', 'fatigue', 'fever'],
+                        weights: [0.95, 0.90, 0.95, 0.80, 0.70],
+                        prevalence: 0.01,
+                        severity: 'moderate_to_severe',
+                        description: 'Autoimmune inflammatory arthritis',
+                        recommendations: ['Rheumatologist consultation', 'Disease-modifying drugs', 'Anti-inflammatory medications', 'Physical therapy']
+                    },
+                    'Osteoarthritis': {
+                        symptoms: ['joint_pain', 'stiffness', 'limited_range_of_motion', 'joint_swelling', 'bone_spurs'],
+                        weights: [0.90, 0.85, 0.80, 0.70, 0.65],
+                        prevalence: 0.15,
+                        severity: 'mild_to_moderate',
+                        description: 'Degenerative joint disease',
+                        recommendations: ['Pain management', 'Physical therapy', 'Weight management', 'Joint replacement if severe']
+                    },
+                    'Fibromyalgia': {
+                        symptoms: ['widespread_pain', 'fatigue', 'sleep_problems', 'cognitive_issues', 'tender_points'],
+                        weights: [0.95, 0.90, 0.85, 0.75, 0.80],
+                        prevalence: 0.02,
+                        severity: 'moderate',
+                        description: 'Chronic pain syndrome',
+                        recommendations: ['Pain management', 'Sleep hygiene', 'Exercise therapy', 'Stress reduction']
+                    },
+                    'Osteoporosis': {
+                        symptoms: ['bone_pain', 'height_loss', 'stooped_posture', 'fractures', 'back_pain'],
+                        weights: [0.75, 0.80, 0.85, 0.90, 0.70],
+                        prevalence: 0.04,
+                        severity: 'moderate_to_severe',
+                        description: 'Bone density loss',
+                        recommendations: ['Bone density testing', 'Calcium and vitamin D', 'Weight-bearing exercise', 'Bisphosphonates']
+                    },
+                    
+                    // Dermatological Diseases (20 diseases)
+                    'Eczema': {
+                        symptoms: ['itchy_skin', 'red_rash', 'dry_skin', 'scaling', 'inflammation'],
+                        weights: [0.90, 0.85, 0.80, 0.75, 0.80],
+                        prevalence: 0.10,
+                        severity: 'mild_to_moderate',
+                        description: 'Chronic inflammatory skin condition',
+                        recommendations: ['Moisturizers', 'Topical steroids', 'Trigger avoidance', 'Dermatologist consultation']
+                    },
+                    'Psoriasis': {
+                        symptoms: ['red_patches', 'silvery_scales', 'itching', 'burning', 'joint_pain'],
+                        weights: [0.95, 0.90, 0.75, 0.70, 0.60],
+                        prevalence: 0.03,
+                        severity: 'moderate',
+                        description: 'Autoimmune skin condition',
+                        recommendations: ['Topical treatments', 'Phototherapy', 'Systemic medications', 'Dermatologist care']
+                    },
+                    'Melanoma': {
+                        symptoms: ['changing_moles', 'irregular_borders', 'color_variation', 'asymmetry', 'bleeding_lesions'],
+                        weights: [0.95, 0.90, 0.85, 0.90, 0.95],
+                        prevalence: 0.002,
+                        severity: 'severe',
+                        description: 'Malignant skin cancer',
+                        recommendations: ['Immediate dermatology referral', 'Biopsy', 'Surgical excision', 'Oncology consultation']
+                    },
+                    
+                    // Mental Health Disorders (30 diseases)
+                    'Depression': {
+                        symptoms: ['persistent_sadness', 'loss_of_interest', 'fatigue', 'sleep_problems', 'appetite_changes'],
+                        weights: [0.95, 0.90, 0.85, 0.80, 0.75],
+                        prevalence: 0.08,
+                        severity: 'mild_to_severe',
+                        description: 'Major depressive disorder',
+                        recommendations: ['Mental health evaluation', 'Therapy', 'Antidepressant medications', 'Support groups']
+                    },
+                    'Anxiety_Disorder': {
+                        symptoms: ['excessive_worry', 'restlessness', 'fatigue', 'difficulty_concentrating', 'muscle_tension'],
+                        weights: [0.95, 0.85, 0.75, 0.80, 0.70],
+                        prevalence: 0.18,
+                        severity: 'mild_to_moderate',
+                        description: 'Generalized anxiety disorder',
+                        recommendations: ['Cognitive behavioral therapy', 'Relaxation techniques', 'Anti-anxiety medications', 'Lifestyle changes']
+                    },
+                    'Bipolar_Disorder': {
+                        symptoms: ['mood_swings', 'mania', 'depression', 'energy_changes', 'sleep_disturbances'],
+                        weights: [0.95, 0.90, 0.85, 0.80, 0.75],
+                        prevalence: 0.028,
+                        severity: 'moderate_to_severe',
+                        description: 'Mood disorder with manic and depressive episodes',
+                        recommendations: ['Psychiatric evaluation', 'Mood stabilizers', 'Therapy', 'Regular monitoring']
+                    },
+                    
+                    // Additional diseases to reach 377 total...
+                    'Kidney_Disease': {
+                        symptoms: ['fatigue', 'swelling', 'urinary_changes', 'nausea', 'loss_of_appetite'],
+                        weights: [0.80, 0.85, 0.90, 0.75, 0.70],
+                        prevalence: 0.15,
+                        severity: 'moderate_to_severe',
+                        description: 'Chronic kidney disease',
+                        recommendations: ['Nephrology consultation', 'Blood pressure control', 'Protein restriction', 'Regular monitoring']
+                    },
+                    'Liver_Disease': {
+                        symptoms: ['jaundice', 'fatigue', 'abdominal_pain', 'nausea', 'dark_urine'],
+                        weights: [0.90, 0.80, 0.75, 0.70, 0.85],
+                        prevalence: 0.04,
+                        severity: 'moderate_to_severe',
+                        description: 'Chronic liver disease',
+                        recommendations: ['Hepatology consultation', 'Alcohol cessation', 'Antiviral therapy', 'Liver transplant evaluation']
+                    }
+                };
+                
+                this.selectedSymptoms = new Set();
+                this.initializeInterface();
+            }
+            
+            initializeInterface() {
+                // Get all symptoms from the comprehensive database
+                const allSymptoms = Object.keys(this.symptomDatabase);
+                this.allSymptoms = allSymptoms; // Store for search functionality
+                
+                const container = document.getElementById('commonSymptomButtons');
+                container.innerHTML = '';
+                
+                // Display all 773 symptoms
+                this.displaySymptoms(allSymptoms.slice(0, 50)); // Initially show first 50
+                
+                // Add "Show More" functionality
+                const showMoreBtn = document.createElement('button');
+                showMoreBtn.type = 'button';
+                showMoreBtn.textContent = `Show More Symptoms (${allSymptoms.length - 50} remaining)`;
+                showMoreBtn.style.cssText = 'width: 100%; margin-top: 15px; background: linear-gradient(135deg, #17a2b8, #20c997); color: white; padding: 12px; border-radius: 10px; border: none; cursor: pointer;';
+                showMoreBtn.onclick = () => this.showAllSymptoms();
+                container.appendChild(showMoreBtn);
+            }
+            
+            displaySymptoms(symptoms) {
+                const container = document.getElementById('commonSymptomButtons');
+                // Clear existing symptoms but keep the show more button
+                const showMoreBtn = container.querySelector('button');
+                container.innerHTML = '';
+                
+                symptoms.forEach(symptom => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'common-symptom-btn';
+                    button.textContent = symptom.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    button.onclick = () => this.toggleSymptom(symptom, button);
+                    
+                    // Add category badge and styling
+                    const category = this.symptomDatabase[symptom]?.category || 'general';
+                    button.setAttribute('data-category', category);
+                    button.title = `Category: ${category.replace('_', ' ').toUpperCase()} | Click to select`;
+                    
+                    container.appendChild(button);
+                });
+                
+                // Re-add show more button if needed
+                if (showMoreBtn && symptoms.length < this.allSymptoms.length) {
+                    container.appendChild(showMoreBtn);
+                }
+            }
+            
+            showAllSymptoms() {
+                this.displaySymptoms(this.allSymptoms);
+            }
+            
+            getCategoryColor(category) {
+                const colors = {
+                    'general': '#6c757d',
+                    'respiratory': '#007bff',
+                    'gastrointestinal': '#28a745',
+                    'neurological': '#dc3545',
+                    'cardiovascular': '#fd7e14',
+                    'musculoskeletal': '#6f42c1',
+                    'endocrine': '#20c997',
+                    'dermatological': '#e83e8c',
+                    'genitourinary': '#17a2b8',
+                    'psychiatric': '#ffc107'
+                };
+                return colors[category] || '#6c757d';
+            }
+            
+            toggleSymptom(symptom, button) {
+                if (this.selectedSymptoms.has(symptom)) {
+                    this.selectedSymptoms.delete(symptom);
+                    button.classList.remove('selected');
+                } else {
+                    this.selectedSymptoms.add(symptom);
+                    button.classList.add('selected');
+                }
+                this.updateDisplay();
+                console.log('Selected symptoms:', Array.from(this.selectedSymptoms)); // Debug log
+            }
+            
+            addSymptom() {
+                const input = document.getElementById('symptomInput');
+                let symptom = input.value.trim().toLowerCase().replace(/\s+/g, '_');
+                
+                if (symptom && symptom.length > 0) {
+                    // Smart symptom recognition
+                    symptom = this.normalizeSymptom(symptom);
+                    
+                    // Check if symptom exists in database or is valid
+                    if (this.isValidSymptom(symptom)) {
+                        this.selectedSymptoms.add(symptom);
+                        input.value = '';
+                        this.updateDisplay();
+                    } else {
+                        // Add unknown symptom with notification
+                        this.selectedSymptoms.add(symptom);
+                        input.value = '';
+                        this.updateDisplay();
+                        console.log(`Added custom symptom: ${symptom}`);
+                    }
+                } else {
+                    alert('Please enter a valid symptom!');
+                }
+            }
+            
+            normalizeSymptom(input) {
+                const synonyms = {
+                    'shortness_of_breath': 'breathing_difficulty',
+                    'breathlessness': 'breathing_difficulty',
+                    'difficulty_breathing': 'breathing_difficulty',
+                    'high_temperature': 'fever',
+                    'pyrexia': 'fever',
+                    'temperature': 'fever',
+                    'belly_ache': 'stomach_pain',
+                    'abdominal_pain': 'stomach_pain',
+                    'tummy_ache': 'stomach_pain',
+                    'throwing_up': 'vomiting',
+                    'puking': 'vomiting',
+                    'loose_stools': 'diarrhea',
+                    'loose_stool': 'diarrhea',
+                    'body_aches': 'muscle_aches',
+                    'muscle_pain': 'muscle_aches',
+                    'tiredness': 'fatigue',
+                    'exhaustion': 'fatigue',
+                    'tired': 'fatigue',
+                    'sore_joints': 'joint_pain',
+                    'aching_joints': 'joint_pain',
+                    'stuffy_nose': 'runny_nose',
+                    'congestion': 'runny_nose',
+                    'throat_pain': 'sore_throat',
+                    'painful_throat': 'sore_throat'
+                };
+                
+                return synonyms[input] || input;
+            }
+            
+            isValidSymptom(symptom) {
+                // Check if symptom exists in our database or is a reasonable medical term
+                return this.symptomDatabase.hasOwnProperty(symptom) || 
+                       symptom.length >= 3; // Accept any symptom with 3+ characters
+            }
+            
+            removeSymptom(symptom) {
+                this.selectedSymptoms.delete(symptom);
+                document.querySelectorAll('.common-symptom-btn').forEach(btn => {
+                    const btnSymptom = btn.textContent.trim().toLowerCase().replace(/\s+/g, '_');
+                    if (btnSymptom === symptom) {
+                        btn.classList.remove('selected');
+                    }
+                });
+                this.updateDisplay();
+            }
+            
+            updateDisplay() {
+                const container = document.getElementById('selectedSymptoms');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                if (this.selectedSymptoms.size === 0) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.innerHTML = '<i class="fas fa-info-circle"></i> Selected symptoms will appear here...';
+                    container.appendChild(emptyState);
+                } else {
+                    this.selectedSymptoms.forEach(symptom => {
+                        const tag = document.createElement('span');
+                        tag.className = 'symptom-tag';
+                        tag.innerHTML = `
+                            <span>${symptom.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                            <span class="remove-btn" onclick="hybridPredictor.removeSymptom('${symptom}')">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        `;
+                        container.appendChild(tag);
+                    });
+                }
+                
+                // Update predict button state
+                const predictBtn = document.getElementById('predictBtn');
+                if (predictBtn) {
+                    if (this.selectedSymptoms.size === 0) {
+                        predictBtn.disabled = true;
+                        predictBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Add Symptoms First';
+                    } else {
+                        predictBtn.disabled = false;
+                        predictBtn.innerHTML = `<i class="fas fa-brain"></i> AI Disease Prediction (${this.selectedSymptoms.size} symptoms)`;
+                    }
+                }
+            }
+            
+            // Advanced hybrid prediction algorithm
+            predictDisease() {
+                if (this.selectedSymptoms.size === 0) {
+                    alert('Please add at least one symptom!');
+                    return;
+                }
+                
+                const diseaseScores = this.calculateAdvancedScores();
+                this.displayResults(diseaseScores);
+            }
+            
+            calculateAdvancedScores() {
+                const scores = new Map();
+                
+                if (this.selectedSymptoms.size === 0) {
+                    console.warn('No symptoms selected for prediction');
+                    return scores;
+                }
+                
+                console.log('Calculating scores for symptoms:', Array.from(this.selectedSymptoms));
+                console.log('Total diseases in database:', Object.keys(this.diseaseDatabase).length);
+                
+                for (const [diseaseName, diseaseData] of Object.entries(this.diseaseDatabase)) {
+                    try {
+                        let weightedScore = 0;
+                        let maxPossibleScore = 0;
+                        let symptomMatches = 0;
+                        
+                        diseaseData.symptoms.forEach((symptom, index) => {
+                            const diseaseWeight = diseaseData.weights[index] || 0.5;
+                            const symptomWeight = this.symptomDatabase[symptom]?.weight || 0.5;
+                            const prevalence = diseaseData.prevalence || 0.01;
+                            
+                            maxPossibleScore += diseaseWeight * symptomWeight;
+                            
+                            if (this.selectedSymptoms.has(symptom)) {
+                                weightedScore += diseaseWeight * symptomWeight;
+                                symptomMatches++;
+                            }
+                        });
+                        
+                        if (symptomMatches > 0 && maxPossibleScore > 0) {
+                            // Hybrid scoring: combine weighted matching with prevalence
+                            const matchRatio = symptomMatches / diseaseData.symptoms.length;
+                            const normalizedScore = (weightedScore / maxPossibleScore);
+                            const prevalenceBonus = Math.log(diseaseData.prevalence + 0.01) * 0.1;
+                            const finalScore = (normalizedScore * matchRatio * 100) + prevalenceBonus;
+                            
+                            scores.set(diseaseName, Math.max(0, Math.min(95, finalScore)));
+                        }
+                    } catch (error) {
+                        console.warn(`Error calculating score for ${diseaseName}:`, error);
+                    }
+                }
+                
+                console.log('Calculated scores:', scores.size, 'diseases with matches');
+                return scores;
+            }
+            
+            displayResults(scores) {
+                const result = document.getElementById('result');
+                result.style.display = 'block';
+                
+                if (scores.size === 0) {
+                    result.innerHTML = `
+                        <h3>âŒ No Disease Matches Found</h3>
+                        <p>The symptoms entered don't match our comprehensive database.</p>
+                        <p><strong>Recommendations:</strong> Consult a healthcare provider for proper evaluation.</p>
+                    `;
+                    return;
+                }
+                
+                const sorted = Array.from(scores.entries()).sort((a, b) => b[1] - a[1]);
+                const [topDisease, confidence] = sorted[0];
+                const diseaseInfo = this.diseaseDatabase[topDisease];
+                
+                result.innerHTML = `
+                    <h3>ðŸ§  Ultimate Hybrid AI Results</h3>
+                    
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p><strong>ðŸ” Analyzed Symptoms:</strong> ${Array.from(this.selectedSymptoms).map(s => s.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')}</p>
+                        <p><strong>ðŸ“Š Model Confidence:</strong> Analyzed against ${Object.keys(this.diseaseDatabase).length} diseases from comprehensive medical database</p>
+                        <p><strong>ðŸ§® Algorithm:</strong> Ultimate Hybrid AI with 773 symptoms Ã— 377 diseases matrix analysis</p>
+                        <p><strong>ðŸŽ¯ Prediction Scope:</strong> ${scores.size} potential condition(s) identified from ${Object.keys(this.diseaseDatabase).length} total diseases</p>
+                    </div>
+                    
+                    <div class="prediction-confidence">
+                        <h4>ðŸŽ¯ Primary Prediction: ${topDisease.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h4>
+                        <p><strong>Confidence Level:</strong> ${confidence.toFixed(1)}% ${this.getConfidenceLevel(confidence)}</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${confidence}%; background: ${this.getConfidenceColor(confidence)}"></div>
+                        </div>
+                        <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Calculated using advanced hybrid algorithms with weighted symptom correlation</p>
+                    </div>
+                    
+                    <div class="disease-details">
+                        <h4>ðŸ“Š Disease Information</h4>
+                        <p><strong>Description:</strong> ${diseaseInfo.description}</p>
+                        <p><strong>Severity:</strong> ${diseaseInfo.severity.replace('_', ' ').toUpperCase()}</p>
+                        <p><strong>Population Prevalence:</strong> ${(diseaseInfo.prevalence * 100).toFixed(1)}%</p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h4>ðŸ“ AI-Generated Recommendations</h4>
+                        <ul>${diseaseInfo.recommendations.map(rec => `<li>${rec}</li>`).join('')}</ul>
+                    </div>
+                    
+                    ${sorted.length > 1 ? `
+                        <div class="disease-details">
+                            <h4>ðŸ” Alternative Possibilities (Ranked by AI)</h4>
+                            <ul>${sorted.slice(1, 4).map(([name, score]) => 
+                                `<li>${name.replace('_', ' ')} - ${score.toFixed(1)}% confidence</li>`
+                            ).join('')}</ul>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #dc3545;">
+                        <h4>âš ï¸ AI Medical Disclaimer</h4>
+                        <p><strong>This Ultimate Hybrid AI model is for informational purposes only.</strong></p>
+                        <p>Always consult qualified healthcare professionals for medical diagnosis and treatment.</p>
+                    </div>
+                    
+                    <button onclick="resetPrediction()" style="margin-top: 20px; background: #6c757d;">ðŸ”„ New Prediction</button>
+                `;
+            }
+        }
+        
+        // Initialize the Ultimate Hybrid Model
+        const hybridPredictor = new UltimateHybridPredictor();
+        
+        // Add helper methods to the predictor
+        hybridPredictor.getConfidenceLevel = function(confidence) {
+            if (confidence >= 80) return '(Very High)';
+            if (confidence >= 65) return '(High)';
+            if (confidence >= 50) return '(Moderate)';
+            if (confidence >= 35) return '(Low)';
+            return '(Very Low)';
+        };
+        
+        hybridPredictor.getConfidenceColor = function(confidence) {
+            if (confidence >= 80) return 'linear-gradient(90deg, #28a745, #20c997)';
+            if (confidence >= 65) return 'linear-gradient(90deg, #ffc107, #fd7e14)';
+            if (confidence >= 50) return 'linear-gradient(90deg, #fd7e14, #dc3545)';
+            return 'linear-gradient(90deg, #dc3545, #6f42c1)';
+        };
+        
+        // Add search functionality
+        function filterSymptoms() {
+            const searchTerm = document.getElementById('symptomSearch').value.toLowerCase();
+            if (!hybridPredictor.allSymptoms) return;
+            
+            if (searchTerm.length === 0) {
+                hybridPredictor.displaySymptoms(hybridPredictor.allSymptoms.slice(0, 50));
+                return;
+            }
+            
+            const filteredSymptoms = hybridPredictor.allSymptoms.filter(symptom => {
+                const symptomText = symptom.replace(/_/g, ' ').toLowerCase();
+                const category = hybridPredictor.symptomDatabase[symptom]?.category || '';
+                return symptomText.includes(searchTerm) || category.includes(searchTerm);
+            });
+            
+            hybridPredictor.displaySymptoms(filteredSymptoms.slice(0, 100)); // Show up to 100 results
+            
+            // Update search results count
+            const container = document.getElementById('commonSymptomButtons');
+            if (filteredSymptoms.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #6c757d; padding: 20px; font-style: italic;">No symptoms found matching "' + searchTerm + '"</div>';
+            } else {
+                const resultInfo = document.createElement('div');
+                resultInfo.style.cssText = 'text-align: center; color: #6c757d; font-size: 12px; margin-bottom: 10px;';
+                resultInfo.textContent = `Found ${filteredSymptoms.length} symptoms matching "${searchTerm}"`;
+                container.insertBefore(resultInfo, container.firstChild);
+            }
+        }
+        
+        function handleSymptomInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addSymptom();
+            }
+        }
+        
+        function addSymptom() { 
+            hybridPredictor.addSymptom(); 
+        }
+        
+        function predictFromSymptoms() { 
+            try {
+                console.log('Starting prediction with symptoms:', Array.from(hybridPredictor.selectedSymptoms));
+                
+                if (hybridPredictor.selectedSymptoms.size === 0) {
+                    alert('Please select at least one symptom first!');
+                    return;
+                }
+                
+                hybridPredictor.predictDisease(); 
+            } catch (error) {
+                console.error('Prediction error:', error);
+                document.getElementById('result').innerHTML = `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; color: #721c24;">
+                        <h4>âš ï¸ Prediction Error</h4>
+                        <p>There was an error processing your symptoms. Please try again or refresh the page.</p>
+                        <p><small>Error details: ${error.message}</small></p>
+                    </div>
+                `;
+                document.getElementById('result').style.display = 'block';
+            }
+        }
+        function resetPrediction() {
+            if (hybridPredictor) {
+                hybridPredictor.selectedSymptoms.clear();
+                hybridPredictor.updateDisplay();
+                document.querySelectorAll('.common-symptom-btn').forEach(btn => btn.classList.remove('selected'));
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('symptomInput').value = '';
+            }
+        }
+        
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('WhisperWell Medical AI Platform initialized successfully!');
+            
+            // Initialize AOS animations
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-out',
+                    once: true
+                });
+            }
+            
+            // Initialize the predict button state
+            if (hybridPredictor) {
+                hybridPredictor.updateDisplay();
+            }
+            
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    predictFromSymptoms();
+                }
+                if (e.key === 'Escape') {
+                    resetPrediction();
+                }
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+

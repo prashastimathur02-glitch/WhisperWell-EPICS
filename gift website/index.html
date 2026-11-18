@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gift Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+  <style>
+    ::-webkit-scrollbar {
+      height: 20px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #f472b6;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-white font-sans text-gray-800">
+
+  <!-- Header -->
+  <header class="relative bg-gradient-to-r from-pink-600 via-pink-600 to-pink-600 text-white py-12 shadow-2xl rounded-b-3xl">
+    <!-- Background Video -->
+    <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover z-0 opacity-50">
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="relative z-10">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-shadow-lg animate__animated animate__fadeInUp">🎁 Welcome To Gifts Store</h1>
+      <p class="text-center mt-4 text-lg sm:text-xl font-medium text-opacity-80 animate__animated animate__fadeInUp animate__delay-1s">Find the perfect gift for every occasion</p>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="hero-section" class="relative text-center py-16 px-6 md:px-12 bg-gradient-to-tl from-white via-pink-100 to-pink-50 rounded-xl shadow-xl">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4 animate__animated animate__fadeInUp">Make Someone Smile Today 😊</h2>
+    <p class="text-white font-bold mb-8 max-w-3xl mx-auto text-base sm:text-lg animate__animated animate__fadeInUp animate__delay-2s">
+      Discover our beautifully curated collection of gifts crafted to make every celebration unforgettable. Whether it’s a birthday, anniversary, or just a simple gesture, we’ve got the perfect gift for everyone.
+    </p>
+    <button class="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 sm:px-10 sm:py-5 rounded-full shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+      ✨ Shop Now
+    </button>
+  </section>
+
+  <script>
+    // List of background images to cycle through
+    const backgroundImages = [
+      'image/colorful-festive-holiday-background-gift-boxes-generative-ai-339772065.webp',
+      'image/joyfull-christmas-gift-background-free-vector.jpg',
+      'image/gift-boxes-decorations-abstract-background-sales-gifts-colored-wallpaper-black-friday-296977864.webp',
+      'image/pngtree-black-friday-shopping-carnival-gift-box-background-image_547749.jpg',
+      'image/pngtree-atmospheric-bow-gift-box-gift-voucher-image_926748.jpg',
+    ];
+
+    let currentImageIndex = 0;
+
+    // Function to change the background image
+    function changeBackgroundImage() {
+      const heroSection = document.getElementById('hero-section');
+      heroSection.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+
+      // Move to the next image in the array
+      currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+    }
+
+    // Change background every 5 minutes (300,000 milliseconds)
+    setInterval(changeBackgroundImage, 5000);
+
+    // Set the initial background image when the page loads
+    window.onload = changeBackgroundImage;
+  </script>
+
+  <!-- Category Section (Horizontal Scroll) -->
+  <section class="px-4 py-10">
+    <h2 class="text-2xl font-bold text-center text-pink-700 mb-6">We have gifts for.....</h2>
+    <div class="flex overflow-x-auto space-x-5 pb-4 px-1 snap-x scroll-smooth">
+      <!-- Category Items with GIFs -->
+      <script>
+        const categories = [
+          { name: "Men", gif: "https://media.tenor.com/stwEJrjgtwYAAAAi/wave-hi.gif" },
+          { name: "Women", gif: "https://media.tenor.com/fKTW_94hK9UAAAAi/transparent-lift.gif" },
+          { name: "Husband", gif: "https://media1.tenor.com/m/_R5SfEZzf7kAAAAd/handsome-handsome-man.gif" },
+          { name: "Wife", gif: "https://media1.tenor.com/m/7F5KAKTuV6sAAAAC/theecards-theecards-greetings.gif" },
+          { name: "Mom", gif: "https://media1.tenor.com/m/EUqyr1DjEdUAAAAC/happy-mothers-day-mom-happy-moms-day.gif" },
+          { name: "Dad", gif: "https://media1.tenor.com/m/pytq451fr1UAAAAd/baby-nose-baby-nose-attack.gif" },
+          { name: "Sister", gif: "https://media.tenor.com/qH7Uk4k2JNwAAAAi/mocha-and-milk.gif" },
+          { name: "Brother", gif: "https://media.tenor.com/26VWQbnTPpAAAAAi/little-pills.gif" },
+          { name: "Girlfriend", gif: "https://media.tenor.com/LXmZ2bdPYlwAAAAi/caring.gif" },
+          { name: "Boyfriend", gif: "https://media.tenor.com/qrYeEh7fiKkAAAAi/bf-fnf.gif" },
+          { name: "Teenager", gif: "https://media1.tenor.com/m/U0pcpLZ6FbEAAAAC/sigh-eye-roll.gif" },
+          { name: "Babies", gif: "https://media1.tenor.com/m/peJkzB-KT5cAAAAd/wongyeekei-keikei.gif" }
+        ];
+
+        const categoryContainer = document.querySelector('.flex');
+        
+        categories.forEach(cat => {
+          const categoryItem = document.createElement('div');
+          categoryItem.classList.add('flex-shrink-0', 'flex', 'flex-col', 'items-center', 'snap-start');
+          categoryItem.setAttribute('data-aos', 'zoom-in');
+          
+          categoryItem.innerHTML = `
+            <div class="w-16 h-16 sm:w-24 sm:h-24 bg-white border-4 border-pink-300 rounded-full overflow-hidden shadow-md hover:scale-110 transition-transform duration-300">
+              <img src="${cat.gif}" alt="${cat.name}" class="w-full h-full object-cover" />
+            </div>
+            <span class="mt-2 text-xs sm:text-sm font-medium">${cat.name.toUpperCase()}</span>
+          `;
+          
+          categoryContainer.appendChild(categoryItem);
+        });
+      </script>
+    </div>
+  </section>
+  <section id="special-deals" class="bg-gradient-to-br from-pink-100 to-pink-50 py-16 px-4 md:px-12 relative">
+    <h2 class="text-3xl font-extrabold text-center text-pink-700 mb-8">Special Deals</h2>
+  
+    <!-- Navigation Arrows -->
+    <button id="scrollLeft" class="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg p-2 rounded-full hover:bg-pink-100">
+      <svg class="w-6 h-6 text-pink-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+  
+    <button id="scrollRight" class="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg p-2 rounded-full hover:bg-pink-100">
+      <svg class="w-6 h-6 text-pink-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  
+    <!-- Carousel -->
+    <section class="relative">
+      <!-- Scroll Buttons -->
+      <button id="scrollLeft" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-200 hover:bg-gray-300 p-2 rounded-full shadow">
+        ◀
+      </button>
+      <button id="scrollRight" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-200 hover:bg-gray-300 p-2 rounded-full shadow">
+        ▶
+      </button>
+    
+      <!-- Carousel Container -->
+      <div id="carousel" class="flex overflow-x-auto space-x-6 scroll-smooth snap-x pb-4 px-8">
+        <!-- All Cards Here -->
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif" alt="Wedding" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Wedding Deals 💍</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Celebrate love with curated wedding gifts.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="Diwali" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Diwali Delights 🪔</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Spread light with thoughtful gifts.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/l0MYyda6CQE1ZJxP2/giphy.gif" alt="Mother's Day" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Mother's Day 💐</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Celebrate love and gratitude.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-rose-500 text-white rounded-md hover:bg-rose-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/3o7qDEq2bMbcbPRQ2c/giphy.gif" alt="Holi" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Holi Colors 🌈</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Add joy and color with festive gifts.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/xUPGcguWZHRC2HyBRS/giphy.gif" alt="Eid" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Eid's Special 🌙</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Brighten Eid with meaningful gifts.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/l0Exk8EUzSLsrErEQ/giphy.gif" alt="Friendship" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Friends Forever 👫</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Gifts that celebrate your closest bonds.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/l0ExbR2VLzBHOg74I/giphy.gif" alt="Couple Gifts" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Couple Gifts ❤️</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Romantic picks for the perfect pair.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" alt="Bouquet" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Bouquet 🌸</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Fresh flowers for every occasion.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/26xBwdIuRJiAIqHwA/giphy.gif" alt="Birthday" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Birthday Bliss 🎂</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Perfect presents for a perfect birthday!</p>
+          <button class="mt-4 w-full py-2 px-4 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">Shop Now</button>
+        </div>
+    
+        <div class="flex-shrink-0 w-72 bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 snap-start">
+          <img src="https://media.giphy.com/media/l0IylOPCNkiqOgMyA/giphy.gif" alt="Anniversary" class="w-14 h-14 mb-3 rounded-full mx-auto">
+          <h3 class="text-xl font-bold text-center text-gray-800">Anniversary Magic 💞</h3>
+          <p class="text-sm text-center text-gray-600 mt-2">Celebrate milestones with meaningful surprises.</p>
+          <button class="mt-4 w-full py-2 px-4 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">Shop Now</button>
+        </div>
+      </div>
+    </section>
+    
+    <script>
+      const carousel = document.getElementById("carousel");
+      const scrollLeft = document.getElementById("scrollLeft");
+      const scrollRight = document.getElementById("scrollRight");
+    
+      scrollLeft.addEventListener("click", () => {
+        carousel.scrollBy({ left: -300, behavior: "smooth" });
+      });
+    
+      scrollRight.addEventListener("click", () => {
+        carousel.scrollBy({ left: 300, behavior: "smooth" });
+      });
+    
+      // Auto-scroll every 4 seconds
+      setInterval(() => {
+        carousel.scrollBy({ left: 300, behavior: "smooth" });
+      }, 5000);
+    </script>
+    
+  
+
+  <!-- Gift Grid (Vertical Scroll) -->
+  <section class="py-10 px-4 sm:px-12 bg-gradient-to-b from-pink-50 to-white">
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-pink-700 mb-10 tracking-tight">🎁 Popular Gifts</h2>
+  
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 overflow-y-auto max-h-[32rem] sm:max-h-[28rem]" data-aos="fade-up">
+      
+      <!-- Gift Card -->
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://www.fnp.com//images/pr/l/v20250411173629/bedazzled-roses-delight-in-personalised-pen-holder_1.jpg" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">Bedazzled Roses Delight In Personalised Pen Holder</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://www.fnp.com//images/pr/l/v20250409183304/golden-syngonium-gift-for-mothers-day_1.jpg" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">Golden Syngonium Gift for Mother's Day</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://funcakes.com/content/uploads/2021/02/Red-Velvet-Cake-with-Fruit-1000x750.png" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700"> traditional American red velvet cake.</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="image\6034826b8c3d5321c12c1e5bb2492c6c.jpg" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">Gift hamper which consist bouquet o</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/18904686/2022/8/4/cf055172-6c35-4f2c-9741-bf692747ff0d1659630659361CarltonLondonGirlsGold-PlatedPinkTurquoiseBlueJewellerySet1.jpg" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">Carlton London Girls Gold-Plated Pink & Turquoise Blue Jewellery Set</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://imonkey-blog.imgix.net/blog/wp-content/uploads/2015/11/01042627/shutterstock_171155426-371x600.jpg?auto=fortmat&fit=clip&expires=1777680000&width=480&height=776" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">watch Watches For Men's</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="data:image/jpeg;base64,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" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">Silver Ring For Girls and Women Silver Ring</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRlyxRvSgJEIBithEKnp04z7jUo3arY6YCxh_t9gOyysP84vDXAgUE7Cfz05ZeD3fl_Gjs9rXKxJiZPNB5sCMa_tgCTUFQ1jIZLrzHk2XULnEOY3F2Owknn" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">House Of Common Long Soft Lovable Hugable Cute Giant Life Size Teddy Bear 4.5 Feet Pink - 25 Inch</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:scale-105 duration-300 border border-pink-100">
+        <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQPe7dVLr3ramBF0MG70dEjzaRDzZzLhfLjPlLdbv7QRsj0h5MZu5hCKuyPcYBmr9x_jeCaNBvuHBCyvccTa-tL55D_1sLD5gmm5ozare9dKaDy2qyKeKQ3" alt="Gift Card 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg sm:text-xl font-bold text-pink-700">Mercedes AMG GT Diecast Car</h3>
+          <p class="text-sm text-gray-500 mt-2">A wonderful gift for any occasion!</p>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-xl font-extrabold text-pink-600">₹50</span>
+            <button class="py-2 px-5 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition duration-200">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+  
+    </div>
+  </section>
+
+  <!-- Contact Us Section -->
+  <section id="contact-us" class="bg-pink-50 py-16 px-6 md:px-12">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl font-semibold text-pink-700 mb-6">
+        ☎ Contact Us
+      </h2>
+      <p class="text-lg font-medium text-gray-700 mb-8">
+        We'd love to hear from you! Feel free to reach out for any questions, suggestions, or feedback.
+      </p>
+      <a href="contact.html" class="inline-flex items-center bg-pink-600 text-white font-medium py-3 px-6 rounded-md shadow-md transition-transform transform hover:bg-pink-700 hover:scale-105 hover:shadow-lg duration-300 ease-in-out">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75l7.5 7.5 4.5-4.5 7.5 7.5M9.75 3.75h10.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25H9.75a2.25 2.25 0 01-2.25-2.25V6a2.25 2.25 0 012.25-2.25z"></path>
+        </svg>
+        Get in Touch
+      </a>
+    </div>
+  </section>
+  
+  </section>
+  
+<!-- About Us Section -->
+<section id="about-us" class="bg-white py-16 px-6 md:px-12" data-aos="fade-up">
+  <div class="max-w-5xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-pink-600 mb-6">About Us</h2>
+    <p class="text-gray-700 text-lg sm:text-xl leading-relaxed mb-4">
+      At <span class="font-bold text-pink-600">Gifts Store</span>, we believe in the power of thoughtful gifting. Our curated collections are designed to make every occasion special. 
+      From personalized keepsakes to joyful surprises, we aim to spread smiles across miles. Whether it's a birthday, anniversary, or just because, we bring joy to your celebrations.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 mt-8">
+      <div class="flex flex-col items-center text-center">
+        <div class="text-pink-600 text-4xl mb-4">
+          <i class="fas fa-gift"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Curated Gifts</h3>
+        <p class="text-gray-600">Handpicked gifts for every occasion, ensuring that your loved ones feel special and appreciated.</p>
+      </div>
+      <div class="flex flex-col items-center text-center">
+        <div class="text-pink-600 text-4xl mb-4">
+          <i class="fas fa-heart"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Spread Joy</h3>
+        <p class="text-gray-600">Our goal is to bring joy to every doorstep. Every gift we offer is meant to create lasting memories and smiles.</p>
+      </div>
+      <div class="flex flex-col items-center text-center">
+        <div class="text-pink-600 text-4xl mb-4">
+          <i class="fas fa-shipping-fast"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Fast Delivery</h3>
+        <p class="text-gray-600">We understand the importance of timely delivery, ensuring your gift reaches its destination right on time.</p>
+      </div>
+    </div>
+    <p class="mt-6 text-gray-500 text-base">
+      Whether you're shopping for birthdays, anniversaries, or just because — we're here to help you make someone’s day memorable with a personalized gift that speaks from the heart.
+    </p>
+  </div>
+</section>
+
+
+<<!-- Footer Section -->
+<footer class="bg-gradient-to-r from-pink-500 to-pink-300 text-white py-10 px-6 md:px-12 mt-10">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
+    <!-- Company Info -->
+    <div>
+      <h3 class="text-2xl font-extrabold mb-2 text-pink-100">
+        Dream Store
+      </h3>
+      <p class="text-sm text-white/80">Making gifting magical ✨</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="text-center md:text-left w-full md:w-auto">
+      <h4 class="text-lg font-semibold mb-2 text-pink-100">Quick Links</h4>
+      <ul class="space-y-1 text-sm text-white/80">
+        <li>
+          <a href="#hero-section" class="flex items-center justify-center md:justify-start hover:underline">
+            <i class="fas fa-home mr-2"></i> Home
+          </a>
+        </li>
+        <li>
+          <a href="#about-us" class="flex items-center justify-center md:justify-start hover:underline">
+            <i class="fas fa-info-circle mr-2"></i> About Us
+          </a>
+        </li>
+        <li>
+          <a href="#gift-list" class="flex items-center justify-center md:justify-start hover:underline">
+            <i class="fas fa-gift mr-2"></i> Gifts
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Contact Info -->
+    <div>
+      <h4 class="text-lg font-semibold mb-2 text-pink-100">Contact</h4>
+      <p class="text-sm text-white/80 flex items-center justify-center sm:justify-start">
+        <i class="fas fa-envelope mr-2"></i> dreamstore@example.com
+      </p>
+      <p class="text-sm text-white/80 flex items-center justify-center sm:justify-start">
+        <i class="fas fa-phone-alt mr-2"></i> +91 98765 43210
+      </p>
+      <p class="text-sm text-white/80 flex items-center justify-center sm:justify-start">
+        <i class="fas fa-map-marker-alt mr-2"></i> VIT Bhopal, India
+      </p>
+    </div>
+  </div>
+
+  <div class="text-center mt-6 text-sm text-white/80">
+    &copy; 2025 Dream Store. All rights reserved.
+  </div>
+</footer>
+
+
+  <!-- Firebase Gift Loading Script (Fixed) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IlLZCcUnwsWQ6R360tMIR3pcMO3Cx1A",
+      authDomain: "vital-92722.firebaseapp.com",
+      databaseURL: "https://vital-92722-default-rtdb.firebaseio.com",
+      projectId: "vital-92722",
+      storageBucket: "vital-92722.appspot.com",
+      messagingSenderId: "141384962985",
+      appId: "1:141384962985:web:e18a741ef33058a75c6ab8",
+      measurementId: "G-EJ45EV7DKX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadGifts() {
+      const giftList = document.getElementById("gift-list");
+      const querySnapshot = await getDocs(collection(db, "gifts"));
+      querySnapshot.forEach(doc => {
+        const gift = doc.data();
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl shadow-md p-4 flex flex-col justify-between transform transition duration-300 hover:shadow-xl hover:scale-105";
+        card.innerHTML = `
+          <img src="${gift.image}" alt="${gift.name}" class="w-full h-40 object-cover rounded-xl" />
+          <h2 class="mt-3 text-xl font-semibold text-gray-800">${gift.name}</h2>
+          <p class="text-gray-600 text-sm">${gift.description}</p>
+          <p class="text-pink-600 font-bold text-lg mt-1">₹${gift.price}</p>
+          <button class="mt-3 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition duration-200 shadow" onclick="addToCart('${gift.name}', '${gift.price}')">Add to Cart</button>
+        `;
+        giftList.appendChild(card);
+      });
+    }
+
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Item added to cart!");
+    }
+
+    loadGifts();
+  </script>
+
+  
+  <!-- AOS Animation -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+
+</body>
+</html>

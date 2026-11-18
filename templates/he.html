@@ -1,0 +1,922 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Medicine Reminder - WhisperWell | Smart Health Assistant</title>
+    <meta name="description" content="Never miss a dose with WhisperWell's advanced voice-activated medicine reminder system. Smart notifications for your health routine.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+            --radius-lg: 16px; --radius-xl: 24px; --radius-2xl: 32px; --radius-full: 9999px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-gradient);
+            min-height: 100vh; color: white; position: relative;
+        }
+        
+        /* Permanent Background GIF */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMAGE/k7cxz7qunpzc6hntjwcl.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.2;
+            z-index: -2;
+        }
+
+        /* Animated Background Overlay */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+                       radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+                       radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite; z-index: -1;
+        }
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(30px, -30px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-20px, 20px) rotate(240deg) scale(0.9); }
+        }
+        /* Navigation */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border); padding: var(--space-4) 0; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-6);
+            display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: var(--space-3);
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;
+            color: white; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--secondary-gradient);
+            border-radius: var(--radius-lg); display: flex; align-items: center;
+            justify-content: center; color: white; font-size: 1.25rem; }
+        .nav-menu { display: flex; align-items: center; gap: var(--space-6); list-style: none; }
+        .nav-link { color: rgba(255, 255, 255, 0.9); text-decoration: none;
+            font-weight: 500; padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-lg); transition: all 0.3s ease;
+            display: flex; align-items: center; gap: var(--space-2); }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        /* Header & Main Content */
+        .header { text-align: center; padding: 120px var(--space-6) var(--space-8); }
+        .header-title { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: var(--space-4); }
+        .header-subtitle { font-size: 1.25rem; color: rgba(255, 255, 255, 0.8);
+            max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto var(--space-8); padding: var(--space-8);
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-2xl);
+            box-shadow: var(--glass-shadow); position: relative; }
+        .container::before { content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: var(--warning-gradient); }
+
+        /* Form Elements */
+        .form-group { margin-bottom: var(--space-6); }
+        label { display: block; font-weight: 600; color: white;
+            margin-bottom: var(--space-2); font-size: 1.125rem; }
+        input, select, button { width: 100%; background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: var(--radius-lg);
+            padding: var(--space-4); color: white; font-size: 1rem;
+            font-family: var(--font-primary); transition: all 0.3s ease; outline: none; }
+        input::placeholder { color: rgba(255, 255, 255, 0.6); }
+        input:focus, select:focus { border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15); box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+        button { background: var(--warning-gradient); border: none;
+            border-radius: var(--radius-full); font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            gap: var(--space-2); margin: var(--space-4) 0; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); }
+        .stop-btn { background: var(--danger-gradient); }
+        .snooze-btn { background: var(--secondary-gradient); }
+
+        /* Day Checkboxes & Reminders List */
+        .day-checkbox { display: flex; justify-content: center; gap: var(--space-2);
+            margin: var(--space-4) 0; flex-wrap: wrap; }
+        .day-checkbox label { cursor: pointer; color: white; font-weight: 600;
+            padding: var(--space-2) var(--space-3); background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg); transition: all 0.3s ease; }
+        .day-checkbox label:hover { background: rgba(255, 255, 255, 0.2); }
+        ul { list-style: none; padding: 0; margin: var(--space-6) 0; }
+        li { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: var(--space-4);
+            margin: var(--space-3) 0; border-radius: var(--radius-lg);
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s ease; }
+        li:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .header { padding: 100px var(--space-4) var(--space-6); }
+            .container { margin: 0 var(--space-4) var(--space-8); padding: var(--space-6); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-heartbeat"></i></div>
+                WhisperWell
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="disease.html" class="nav-link"><i class="fas fa-stethoscope"></i> Disease Prediction</a></li>
+                <li><a href="ai.html" class="nav-link"><i class="fas fa-robot"></i> Medbot</a></li>
+                <li><a href="contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <h1 class="header-title" data-aos="fade-up">
+            <i class="fas fa-volume-up"></i> Voice Medicine Reminder
+        </h1>
+        <p class="header-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Never miss a dose with our intelligent voice-activated reminder system
+        </p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" data-aos="fade-up" data-aos-delay="400">
+        <div class="form-group">
+            <label for="medicineName"><i class="fas fa-pills"></i> Medicine Name:</label>
+            <input type="text" id="medicineName" placeholder="Enter medicine name">
+        </div>
+        
+        <div class="form-group">
+            <label for="dosage"><i class="fas fa-prescription-bottle"></i> Dosage:</label>
+            <input type="text" id="dosage" placeholder="e.g., 1 tablet, 5ml">
+        </div>
+        
+        <div class="form-group">
+            <label for="time"><i class="fas fa-clock"></i> Time:</label>
+            <input type="time" id="time">
+        </div>
+        
+        <div class="form-group">
+            <label for="frequency"><i class="fas fa-calendar-alt"></i> Frequency:</label>
+            <select id="frequency">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="custom">Custom Days</option>
+            </select>
+        </div>
+        
+        <div class="day-checkbox" id="daysSelection" style="display: none;">
+            <label><input type="checkbox" value="Monday"> Mon</label>
+            <label><input type="checkbox" value="Tuesday"> Tue</label>
+            <label><input type="checkbox" value="Wednesday"> Wed</label>
+            <label><input type="checkbox" value="Thursday"> Thu</label>
+            <label><input type="checkbox" value="Friday"> Fri</label>
+            <label><input type="checkbox" value="Saturday"> Sat</label>
+            <label><input type="checkbox" value="Sunday"> Sun</label>
+        </div>
+        
+        <button onclick="addReminder()"><i class="fas fa-plus"></i> Add Reminder</button>
+        <button onclick="startVoiceInput()" style="background: var(--success-gradient);"><i class="fas fa-microphone"></i> Voice Input</button>
+        
+        <h3 style="margin-top: var(--space-8); text-align: center; color: white;">Active Reminders</h3>
+        <ul id="reminderList"></ul>
+        
+        <button onclick="exportReminders()" style="background: var(--secondary-gradient); margin-top: var(--space-4);">
+            <i class="fas fa-download"></i> Export Reminders
+        </button>
+        <button onclick="importReminders()" style="background: var(--primary-gradient); margin-top: var(--space-4);">
+            <i class="fas fa-upload"></i> Import Reminders
+        </button>
+        
+        <div style="margin-top: var(--space-6); text-align: center; font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+            <p><strong>ðŸ’¡ Keyboard Shortcuts:</strong></p>
+            <p><kbd>Ctrl+M</kbd>: Voice Input | <kbd>Ctrl+Enter</kbd>: Add Reminder</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize AOS animations
+        AOS.init({ duration: 800, easing: 'ease-in-out', once: true, offset: 100 });
+        
+        let reminders = JSON.parse(localStorage.getItem('medicineReminders')) || [];
+        let reminderIntervals = [];
+        let isListening = false;
+        let recognition = null;
+        let medicineDatabase = {
+            'aspirin': { dosage: '1 tablet', instructions: 'Take with food' },
+            'paracetamol': { dosage: '500mg', instructions: 'Take every 4-6 hours' },
+            'ibuprofen': { dosage: '200mg', instructions: 'Take with food' },
+            'metformin': { dosage: '500mg', instructions: 'Take with meals' },
+            'amoxicillin': { dosage: '250mg', instructions: 'Complete the course' },
+            'lisinopril': { dosage: '5mg', instructions: 'Take at same time daily' },
+            'atorvastatin': { dosage: '20mg', instructions: 'Take in evening' },
+            'omeprazole': { dosage: '20mg', instructions: 'Take before breakfast' }
+        };
+        
+        function addReminder() {
+            const medicine = document.getElementById('medicineName').value.toLowerCase().trim();
+            const dosage = document.getElementById('dosage').value || 'As prescribed';
+            const time = document.getElementById('time').value;
+            const frequency = document.getElementById('frequency').value;
+            
+            if (!medicine || !time) {
+                showAlert('Please fill in medicine name and time', 'warning');
+                return;
+            }
+            
+            // Auto-fill dosage if medicine is in database
+            if (medicineDatabase[medicine] && !document.getElementById('dosage').value) {
+                document.getElementById('dosage').value = medicineDatabase[medicine].dosage;
+            }
+            
+            const selectedDays = getSelectedDays();
+            const reminder = {
+                id: Date.now(),
+                medicine: medicine.charAt(0).toUpperCase() + medicine.slice(1),
+                dosage: dosage,
+                time: time,
+                frequency: frequency,
+                days: selectedDays,
+                created: new Date().toISOString(),
+                streak: 0,
+                totalDoses: 0,
+                missedDoses: 0,
+                instructions: medicineDatabase[medicine]?.instructions || 'Follow doctor\'s advice'
+            };
+            
+            reminders.push(reminder);
+            saveReminders();
+            displayReminders();
+            scheduleReminder(reminder);
+            clearForm();
+            showAlert(`Reminder for ${reminder.medicine} added successfully!`, 'success');
+        }
+        
+        function displayReminders() {
+            const list = document.getElementById('reminderList');
+            list.innerHTML = '';
+            
+            if (reminders.length === 0) {
+                list.innerHTML = '<li style="text-align: center; color: rgba(255,255,255,0.6);">No active reminders</li>';
+                return;
+            }
+            
+            reminders.forEach(reminder => {
+                const li = document.createElement('li');
+                const accuracy = reminder.totalDoses > 0 ? 
+                    Math.round(((reminder.totalDoses - reminder.missedDoses) / reminder.totalDoses) * 100) : 100;
+                
+                li.innerHTML = `
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 5px;">
+                            ðŸ’Š ${reminder.medicine} - ${reminder.dosage}
+                        </div>
+                        <div style="font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 5px;">
+                            ðŸ• Time: ${reminder.time} | ${reminder.frequency}
+                        </div>
+                        <div style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">
+                            ðŸ“Š Streak: ${reminder.streak} days | Accuracy: ${accuracy}%
+                        </div>
+                        ${reminder.days && reminder.days.length > 0 ? 
+                            `<div style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">Days: ${reminder.days.join(', ')}</div>` : ''}
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button onclick="editReminder(${reminder.id})" style="background: var(--secondary-gradient); width: auto; padding: 8px 12px; font-size: 0.9rem;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="removeReminder(${reminder.id})" style="background: var(--danger-gradient); width: auto; padding: 8px 12px; font-size: 0.9rem;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+        
+        function editReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            if (!reminder) return;
+            
+            document.getElementById('medicineName').value = reminder.medicine;
+            document.getElementById('dosage').value = reminder.dosage;
+            document.getElementById('time').value = reminder.time;
+            document.getElementById('frequency').value = reminder.frequency;
+            
+            // Select the days
+            document.querySelectorAll('.day-checkbox input').forEach(cb => {
+                cb.checked = reminder.days && reminder.days.includes(cb.value);
+            });
+            
+            // Remove the old reminder
+            removeReminder(id);
+            
+            showAlert('Reminder loaded for editing. Make changes and click Add Reminder.', 'info');
+        }
+        
+        function removeReminder(id) {
+            reminders = reminders.filter(r => r.id !== id);
+            saveReminders();
+            displayReminders();
+            showAlert('Reminder removed successfully', 'success');
+        }
+        
+        function stopAllReminders() {
+            if (confirm('Are you sure you want to stop all reminders? This action cannot be undone.')) {
+                reminderIntervals.forEach(interval => clearInterval(interval));
+                reminderIntervals = [];
+                reminders = [];
+                saveReminders();
+                displayReminders();
+                showAlert('All reminders stopped', 'success');
+            }
+        }
+        
+        function scheduleReminder(reminder) {
+            const now = new Date();
+            const [hours, minutes] = reminder.time.split(':');
+            
+            function getNextReminderTime() {
+                const reminderTime = new Date();
+                reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                
+                // If time has passed today, schedule for tomorrow or next valid day
+                if (reminderTime <= now) {
+                    reminderTime.setDate(reminderTime.getDate() + 1);
+                }
+                
+                // If specific days are selected, find the next valid day
+                if (reminder.days && reminder.days.length > 0) {
+                    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    
+                    while (!reminder.days.includes(daysOfWeek[reminderTime.getDay()])) {
+                        reminderTime.setDate(reminderTime.getDate() + 1);
+                    }
+                }
+                
+                return reminderTime;
+            }
+            
+            function setNextReminder() {
+                const nextTime = getNextReminderTime();
+                const timeUntilReminder = nextTime.getTime() - Date.now();
+                
+                if (timeUntilReminder > 0) {
+                    const timeoutId = setTimeout(() => {
+                        showNotification(reminder);
+                        
+                        // Schedule next occurrence based on frequency
+                        if (reminder.frequency === 'daily' || 
+                            (reminder.days && reminder.days.length > 0)) {
+                            setNextReminder();
+                        }
+                    }, timeUntilReminder);
+                    
+                    reminderIntervals.push(timeoutId);
+                }
+            }
+            
+            setNextReminder();
+        }
+        
+        function showNotification(reminder) {
+            const message = `Time to take ${reminder.medicine} - ${reminder.dosage}`;
+            const extendedMessage = `${message}. ${reminder.instructions}`;
+            
+            // Enhanced notification with custom icon and actions
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const notification = new Notification('ðŸ’Š Medicine Reminder', {
+                    body: extendedMessage,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/883/883356.png',
+                    badge: 'https://cdn-icons-png.flaticon.com/512/883/883356.png',
+                    requireInteraction: true,
+                    actions: [
+                        { action: 'taken', title: 'âœ… Taken' },
+                        { action: 'snooze', title: 'â° Snooze 10min' },
+                        { action: 'skip', title: 'âŒ Skip' }
+                    ]
+                });
+                
+                notification.onclick = () => {
+                    window.focus();
+                    notification.close();
+                    handleMedicineTaken(reminder.id, true);
+                };
+            }
+            
+            // Enhanced voice notification with personality
+            if ('speechSynthesis' in window) {
+                const voices = speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => 
+                    voice.name.includes('Female') || 
+                    voice.name.includes('Zira') || 
+                    voice.name.includes('Samantha')
+                ) || voices[0];
+                
+                const utterance = new SpeechSynthesisUtterance(
+                    `Hello! It's time for your ${reminder.medicine}. Please take ${reminder.dosage}. ${reminder.instructions}`
+                );
+                utterance.voice = femaleVoice;
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                speechSynthesis.speak(utterance);
+            }
+            
+            // Enhanced popup with options
+            showCustomAlert(reminder);
+        }
+        
+        function startVoiceInput() {
+            if (!('webkitSpeechRecognition' in window)) {
+                showAlert('Voice recognition not supported in your browser', 'error');
+                return;
+            }
+            
+            if (isListening) {
+                stopVoiceInput();
+                return;
+            }
+            
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            
+            const button = document.querySelector('[onclick="startVoiceInput()"]');
+            button.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop Listening';
+            button.style.background = 'var(--danger-gradient)';
+            isListening = true;
+            
+            recognition.onstart = () => {
+                showAlert('Listening... Speak your medicine name clearly', 'info');
+            };
+            
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                
+                if (finalTranscript) {
+                    const medicine = finalTranscript.toLowerCase().trim();
+                    document.getElementById('medicineName').value = medicine;
+                    
+                    // Auto-suggest dosage if medicine is recognized
+                    if (medicineDatabase[medicine]) {
+                        document.getElementById('dosage').value = medicineDatabase[medicine].dosage;
+                        showAlert(`Found ${medicine} in database. Dosage auto-filled!`, 'success');
+                    }
+                    
+                    stopVoiceInput();
+                }
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                showAlert(`Voice recognition error: ${event.error}`, 'error');
+                stopVoiceInput();
+            };
+            
+            recognition.onend = () => {
+                stopVoiceInput();
+            };
+            
+            try {
+                recognition.start();
+            } catch (error) {
+                showAlert('Failed to start voice recognition', 'error');
+                stopVoiceInput();
+            }
+        }
+        
+        function clearForm() {
+            document.getElementById('medicineName').value = '';
+            document.getElementById('dosage').value = '';
+            document.getElementById('time').value = '';
+            document.getElementById('frequency').selectedIndex = 0;
+            // Clear day selections
+            document.querySelectorAll('.day-checkbox input').forEach(cb => cb.checked = false);
+        }
+        
+        function stopVoiceInput() {
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+            }
+            isListening = false;
+            const button = document.querySelector('[onclick="startVoiceInput()"]');
+            button.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
+            button.style.background = 'var(--success-gradient)';
+        }
+        
+        function getSelectedDays() {
+            const checkboxes = document.querySelectorAll('.day-checkbox input:checked');
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+        
+        function saveReminders() {
+            localStorage.setItem('medicineReminders', JSON.stringify(reminders));
+        }
+        
+        function loadReminders() {
+            const saved = localStorage.getItem('medicineReminders');
+            if (saved) {
+                reminders = JSON.parse(saved);
+                displayReminders();
+                // Reschedule all reminders
+                reminders.forEach(reminder => scheduleReminder(reminder));
+            }
+        }
+        
+        function showAlert(message, type = 'info') {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.custom-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alert = document.createElement('div');
+            alert.className = `custom-alert alert-${type}`;
+            
+            const colors = {
+                success: 'var(--success-gradient)',
+                error: 'var(--danger-gradient)',
+                warning: 'var(--warning-gradient)',
+                info: 'var(--primary-gradient)'
+            };
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-triangle',
+                warning: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle'
+            };
+            
+            alert.innerHTML = `
+                <i class="${icons[type]}"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">Ã—</button>
+            `;
+            
+            alert.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                z-index: 10000;
+                background: ${colors[type]};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                max-width: 400px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                .custom-alert button {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 0;
+                    width: auto;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(alert);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+        
+        function showCustomAlert(reminder) {
+            // Create modal overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 10001;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 30px;
+                border-radius: 20px;
+                color: white;
+                text-align: center;
+                max-width: 400px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                animation: modalPop 0.3s ease;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes modalPop {
+                    from { transform: scale(0.8); opacity: 0; }
+                    to { transform: scale(1); opacity: 1; }
+                }
+                .modal-button {
+                    margin: 5px;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                }
+                .modal-button:hover {
+                    transform: translateY(-2px);
+                }
+            `;
+            document.head.appendChild(style);
+            
+            modal.innerHTML = `
+                <div style="font-size: 60px; margin-bottom: 20px;">ðŸ’Š</div>
+                <h2 style="margin-bottom: 15px;">Medicine Time!</h2>
+                <p style="margin-bottom: 10px; font-size: 18px;">${reminder.medicine}</p>
+                <p style="margin-bottom: 10px; color: rgba(255,255,255,0.8);">${reminder.dosage}</p>
+                <p style="margin-bottom: 20px; font-size: 14px; color: rgba(255,255,255,0.7);">${reminder.instructions}</p>
+                <div>
+                    <button class="modal-button" style="background: #4facfe; color: white;" onclick="handleMedicineTaken(${reminder.id}, true); this.closest('.overlay').remove()">
+                        âœ… Taken
+                    </button>
+                    <button class="modal-button" style="background: #f093fb; color: white;" onclick="snoozeReminder(${reminder.id}); this.closest('.overlay').remove()">
+                        â° Snooze
+                    </button>
+                    <button class="modal-button" style="background: #fa709a; color: white;" onclick="handleMedicineTaken(${reminder.id}, false); this.closest('.overlay').remove()">
+                        âŒ Skip
+                    </button>
+                </div>
+            `;
+            
+            overlay.className = 'overlay';
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // Auto-remove after 30 seconds
+            setTimeout(() => {
+                if (overlay.parentElement) {
+                    overlay.remove();
+                    handleMedicineTaken(reminder.id, false); // Mark as missed
+                }
+            }, 30000);
+        }
+        
+        function handleMedicineTaken(reminderId, taken) {
+            const reminder = reminders.find(r => r.id === reminderId);
+            if (!reminder) return;
+            
+            reminder.totalDoses++;
+            
+            if (taken) {
+                reminder.streak++;
+                showAlert(`Great! You've taken ${reminder.medicine}. Current streak: ${reminder.streak} days!`, 'success');
+            } else {
+                reminder.missedDoses++;
+                reminder.streak = 0;
+                showAlert(`Missed dose of ${reminder.medicine}. Try to take it as soon as possible.`, 'warning');
+            }
+            
+            saveReminders();
+            displayReminders();
+        }
+        
+        function snoozeReminder(reminderId) {
+            const reminder = reminders.find(r => r.id === reminderId);
+            if (!reminder) return;
+            
+            // Snooze for 10 minutes
+            setTimeout(() => {
+                showNotification(reminder);
+            }, 10 * 60 * 1000);
+            
+            showAlert(`${reminder.medicine} reminder snoozed for 10 minutes`, 'info');
+        }
+        
+        // Request notification permission on load
+        window.addEventListener('load', () => {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+            
+            // Load saved reminders
+            loadReminders();
+            
+            // Initialize frequency change handler
+            document.getElementById('frequency').addEventListener('change', function() {
+                const daysSelection = document.getElementById('daysSelection');
+                if (this.value === 'custom') {
+                    daysSelection.style.display = 'flex';
+                } else {
+                    daysSelection.style.display = 'none';
+                    // Clear day selections when not using custom
+                    document.querySelectorAll('.day-checkbox input').forEach(cb => cb.checked = false);
+                }
+            });
+            
+            // Add medicine name autocomplete
+            const medicineInput = document.getElementById('medicineName');
+            medicineInput.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                const suggestions = Object.keys(medicineDatabase)
+                    .filter(med => med.includes(value))
+                    .slice(0, 5);
+                
+                // Remove existing suggestions
+                const existingList = document.querySelector('.suggestions-list');
+                if (existingList) existingList.remove();
+                
+                if (suggestions.length > 0 && value.length > 1) {
+                    const suggestionsList = document.createElement('div');
+                    suggestionsList.className = 'suggestions-list';
+                    suggestionsList.style.cssText = `
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        right: 0;
+                        background: rgba(255, 255, 255, 0.95);
+                        border-radius: 8px;
+                        margin-top: 5px;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                        z-index: 1000;
+                        max-height: 200px;
+                        overflow-y: auto;
+                    `;
+                    
+                    suggestions.forEach(med => {
+                        const item = document.createElement('div');
+                        item.style.cssText = `
+                            padding: 10px;
+                            cursor: pointer;
+                            color: #333;
+                            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        `;
+                        item.textContent = med.charAt(0).toUpperCase() + med.slice(1);
+                        item.addEventListener('click', () => {
+                            medicineInput.value = med;
+                            document.getElementById('dosage').value = medicineDatabase[med].dosage;
+                            suggestionsList.remove();
+                        });
+                        suggestionsList.appendChild(item);
+                    });
+                    
+                    this.parentElement.style.position = 'relative';
+                    this.parentElement.appendChild(suggestionsList);
+                }
+            });
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.form-group')) {
+                    const suggestionsList = document.querySelector('.suggestions-list');
+                    if (suggestionsList) suggestionsList.remove();
+                }
+            });
+        });
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + M for voice input
+            if ((e.ctrlKey || e.metaKey) && e.key === 'm') {
+                e.preventDefault();
+                startVoiceInput();
+            }
+            
+            // Ctrl/Cmd + Enter to add reminder
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                addReminder();
+            }
+        });
+        
+        // Add export/import functionality
+        function exportReminders() {
+            const data = {
+                reminders: reminders,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `whisperwell-reminders-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showAlert('Reminders exported successfully!', 'success');
+        }
+        
+        function importReminders() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.reminders && Array.isArray(data.reminders)) {
+                            if (confirm('This will replace all current reminders. Continue?')) {
+                                reminders = data.reminders;
+                                saveReminders();
+                                displayReminders();
+                                // Reschedule all reminders
+                                reminders.forEach(reminder => scheduleReminder(reminder));
+                                showAlert('Reminders imported successfully!', 'success');
+                            }
+                        } else {
+                            showAlert('Invalid file format', 'error');
+                        }
+                    } catch (error) {
+                        showAlert('Error reading file', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+    </script>
+</body>
+</html>
+            <input type="time" id="medicineTime" required>
+            <label>Repeat on:</label>
+            <div class="day-checkbox">
+                <label><input type="checkbox" value="Sunday"> Sun</label>
+                <label><input type="checkbox" value="Monday"> Mon</label>
+                <label><input type="checkbox" value="Tuesday"> Tue</label>
+                <label><input type="checkbox" value="Wednesday"> Wed</label>
+                <label><input type="checkbox" value="Thursday"> Thu</label>
+                <label><input type="checkbox" value="Friday"> Fri</label>
+                <label><input type="checkbox" value="Saturday"> Sat</label>
+            </div>
+            <label>Frequency:</label>
+            <select id="frequency">
+                <option value="1">Once</option>
+                <option value="2">Every 2 hours</option>
+                <option value="24">Daily</option>
+                <option value="168">Weekly</option>
+            </select>
+            <button onclick="addMedicine()"><i class="fas fa-plus"></i> Add Medicine</button>
+
+

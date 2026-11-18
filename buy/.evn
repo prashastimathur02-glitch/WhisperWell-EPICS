@@ -1,0 +1,4 @@
+PORT=5000
+MONGO_URI=mongodb+srv://atlas-sample-dataset-load-67f028b74b4c9b7ca9c7cbcf:<aman22++>@cluster0.ychhuca.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=JWT_SECRET=ai-marketplace-ultra-secret-2025aman
+

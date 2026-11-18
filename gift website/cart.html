@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-pink-50 font-sans text-gray-800">
+  <header class="bg-pink-600 text-white py-5 text-center shadow-md">
+    <h1 class="text-3xl font-bold">🛍️ Your Cart</h1>
+  </header>
+
+  <main class="p-6 space-y-4" id="cart-container">
+    <!-- Cart items will be loaded here -->
+  </main>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const container = document.getElementById("cart-container");
+
+    if (cart.length === 0) {
+      container.innerHTML = "<p class='text-center text-lg'>Your cart is empty.</p>";
+    } else {
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price;
+        container.innerHTML += `
+          <div class="bg-white p-4 rounded-xl shadow-md flex items-center justify-between">
+            <div>
+              <h2 class="font-bold text-lg">${item.name}</h2>
+              <p class="text-pink-600 font-semibold">₹${item.price}</p>
+            </div>
+            <img src="${item.image}" class="w-16 h-16 object-cover rounded" />
+          </div>`;
+      });
+
+      container.innerHTML += `
+        <div class="text-right pt-4">
+          <h3 class="text-xl font-bold">Total: ₹${total}</h3>
+          <button class="mt-3 bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-full shadow transition">Proceed to Checkout</button>
+        </div>`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Diet Planner - WhisperWell | Personalized Nutrition Plans</title>
+    <meta name="description" content="WhisperWell's intelligent diet planner provides personalized meal plans based on your health conditions and dietary preferences.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid #388E3C;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        select:focus, input[type="text"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        #loaderGif {
+  display: none;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        button i {
+            margin-right: 8px;
+        }
+        .meal-plan {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Allow horizontal scrolling */
+            display: block; /* Ensure it's always visible */
+            min-height: 100px; /* Give it a minimum height */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden; /* To round the corners of the table */
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        /* Make day column more visible */
+        td:first-child {
+            background-color: #2E7D32;
+            color: white;
+            font-weight: bold;
+            font-size: 17px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tr:nth-child(even) td:first-child {
+            background-color: #388E3C;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e0e0e0; /* Highlight row on hover */
+        }
+        tr:hover td:first-child {
+            background-color: #1B5E20;
+        }
+        .meal {
+            color: #2E7D32;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        /* Special styling for Day header */
+        th:first-child {
+            background-color: #1B5E20;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-utensils"></i> Smart Diet Planner</h1>
+        <p>Enter Your Health Condition to Get Personalized Meal Plans</p>
+    </header>
+
+    <div class="container">
+        <label for="dietType">Select your diet type:</label>
+        <select id="dietType">
+            <option value="vegetarian">Vegetarian</option>
+            <option value="non-vegetarian">Non-Vegetarian</option>
+        </select>
+
+        <label for="userInput">Enter your Health Condition or Disease:</label>
+        <input type="text" id="userInput" placeholder="e.g., Diabetes, Fever, Hypertension, Heart Disease">
+        <button onclick="generateMealPlan()"><i class="fas fa-utensils"></i> Get My Meal Plan</button>
+        
+
+        <div class="meal-plan" id="mealPlan" style="display: none;">
+            <!-- Meal plan will show when disease is entered -->
+        </div>
+    </div>
+    <div id="loaderGif">
+        <img src="IMAGE/3a15db4084af78963434fc164538de65.gif" alt="Loading..." width="300" />
+      </div>
+
+    <script>
+        const mealDatabase = {
+            vegetarian: {
+                breakfast: [
+                    "Oatmeal with Fresh Fruits", 
+                    "Greek Yogurt with Berries & Nuts", 
+                    "Scrambled Tofu with Spinach", 
+                    "Avocado Toast with Seeds",
+                    "Green Smoothie Bowl", 
+                    "Chia Seed Pudding with Mango", 
+                    "Mixed Fruit Salad with Honey", 
+                    "Vegetable Omelette with Herbs",
+                    "Peanut Butter Banana Toast",
+                    "Cottage Cheese with Pineapple",
+                    "Quinoa Breakfast Bowl",
+                    "Whole Grain Pancakes with Berries",
+                    "Almond Butter Toast with Apple",
+                    "Vegetable Upma",
+                    "Muesli with Yogurt",
+                    "Sweet Potato Hash",
+                    "Green Tea with Nuts",
+                    "Spinach and Mushroom Scramble"
+                ],
+                lunch: [
+                    "Grilled Vegetable Salad with Quinoa", 
+                    "Chickpea and Vegetable Bowl", 
+                    "Whole Wheat Vegetable Wrap", 
+                    "Rainbow Vegetable Stir Fry",
+                    "Fresh Caprese Salad with Basil", 
+                    "Protein-Rich Lentil Salad", 
+                    "Stuffed Bell Peppers with Rice", 
+                    "Zucchini Noodles with Pesto",
+                    "Mushroom and Barley Risotto",
+                    "Mediterranean Falafel Bowl",
+                    "Black Bean and Corn Salad",
+                    "Roasted Vegetable Buddha Bowl",
+                    "Spinach and Paneer Curry",
+                    "Vegetable Sushi Bowl",
+                    "Hummus and Vegetable Plate",
+                    "Cauliflower Rice Bowl",
+                    "Mixed Bean Salad",
+                    "Grilled Portobello Mushroom Burger"
+                ],
+                dinner: [
+                    "Hearty Lentil Soup with Vegetables", 
+                    "Quinoa Stuffed Peppers", 
+                    "Coconut Vegetable Curry", 
+                    "Whole Wheat Pasta Primavera",
+                    "Spiced Chickpea Stew", 
+                    "Black Bean Vegetable Tacos", 
+                    "Creamy Mushroom Stroganoff", 
+                    "Spinach Ricotta Stuffed Shells",
+                    "Cauliflower Fried Rice",
+                    "Mediterranean Vegetable Paella",
+                    "Eggplant and Tomato Curry",
+                    "Vegetable Biryani",
+                    "Roasted Root Vegetable Medley",
+                    "Thai Green Curry with Tofu",
+                    "Stuffed Zucchini Boats",
+                    "Vegetable Lasagna",
+                    "Ratatouille with Herbs",
+                    "Butternut Squash Soup"
+                ]
+            },
+            nonVegetarian: {
+                breakfast: [
+                    "Steel Cut Oats with Protein", 
+                    "Greek Yogurt Parfait with Granola", 
+                    "Scrambled Eggs with Vegetables", 
+                    "Smoked Salmon Avocado Toast",
+                    "Protein Breakfast Burrito", 
+                    "Whole Grain Bagel with Salmon", 
+                    "Egg and Spinach Sandwich", 
+                    "High-Protein Pancakes",
+                    "Turkey Bacon with Eggs",
+                    "Quinoa Breakfast Bowl with Chicken",
+                    "Cottage Cheese with Berries",
+                    "Chicken Sausage with Vegetables",
+                    "Egg White Omelette with Ham",
+                    "Smoked Turkey Wrap",
+                    "Tuna Salad on Whole Grain",
+                    "Boiled Eggs with Whole Grain Toast",
+                    "Chicken and Vegetable Scramble",
+                    "Lean Ham and Cheese Sandwich"
+                ],
+                lunch: [
+                    "Grilled Chicken Caesar Salad", 
+                    "Quinoa Bowl with Grilled Salmon", 
+                    "Turkey and Hummus Wrap", 
+                    "Lean Chicken Stir Fry",
+                    "Fish Tacos with Cabbage Slaw", 
+                    "Shrimp and Avocado Salad", 
+                    "Whole Wheat Pasta with Chicken", 
+                    "Tuna and White Bean Salad",
+                    "BBQ Chicken Power Bowl",
+                    "Turkey Meatball Sub",
+                    "Grilled Fish with Quinoa",
+                    "Chicken and Vegetable Soup",
+                    "Lean Beef and Broccoli",
+                    "Salmon Poke Bowl",
+                    "Turkey and Spinach Salad",
+                    "Grilled Chicken Buddha Bowl",
+                    "Seafood and Vegetable Stir Fry",
+                    "Lean Pork with Sweet Potato"
+                ],
+                dinner: [
+                    "Baked Salmon with Herbs", 
+                    "Lean Chicken Curry with Vegetables", 
+                    "Turkey Stuffed Bell Peppers", 
+                    "Grilled Fish with Steamed Broccoli",
+                    "Lean Steak with Roasted Vegetables", 
+                    "Baked Chicken Breast with Quinoa", 
+                    "Garlic Herb Shrimp with Zucchini", 
+                    "Turkey Meatballs with Marinara",
+                    "Grilled Lamb with Mediterranean Vegetables",
+                    "Baked Cod with Lemon and Herbs",
+                    "Chicken and Vegetable Skewers",
+                    "Turkey Chili with Beans",
+                    "Grilled Salmon with Asparagus",
+                    "Lean Beef Stir Fry",
+                    "Herb-Crusted Chicken Thighs",
+                    "Seafood Paella with Vegetables",
+                    "Turkey and Vegetable Curry",
+                    "Baked Tilapia with Roasted Vegetables"
+                ]
+            }
+        };
+
+        function getRandomMeal(meals) {
+            return meals[Math.floor(Math.random() * meals.length)];
+        }
+
+        function generateMealPlan() {
+            const userInput = document.getElementById("userInput").value.trim();
+            const mealPlanDiv = document.getElementById("mealPlan");
+            
+            // Only show meal plan if disease is entered
+            if (!userInput) {
+                alert("Please enter a health condition or disease to get your personalized meal plan.");
+                return;
+            }
+            
+            // Show the meal plan container
+            mealPlanDiv.style.display = "block";
+            mealPlanDiv.innerHTML = '';
+
+            const dietType = document.getElementById("dietType").value;
+            const selectedMeals = mealDatabase[dietType === "vegetarian" ? "vegetarian" : "nonVegetarian"];
+            const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+            let tableHTML = '<table><thead><tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th></tr></thead><tbody>';
+            daysOfWeek.forEach(day => {
+                tableHTML += `<tr><td>${day}</td>`;
+                for (const mealType in selectedMeals) {
+                    const meal = getRandomMeal(selectedMeals[mealType]);
+                    tableHTML += `<td class="meal">${meal}</td>`;
+                }
+                tableHTML += `</tr>`;
+            });
+            tableHTML += '</tbody></table>';
+            
+            // Add a header showing the entered condition
+            const headerHTML = `<h3 style="text-align: center; color: #2E7D32; margin-bottom: 15px;">ðŸ½ï¸ Healthy Meal Plan for: ${userInput}</h3>`;
+            mealPlanDiv.innerHTML = headerHTML + tableHTML;
+        }
+        
+        // Remove all automatic meal plan generation
+        // Meal plan will only show when user enters a disease
+        
+        // Auto-generate meal plan when diet type changes (only if disease is already entered)
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('dietType').addEventListener('change', function() {
+                const userInput = document.getElementById("userInput").value.trim();
+                if (userInput) {
+                    generateMealPlan();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

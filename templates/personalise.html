@@ -1,0 +1,698 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Personalized Treatment - WhisperWell | Smart Health Plans</title>
+    <meta name="description" content="Get AI-powered personalized treatment plans tailored to your unique health profile with WhisperWell's advanced medical AI.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+            --radius-lg: 16px; --radius-xl: 24px; --radius-2xl: 32px; --radius-full: 9999px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary); background: var(--primary-gradient);
+            min-height: 100vh; color: white; display: flex; align-items: center;
+            justify-content: center; padding: var(--space-4); position: relative;
+        }
+        
+        /* Permanent Background GIF */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMAGE/k7cxz7qunpzc6hntjwcl.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.2;
+            z-index: -2;
+        }
+        /* Animated Background Overlay */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+                       radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+                       radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite; z-index: -1;
+        }
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(30px, -30px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-20px, 20px) rotate(240deg) scale(0.9); }
+        }
+        .container {
+            max-width: 800px; width: 100%; background: var(--glass-bg);
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl); padding: var(--space-8);
+            box-shadow: var(--glass-shadow); text-align: center; position: relative;
+        }
+        .container::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: var(--secondary-gradient);
+        }
+        h2 {
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800; margin-bottom: var(--space-6);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        input {
+            width: 100%; background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: var(--radius-lg);
+            padding: var(--space-4); color: white; font-size: 1.125rem;
+            font-family: var(--font-primary); transition: all 0.3s ease;
+            outline: none; margin: var(--space-4) 0;
+        }
+        input::placeholder { color: rgba(255, 255, 255, 0.6); }
+        input:focus {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        button {
+            background: var(--secondary-gradient); color: white; border: none;
+            border-radius: var(--radius-full); padding: var(--space-4) var(--space-8);
+            font-size: 1.125rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; margin: var(--space-2);
+            display: inline-flex; align-items: center; gap: var(--space-2);
+        }
+        button:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5); }
+        #result {
+            margin-top: var(--space-6); padding: var(--space-6);
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-xl);
+            display: none; text-align: left; font-size: 1.125rem; line-height: 1.8;
+        }
+        
+        .medicine-item {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+            display: block;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .medicine-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .medicine-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-3);
+        }
+        
+        .medicine-details {
+            flex: 1;
+            margin-right: var(--space-4);
+        }
+        
+        .medicine-name {
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--space-2);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .medicine-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+            margin-top: var(--space-3);
+        }
+        
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: var(--space-3);
+            border-radius: var(--radius-lg);
+            border-left: 3px solid #4facfe;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        .medicine-price {
+            background: var(--warning-gradient);
+            color: white;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: var(--space-2);
+            display: inline-block;
+        }
+        
+        .buy-btn {
+            background: var(--success-gradient);
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            min-width: 120px;
+            justify-content: center;
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+            background: linear-gradient(135deg, #5a9fd8 0%, #1e88e5 100%);
+        }
+        
+        .disease-section {
+            margin: var(--space-6) 0;
+            padding: var(--space-6);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+        }
+        
+        .section-title {
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--space-4);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: var(--space-2);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .warning-box {
+            margin-top: var(--space-6);
+            padding: var(--space-4);
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: var(--radius-lg);
+            border-left: 4px solid #ffc107;
+        }
+        
+        .warning-box strong {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+        
+        .disease-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-4);
+            line-height: 1.6;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: var(--space-4);
+                padding: var(--space-6);
+            }
+            
+            .medicine-info {
+                grid-template-columns: 1fr;
+                gap: var(--space-2);
+            }
+            
+            .medicine-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .medicine-details {
+                margin-right: 0;
+                margin-bottom: var(--space-3);
+            }
+            
+            .buy-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .medicine-name {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" data-aos="fade-up">
+        <h2><i class="fas fa-user-md"></i> AI-Powered Personalized Treatment</h2>
+        <p style="margin-bottom: var(--space-6); font-size: 1.125rem; color: rgba(255, 255, 255, 0.8);">
+            Get personalized treatment recommendations powered by advanced AI algorithms
+        </p>
+        
+        <input type="text" id="diseaseInput" placeholder="Enter your condition or symptoms">
+        
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <button onclick="generateTreatment()">
+                <i class="fas fa-magic"></i> Generate Treatment Plan
+            </button>
+            <button onclick="startVoiceInput()" style="background: var(--success-gradient);">
+                <i class="fas fa-microphone"></i> Voice Input
+            </button>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // Initialize AOS animations
+        AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+        
+        // Comprehensive Medicine Database
+        const medicineDatabase = {
+            "cold": { medicines: [{ name: "Paracetamol", dosage: "500mg every 6 hours", price: "â‚¹25" }, { name: "Cetirizine", dosage: "10mg once daily", price: "â‚¹45" }], description: "Common cold treatment" },
+            "flu": { medicines: [{ name: "Tamiflu", dosage: "75mg twice daily", price: "â‚¹350" }, { name: "Ibuprofen", dosage: "400mg every 6 hours", price: "â‚¹35" }], description: "Influenza treatment" },
+            "fever": { medicines: [{ name: "Paracetamol", dosage: "650mg every 6 hours", price: "â‚¹25" }, { name: "Ibuprofen", dosage: "400mg every 8 hours", price: "â‚¹35" }], description: "Fever reduction" },
+            "diabetes": { medicines: [{ name: "Metformin", dosage: "500mg twice daily", price: "â‚¹65" }, { name: "Insulin", dosage: "As prescribed", price: "â‚¹450" }], description: "Diabetes management" },
+            "hypertension": { medicines: [{ name: "Lisinopril", dosage: "10mg once daily", price: "â‚¹75" }, { name: "Amlodipine", dosage: "5mg once daily", price: "â‚¹55" }], description: "Blood pressure management" },
+            "asthma": { medicines: [{ name: "Salbutamol Inhaler", dosage: "2 puffs as needed", price: "â‚¹125" }, { name: "Montelukast", dosage: "10mg once daily", price: "â‚¹95" }], description: "Asthma management" },
+            "migraine": { medicines: [{ name: "Sumatriptan", dosage: "50mg at onset", price: "â‚¹285" }, { name: "Propranolol", dosage: "80mg twice daily", price: "â‚¹45" }], description: "Migraine treatment" },
+            "depression": { medicines: [{ name: "Sertraline", dosage: "50mg once daily", price: "â‚¹145" }, { name: "Fluoxetine", dosage: "20mg once daily", price: "â‚¹95" }], description: "Depression treatment" },
+            "anxiety": { medicines: [{ name: "Alprazolam", dosage: "0.5mg as needed", price: "â‚¹55" }, { name: "Buspirone", dosage: "15mg twice daily", price: "â‚¹85" }], description: "Anxiety management" },
+            "arthritis": { medicines: [{ name: "Ibuprofen", dosage: "600mg three times daily", price: "â‚¹35" }, { name: "Methotrexate", dosage: "15mg weekly", price: "â‚¹185" }], description: "Arthritis treatment" },
+            "gastritis": { medicines: [{ name: "Omeprazole", dosage: "20mg twice daily", price: "â‚¹65" }, { name: "Sucralfate", dosage: "1g four times daily", price: "â‚¹85" }], description: "Gastritis treatment" },
+            "pneumonia": { medicines: [{ name: "Amoxicillin", dosage: "500mg three times daily", price: "â‚¹75" }, { name: "Azithromycin", dosage: "500mg once daily", price: "â‚¹125" }], description: "Pneumonia treatment" },
+            "eczema": { medicines: [{ name: "Hydrocortisone Cream", dosage: "Apply twice daily", price: "â‚¹85" }, { name: "Cetirizine", dosage: "10mg once daily", price: "â‚¹45" }], description: "Eczema treatment" },
+            "insomnia": { medicines: [{ name: "Zolpidem", dosage: "10mg at bedtime", price: "â‚¹125" }, { name: "Melatonin", dosage: "3mg before bed", price: "â‚¹285" }], description: "Sleep disorder treatment" },
+            "obesity": { medicines: [{ name: "Orlistat", dosage: "120mg with meals", price: "â‚¹385" }, { name: "Phentermine", dosage: "37.5mg once daily", price: "â‚¹485" }], description: "Weight management" },
+            "anemia": { medicines: [{ name: "Ferrous Sulfate", dosage: "325mg three times daily", price: "â‚¹45" }, { name: "Vitamin B12", dosage: "1000mcg once daily", price: "â‚¹125" }], description: "Anemia treatment" },
+            "gout": { medicines: [{ name: "Colchicine", dosage: "0.6mg twice daily", price: "â‚¹185" }, { name: "Allopurinol", dosage: "300mg once daily", price: "â‚¹85" }], description: "Gout management" },
+            "thyroid": { medicines: [{ name: "Levothyroxine", dosage: "50-100mcg once daily", price: "â‚¹95" }, { name: "Methimazole", dosage: "10mg three times daily", price: "â‚¹125" }], description: "Thyroid disorder management" },
+            "kidney_stones": { medicines: [{ name: "Tamsulosin", dosage: "0.4mg once daily", price: "â‚¹165" }, { name: "Potassium Citrate", dosage: "15mEq twice daily", price: "â‚¹285" }], description: "Kidney stone treatment" },
+            "osteoporosis": { medicines: [{ name: "Alendronate", dosage: "70mg once weekly", price: "â‚¹285" }, { name: "Calcium Carbonate", dosage: "1200mg daily", price: "â‚¹65" }], description: "Bone health" },
+            "typhoid": { medicines: [{ name: "Ciprofloxacin", dosage: "500mg twice daily", price: "â‚¹85" }, { name: "Azithromycin", dosage: "500mg once daily", price: "â‚¹125" }], description: "Typhoid fever treatment" },
+            "malaria": { medicines: [{ name: "Artemether-Lumefantrine", dosage: "4 tablets twice daily", price: "â‚¹225" }, { name: "Quinine", dosage: "600mg every 8 hours", price: "â‚¹185" }], description: "Malaria treatment" },
+            "tuberculosis": { medicines: [{ name: "Isoniazid", dosage: "300mg daily", price: "â‚¹45" }, { name: "Rifampin", dosage: "600mg daily", price: "â‚¹125" }], description: "TB treatment" },
+            "hepatitis_b": { medicines: [{ name: "Tenofovir", dosage: "300mg once daily", price: "â‚¹385" }, { name: "Entecavir", dosage: "0.5mg once daily", price: "â‚¹285" }], description: "Hepatitis B treatment" },
+            "dengue": { medicines: [{ name: "Paracetamol", dosage: "650mg every 6 hours", price: "â‚¹25" }, { name: "ORS Solution", dosage: "As needed", price: "â‚¹15" }], description: "Dengue fever supportive treatment" },
+            "cancer": { medicines: [{ name: "Cisplatin", dosage: "75mg/mÂ² every 3 weeks", price: "â‚¹1250" }, { name: "Doxorubicin", dosage: "60mg/mÂ² every 3 weeks", price: "â‚¹2150" }, { name: "Methotrexate", dosage: "15mg weekly", price: "â‚¹185" }, { name: "Tamoxifen", dosage: "20mg daily", price: "â‚¹485" }], description: "Cancer chemotherapy and hormonal treatment" },
+            "diarrhea": { medicines: [{ name: "Loperamide", dosage: "2mg after each loose stool", price: "â‚¹45" }, { name: "ORS", dosage: "500ml after each stool", price: "â‚¹15" }, { name: "Metronidazole", dosage: "400mg thrice daily", price: "â‚¹65" }], description: "Diarrhea treatment and rehydration" },
+            "cholera": { medicines: [{ name: "ORS", dosage: "75ml/kg in 4 hours", price: "â‚¹15" }, { name: "Doxycycline", dosage: "300mg single dose", price: "â‚¹85" }, { name: "Azithromycin", dosage: "1g single dose", price: "â‚¹125" }], description: "Cholera treatment and fluid replacement" },
+            "pneumonia": { medicines: [{ name: "Amoxicillin", dosage: "500mg thrice daily", price: "â‚¹75" }, { name: "Azithromycin", dosage: "500mg once daily", price: "â‚¹125" }, { name: "Ceftriaxone", dosage: "1g daily IV", price: "â‚¹285" }], description: "Pneumonia antibiotic treatment" },
+            "meningitis": { medicines: [{ name: "Ceftriaxone", dosage: "2g twice daily IV", price: "â‚¹285" }, { name: "Vancomycin", dosage: "15mg/kg every 8-12 hours", price: "â‚¹485" }, { name: "Dexamethasone", dosage: "0.15mg/kg every 6 hours", price: "â‚¹125" }], description: "Bacterial meningitis treatment" },
+            "sepsis": { medicines: [{ name: "Ceftriaxone", dosage: "2g daily IV", price: "â‚¹285" }, { name: "Vancomycin", dosage: "15mg/kg every 12 hours", price: "â‚¹485" }, { name: "Norepinephrine", dosage: "0.1-0.5 mcg/kg/min", price: "â‚¹385" }], description: "Severe sepsis management" },
+            "hiv_aids": { medicines: [{ name: "Efavirenz", dosage: "600mg daily", price: "â‚¹1250" }, { name: "Emtricitabine", dosage: "200mg daily", price: "â‚¹885" }, { name: "Tenofovir", dosage: "300mg daily", price: "â‚¹385" }], description: "HIV/AIDS antiretroviral therapy" },
+            "stroke": { medicines: [{ name: "Aspirin", dosage: "300mg daily", price: "â‚¹25" }, { name: "Clopidogrel", dosage: "75mg daily", price: "â‚¹125" }, { name: "Atorvastatin", dosage: "80mg daily", price: "â‚¹185" }], description: "Stroke prevention and management" },
+            "heart_attack": { medicines: [{ name: "Aspirin", dosage: "300mg stat then 75mg daily", price: "â‚¹25" }, { name: "Metoprolol", dosage: "50mg twice daily", price: "â‚¹85" }, { name: "Atorvastatin", dosage: "80mg daily", price: "â‚¹185" }], description: "Myocardial infarction treatment" },
+            "epilepsy": { medicines: [{ name: "Phenytoin", dosage: "300mg daily", price: "â‚¹45" }, { name: "Carbamazepine", dosage: "400mg twice daily", price: "â‚¹125" }, { name: "Valproic Acid", dosage: "500mg twice daily", price: "â‚¹185" }], description: "Epilepsy seizure control" },
+            "parkinson": { medicines: [{ name: "Levodopa/Carbidopa", dosage: "25/100mg thrice daily", price: "â‚¹285" }, { name: "Pramipexole", dosage: "0.5mg thrice daily", price: "â‚¹385" }, { name: "Rasagiline", dosage: "1mg daily", price: "â‚¹485" }], description: "Parkinson's disease management" },
+            "alzheimer": { medicines: [{ name: "Donepezil", dosage: "10mg daily", price: "â‚¹485" }, { name: "Memantine", dosage: "20mg daily", price: "â‚¹385" }, { name: "Rivastigmine", dosage: "6mg twice daily", price: "â‚¹585" }], description: "Alzheimer's disease cognitive enhancement" },
+            "schizophrenia": { medicines: [{ name: "Risperidone", dosage: "2mg twice daily", price: "â‚¹185" }, { name: "Olanzapine", dosage: "10mg daily", price: "â‚¹285" }, { name: "Haloperidol", dosage: "5mg twice daily", price: "â‚¹85" }], description: "Schizophrenia antipsychotic treatment" },
+            "bipolar_disorder": { medicines: [{ name: "Lithium", dosage: "600mg twice daily", price: "â‚¹125" }, { name: "Lamotrigine", dosage: "200mg daily", price: "â‚¹285" }, { name: "Quetiapine", dosage: "300mg daily", price: "â‚¹385" }], description: "Bipolar disorder mood stabilization" },
+            "kidney_disease": { medicines: [{ name: "Losartan", dosage: "50mg daily", price: "â‚¹125" }, { name: "Furosemide", dosage: "40mg daily", price: "â‚¹45" }, { name: "Calcium Acetate", dosage: "667mg with meals", price: "â‚¹185" }], description: "Chronic kidney disease management" },
+            "liver_disease": { medicines: [{ name: "Ursodeoxycholic Acid", dosage: "300mg twice daily", price: "â‚¹285" }, { name: "Lactulose", dosage: "30ml twice daily", price: "â‚¹85" }, { name: "Spironolactone", dosage: "100mg daily", price: "â‚¹125" }], description: "Liver disease and cirrhosis treatment" },
+            "copd": { medicines: [{ name: "Tiotropium", dosage: "18mcg daily", price: "â‚¹385" }, { name: "Salbutamol", dosage: "100mcg as needed", price: "â‚¹125" }, { name: "Prednisolone", dosage: "30mg daily", price: "â‚¹45" }], description: "COPD respiratory management" },
+            "bronchitis": { medicines: [{ name: "Amoxicillin", dosage: "500mg thrice daily", price: "â‚¹75" }, { name: "Dextromethorphan", dosage: "15mg every 4 hours", price: "â‚¹85" }, { name: "Guaifenesin", dosage: "400mg twice daily", price: "â‚¹65" }], description: "Acute bronchitis treatment" },
+            "sinusitis": { medicines: [{ name: "Amoxicillin-Clavulanate", dosage: "625mg twice daily", price: "â‚¹125" }, { name: "Pseudoephedrine", dosage: "60mg every 6 hours", price: "â‚¹85" }, { name: "Fluticasone Nasal Spray", dosage: "2 sprays each nostril daily", price: "â‚¹185" }], description: "Bacterial sinusitis treatment" },
+            "allergic_rhinitis": { medicines: [{ name: "Cetirizine", dosage: "10mg daily", price: "â‚¹45" }, { name: "Fluticasone Nasal Spray", dosage: "2 sprays each nostril daily", price: "â‚¹185" }, { name: "Montelukast", dosage: "10mg daily", price: "â‚¹95" }], description: "Allergic rhinitis management" },
+            "conjunctivitis": { medicines: [{ name: "Chloramphenicol Eye Drops", dosage: "1 drop every 2 hours", price: "â‚¹45" }, { name: "Tobramycin Eye Drops", dosage: "1-2 drops every 4 hours", price: "â‚¹125" }, { name: "Prednisolone Eye Drops", dosage: "1 drop every 2 hours", price: "â‚¹85" }], description: "Bacterial conjunctivitis treatment" },
+            "glaucoma": { medicines: [{ name: "Timolol Eye Drops", dosage: "1 drop twice daily", price: "â‚¹185" }, { name: "Latanoprost Eye Drops", dosage: "1 drop at bedtime", price: "â‚¹285" }, { name: "Brimonidine Eye Drops", dosage: "1 drop twice daily", price: "â‚¹225" }], description: "Glaucoma intraocular pressure control" },
+            "cataracts": { medicines: [{ name: "Pilocarpine Eye Drops", dosage: "1 drop thrice daily", price: "â‚¹85" }, { name: "Cyclopentolate Eye Drops", dosage: "1 drop before examination", price: "â‚¹125" }], description: "Pre and post-cataract surgery care" },
+            "otitis_media": { medicines: [{ name: "Amoxicillin", dosage: "500mg thrice daily", price: "â‚¹75" }, { name: "Azithromycin", dosage: "500mg daily", price: "â‚¹125" }, { name: "Ibuprofen", dosage: "400mg every 6 hours", price: "â‚¹35" }], description: "Middle ear infection treatment" },
+            "vertigo": { medicines: [{ name: "Betahistine", dosage: "16mg thrice daily", price: "â‚¹125" }, { name: "Dimenhydrinate", dosage: "50mg every 6 hours", price: "â‚¹65" }, { name: "Prochlorperazine", dosage: "5mg thrice daily", price: "â‚¹85" }], description: "Vertigo and dizziness treatment" },
+            "tinnitus": { medicines: [{ name: "Ginkgo Biloba", dosage: "120mg twice daily", price: "â‚¹185" }, { name: "Betahistine", dosage: "16mg thrice daily", price: "â‚¹125" }, { name: "Amitriptyline", dosage: "25mg at bedtime", price: "â‚¹85" }], description: "Tinnitus management" },
+            "urinary_tract_infection": { medicines: [{ name: "Nitrofurantoin", dosage: "100mg twice daily", price: "â‚¹85" }, { name: "Trimethoprim-Sulfamethoxazole", dosage: "160/800mg twice daily", price: "â‚¹65" }, { name: "Ciprofloxacin", dosage: "500mg twice daily", price: "â‚¹85" }], description: "UTI antibiotic treatment" },
+            "prostate_enlargement": { medicines: [{ name: "Tamsulosin", dosage: "0.4mg daily", price: "â‚¹165" }, { name: "Finasteride", dosage: "5mg daily", price: "â‚¹285" }, { name: "Doxazosin", dosage: "4mg daily", price: "â‚¹125" }], description: "Benign prostatic hyperplasia treatment" },
+            "erectile_dysfunction": { medicines: [{ name: "Sildenafil", dosage: "50mg as needed", price: "â‚¹485" }, { name: "Tadalafil", dosage: "10mg as needed", price: "â‚¹585" }, { name: "Vardenafil", dosage: "10mg as needed", price: "â‚¹685" }], description: "Erectile dysfunction treatment" },
+            "menstrual_disorders": { medicines: [{ name: "Mefenamic Acid", dosage: "500mg thrice daily", price: "â‚¹65" }, { name: "Tranexamic Acid", dosage: "500mg thrice daily", price: "â‚¹125" }, { name: "Norethisterone", dosage: "5mg thrice daily", price: "â‚¹85" }], description: "Menstrual pain and heavy bleeding" },
+            "endometriosis": { medicines: [{ name: "GnRH Agonist (Leuprolide)", dosage: "3.75mg monthly injection", price: "â‚¹2850" }, { name: "Danazol", dosage: "200mg twice daily", price: "â‚¹485" }, { name: "Norethindrone", dosage: "5mg daily", price: "â‚¹185" }], description: "Endometriosis hormonal treatment" },
+            "polycystic_ovary_syndrome": { medicines: [{ name: "Metformin", dosage: "500mg twice daily", price: "â‚¹65" }, { name: "Clomiphene", dosage: "50mg daily for 5 days", price: "â‚¹285" }, { name: "Spironolactone", dosage: "100mg daily", price: "â‚¹125" }], description: "PCOS metabolic and hormonal management" },
+            "infertility": { medicines: [{ name: "Clomiphene", dosage: "50mg daily for 5 days", price: "â‚¹285" }, { name: "Letrozole", dosage: "2.5mg daily for 5 days", price: "â‚¹385" }, { name: "Human Chorionic Gonadotropin", dosage: "5000-10000 IU injection", price: "â‚¹1250" }], description: "Fertility enhancement treatment" },
+            "pregnancy_complications": { medicines: [{ name: "Folic Acid", dosage: "5mg daily", price: "â‚¹25" }, { name: "Iron and Folic Acid", dosage: "100mg + 500mcg daily", price: "â‚¹45" }, { name: "Calcium", dosage: "1000mg daily", price: "â‚¹65" }], description: "Pregnancy nutritional support" },
+            "postpartum_depression": { medicines: [{ name: "Sertraline", dosage: "50mg daily", price: "â‚¹145" }, { name: "Paroxetine", dosage: "20mg daily", price: "â‚¹185" }, { name: "Counseling Support", dosage: "Weekly sessions", price: "â‚¹500" }], description: "Postpartum depression treatment" },
+            "lactation_problems": { medicines: [{ name: "Domperidone", dosage: "10mg thrice daily", price: "â‚¹85" }, { name: "Metoclopramide", dosage: "10mg thrice daily", price: "â‚¹45" }, { name: "Fenugreek Supplements", dosage: "500mg thrice daily", price: "â‚¹125" }], description: "Lactation support and enhancement" },
+            "pediatric_fever": { medicines: [{ name: "Paracetamol Syrup", dosage: "10-15mg/kg every 6 hours", price: "â‚¹45" }, { name: "Ibuprofen Syrup", dosage: "5-10mg/kg every 6 hours", price: "â‚¹65" }, { name: "Tepid Sponging", dosage: "As needed", price: "â‚¹0" }], description: "Pediatric fever management" },
+            "childhood_asthma": { medicines: [{ name: "Salbutamol Syrup", dosage: "2mg thrice daily", price: "â‚¹85" }, { name: "Montelukast Granules", dosage: "4mg daily", price: "â‚¹125" }, { name: "Budesonide Inhaler", dosage: "100mcg twice daily", price: "â‚¹285" }], description: "Pediatric asthma management" },
+            "childhood_diarrhea": { medicines: [{ name: "ORS", dosage: "75ml/kg in 4 hours", price: "â‚¹15" }, { name: "Zinc Supplements", dosage: "20mg daily for 10 days", price: "â‚¹45" }, { name: "Probiotics", dosage: "1 sachet twice daily", price: "â‚¹125" }], description: "Pediatric diarrhea and dehydration" },
+            "attention_deficit_disorder": { medicines: [{ name: "Methylphenidate", dosage: "5-10mg twice daily", price: "â‚¹285" }, { name: "Atomoxetine", dosage: "0.5mg/kg daily", price: "â‚¹485" }, { name: "Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹500" }], description: "ADHD management in children" },
+            "autism_spectrum_disorder": { medicines: [{ name: "Risperidone", dosage: "0.25mg twice daily", price: "â‚¹185" }, { name: "Aripiprazole", dosage: "2mg daily", price: "â‚¹385" }, { name: "Occupational Therapy", dosage: "3 sessions weekly", price: "â‚¹750" }], description: "Autism behavioral support" },
+            "geriatric_dementia": { medicines: [{ name: "Donepezil", dosage: "5mg daily", price: "â‚¹485" }, { name: "Memantine", dosage: "10mg twice daily", price: "â‚¹385" }, { name: "Vitamin B12", dosage: "1000mcg weekly", price: "â‚¹125" }], description: "Elderly dementia cognitive support" },
+            "falls_in_elderly": { medicines: [{ name: "Calcium + Vitamin D", dosage: "1000mg + 800 IU daily", price: "â‚¹125" }, { name: "Balance Training", dosage: "30 minutes daily", price: "â‚¹200" }, { name: "Home Safety Assessment", dosage: "One-time evaluation", price: "â‚¹500" }], description: "Fall prevention in elderly" },
+            "osteoarthritis_elderly": { medicines: [{ name: "Glucosamine", dosage: "1500mg daily", price: "â‚¹285" }, { name: "Topical Diclofenac", dosage: "Apply twice daily", price: "â‚¹125" }, { name: "Physiotherapy", dosage: "3 sessions weekly", price: "â‚¹450" }], description: "Elderly joint pain management" },
+            "psoriasis": { medicines: [{ name: "Methotrexate", dosage: "15mg weekly", price: "â‚¹185" }, { name: "Topical Corticosteroids", dosage: "Apply twice daily", price: "â‚¹125" }, { name: "Calcipotriol", dosage: "Apply twice daily", price: "â‚¹285" }], description: "Psoriasis skin treatment" },
+            "dermatitis": { medicines: [{ name: "Hydrocortisone Cream", dosage: "Apply twice daily", price: "â‚¹85" }, { name: "Calamine Lotion", dosage: "Apply as needed", price: "â‚¹45" }, { name: "Cetirizine", dosage: "10mg daily", price: "â‚¹45" }], description: "Contact dermatitis treatment" },
+            "acne": { medicines: [{ name: "Tretinoin Cream", dosage: "Apply at night", price: "â‚¹185" }, { name: "Clindamycin Gel", dosage: "Apply twice daily", price: "â‚¹125" }, { name: "Doxycycline", dosage: "100mg daily", price: "â‚¹85" }], description: "Acne vulgaris treatment" },
+            "hair_loss": { medicines: [{ name: "Minoxidil Solution", dosage: "Apply twice daily", price: "â‚¹485" }, { name: "Finasteride", dosage: "1mg daily", price: "â‚¹285" }, { name: "Biotin Supplements", dosage: "5mg daily", price: "â‚¹125" }], description: "Androgenetic alopecia treatment" },
+            "nail_fungus": { medicines: [{ name: "Terbinafine", dosage: "250mg daily", price: "â‚¹285" }, { name: "Itraconazole", dosage: "200mg daily", price: "â‚¹385" }, { name: "Topical Antifungal", dosage: "Apply twice daily", price: "â‚¹125" }], description: "Onychomycosis treatment" },
+            "warts": { medicines: [{ name: "Salicylic Acid", dosage: "Apply daily", price: "â‚¹85" }, { name: "Cryotherapy", dosage: "Every 2-3 weeks", price: "â‚¹250" }, { name: "Imiquimod Cream", dosage: "Apply 3 times weekly", price: "â‚¹485" }], description: "Viral wart removal" },
+            "herpes_simplex": { medicines: [{ name: "Acyclovir", dosage: "400mg thrice daily", price: "â‚¹185" }, { name: "Valacyclovir", dosage: "1g twice daily", price: "â‚¹385" }, { name: "Topical Acyclovir", dosage: "Apply 5 times daily", price: "â‚¹125" }], description: "Herpes simplex virus treatment" },
+            "shingles": { medicines: [{ name: "Valacyclovir", dosage: "1g thrice daily", price: "â‚¹385" }, { name: "Gabapentin", dosage: "300mg thrice daily", price: "â‚¹185" }, { name: "Topical Lidocaine", dosage: "Apply as needed", price: "â‚¹125" }], description: "Herpes zoster treatment" },
+            "chickenpox": { medicines: [{ name: "Acyclovir", dosage: "800mg 5 times daily", price: "â‚¹185" }, { name: "Calamine Lotion", dosage: "Apply as needed", price: "â‚¹45" }, { name: "Paracetamol", dosage: "500mg every 6 hours", price: "â‚¹25" }], description: "Varicella zoster treatment" },
+            "measles": { medicines: [{ name: "Vitamin A", dosage: "200,000 IU for 2 days", price: "â‚¹125" }, { name: "Paracetamol", dosage: "15mg/kg every 6 hours", price: "â‚¹25" }, { name: "Supportive Care", dosage: "Rest and hydration", price: "â‚¹0" }], description: "Measles supportive treatment" },
+            "mumps": { medicines: [{ name: "Ibuprofen", dosage: "400mg every 6 hours", price: "â‚¹35" }, { name: "Warm/Cold Compress", dosage: "Apply as needed", price: "â‚¹0" }, { name: "Soft Diet", dosage: "Until swelling subsides", price: "â‚¹0" }], description: "Mumps supportive care" },
+            "whooping_cough": { medicines: [{ name: "Azithromycin", dosage: "500mg daily for 5 days", price: "â‚¹125" }, { name: "Clarithromycin", dosage: "500mg twice daily", price: "â‚¹185" }, { name: "Supportive Care", dosage: "Humidified air", price: "â‚¹0" }], description: "Pertussis antibiotic treatment" },
+            "tetanus": { medicines: [{ name: "Tetanus Immunoglobulin", dosage: "3000-6000 IU IM", price: "â‚¹2500" }, { name: "Metronidazole", dosage: "500mg every 6 hours", price: "â‚¹65" }, { name: "Diazepam", dosage: "10-30mg IV", price: "â‚¹125" }], description: "Tetanus emergency treatment" },
+            "diphtheria": { medicines: [{ name: "Diphtheria Antitoxin", dosage: "20,000-100,000 units", price: "â‚¹5000" }, { name: "Penicillin G", dosage: "2-4 million units every 4 hours", price: "â‚¹185" }, { name: "Erythromycin", dosage: "500mg every 6 hours", price: "â‚¹125" }], description: "Diphtheria antitoxin and antibiotic" },
+            "rabies": { medicines: [{ name: "Rabies Immunoglobulin", dosage: "20 IU/kg at wound site", price: "â‚¹15000" }, { name: "Rabies Vaccine", dosage: "1ml IM on days 0,3,7,14,28", price: "â‚¹1250" }, { name: "Wound Care", dosage: "Thorough cleaning", price: "â‚¹200" }], description: "Post-exposure rabies prophylaxis" },
+            "yellow_fever": { medicines: [{ name: "Yellow Fever Vaccine", dosage: "0.5ml subcutaneous", price: "â‚¹1500" }, { name: "Supportive Care", dosage: "Fluid management", price: "â‚¹500" }, { name: "Paracetamol", dosage: "500mg every 6 hours", price: "â‚¹25" }], description: "Yellow fever prevention and supportive care" },
+            "japanese_encephalitis": { medicines: [{ name: "JE Vaccine", dosage: "2 doses 28 days apart", price: "â‚¹2000" }, { name: "Supportive Care", dosage: "Neurological monitoring", price: "â‚¹1000" }, { name: "Mannitol", dosage: "1-2g/kg IV", price: "â‚¹285" }], description: "Japanese encephalitis prevention and support" },
+            "chikungunya": { medicines: [{ name: "Paracetamol", dosage: "1g every 6 hours", price: "â‚¹25" }, { name: "Ibuprofen", dosage: "400mg every 8 hours", price: "â‚¹35" }, { name: "Topical Pain Relief", dosage: "Apply to joints", price: "â‚¹125" }], description: "Chikungunya symptomatic treatment" },
+            "zika_virus": { medicines: [{ name: "Paracetamol", dosage: "500mg every 6 hours", price: "â‚¹25" }, { name: "Oral Rehydration", dosage: "2-3 liters daily", price: "â‚¹15" }, { name: "Rest", dosage: "Complete bed rest", price: "â‚¹0" }], description: "Zika virus supportive treatment" },
+            "west_nile_virus": { medicines: [{ name: "Supportive Care", dosage: "Symptomatic treatment", price: "â‚¹500" }, { name: "IV Fluids", dosage: "As needed", price: "â‚¹200" }, { name: "Ribavirin", dosage: "400mg twice daily", price: "â‚¹485" }], description: "West Nile virus management" },
+            "ebola": { medicines: [{ name: "Supportive Care", dosage: "Intensive monitoring", price: "â‚¹5000" }, { name: "IV Fluids", dosage: "Aggressive replacement", price: "â‚¹500" }, { name: "Remdesivir", dosage: "200mg day 1, then 100mg daily", price: "â‚¹15000" }], description: "Ebola virus supportive treatment" },
+            "lassa_fever": { medicines: [{ name: "Ribavirin", dosage: "2g loading, then 1g every 6 hours", price: "â‚¹485" }, { name: "Supportive Care", dosage: "Intensive monitoring", price: "â‚¹2000" }, { name: "IV Fluids", dosage: "Careful fluid balance", price: "â‚¹200" }], description: "Lassa fever antiviral treatment" },
+            "marburg_virus": { medicines: [{ name: "Supportive Care", dosage: "Intensive care monitoring", price: "â‚¹5000" }, { name: "Coagulation Support", dosage: "Fresh frozen plasma", price: "â‚¹2000" }, { name: "Antiviral Therapy", dosage: "Experimental treatments", price: "â‚¹10000" }], description: "Marburg virus emergency care" },
+            "leishmaniasis": { medicines: [{ name: "Sodium Stibogluconate", dosage: "20mg/kg daily for 28 days", price: "â‚¹850" }, { name: "Amphotericin B", dosage: "1mg/kg daily", price: "â‚¹1500" }, { name: "Miltefosine", dosage: "100mg daily for 28 days", price: "â‚¹2500" }], description: "Leishmaniasis antiparasitic treatment" },
+            "trypanosomiasis": { medicines: [{ name: "Suramin", dosage: "1g IV weekly for 5 weeks", price: "â‚¹5000" }, { name: "Melarsoprol", dosage: "2.2mg/kg daily for 3 days", price: "â‚¹8000" }, { name: "Eflornithine", dosage: "400mg/kg daily for 7 days", price: "â‚¹12000" }], description: "African sleeping sickness treatment" },
+            "chagas_disease": { medicines: [{ name: "Benznidazole", dosage: "5-7mg/kg daily for 60 days", price: "â‚¹2500" }, { name: "Nifurtimox", dosage: "8-10mg/kg daily for 90 days", price: "â‚¹3500" }, { name: "Cardiac Support", dosage: "ACE inhibitors as needed", price: "â‚¹125" }], description: "Chagas disease antiparasitic therapy" },
+            "schistosomiasis": { medicines: [{ name: "Praziquantel", dosage: "40mg/kg single dose", price: "â‚¹285" }, { name: "Oxamniquine", dosage: "15mg/kg single dose", price: "â‚¹485" }, { name: "Artesunate", dosage: "6mg/kg daily for 3 days", price: "â‚¹385" }], description: "Schistosomiasis treatment" },
+            "filariasis": { medicines: [{ name: "Diethylcarbamazine", dosage: "6mg/kg daily for 12 days", price: "â‚¹185" }, { name: "Ivermectin", dosage: "150mcg/kg annually", price: "â‚¹285" }, { name: "Albendazole", dosage: "400mg twice daily for 21 days", price: "â‚¹125" }], description: "Lymphatic filariasis treatment" },
+            "onchocerciasis": { medicines: [{ name: "Ivermectin", dosage: "150mcg/kg every 6-12 months", price: "â‚¹285" }, { name: "Doxycycline", dosage: "100mg daily for 6 weeks", price: "â‚¹85" }, { name: "Supportive Care", dosage: "Eye examination", price: "â‚¹500" }], description: "River blindness treatment" },
+            "ascariasis": { medicines: [{ name: "Albendazole", dosage: "400mg single dose", price: "â‚¹125" }, { name: "Mebendazole", dosage: "100mg twice daily for 3 days", price: "â‚¹85" }, { name: "Pyrantel Pamoate", dosage: "11mg/kg single dose", price: "â‚¹145" }], description: "Roundworm infection treatment" },
+            "hookworm": { medicines: [{ name: "Albendazole", dosage: "400mg single dose", price: "â‚¹125" }, { name: "Mebendazole", dosage: "100mg twice daily for 3 days", price: "â‚¹85" }, { name: "Iron Supplementation", dosage: "60mg daily", price: "â‚¹45" }], description: "Hookworm anemia treatment" },
+            "whipworm": { medicines: [{ name: "Mebendazole", dosage: "100mg twice daily for 3 days", price: "â‚¹85" }, { name: "Albendazole", dosage: "400mg daily for 3 days", price: "â‚¹125" }, { name: "Ivermectin", dosage: "200mcg/kg daily for 3 days", price: "â‚¹285" }], description: "Trichuris trichiura treatment" },
+            "pinworm": { medicines: [{ name: "Mebendazole", dosage: "100mg single dose, repeat in 2 weeks", price: "â‚¹85" }, { name: "Pyrantel Pamoate", dosage: "11mg/kg single dose", price: "â‚¹145" }, { name: "Albendazole", dosage: "400mg single dose", price: "â‚¹125" }], description: "Enterobius vermicularis treatment" },
+            "tapeworm": { medicines: [{ name: "Praziquantel", dosage: "10-20mg/kg single dose", price: "â‚¹285" }, { name: "Niclosamide", dosage: "2g single dose", price: "â‚¹185" }, { name: "Albendazole", dosage: "400mg twice daily for 28 days", price: "â‚¹125" }], description: "Cestode infection treatment" },
+            "giardiasis": { medicines: [{ name: "Metronidazole", dosage: "250mg thrice daily for 7 days", price: "â‚¹65" }, { name: "Tinidazole", dosage: "2g single dose", price: "â‚¹185" }, { name: "Nitazoxanide", dosage: "500mg twice daily for 3 days", price: "â‚¹285" }], description: "Giardia lamblia infection" },
+            "amoebiasis": { medicines: [{ name: "Metronidazole", dosage: "500mg thrice daily for 7 days", price: "â‚¹65" }, { name: "Tinidazole", dosage: "2g daily for 3 days", price: "â‚¹185" }, { name: "Paromomycin", dosage: "25-35mg/kg daily for 7 days", price: "â‚¹385" }], description: "Entamoeba histolytica treatment" },
+            "cryptosporidiosis": { medicines: [{ name: "Nitazoxanide", dosage: "500mg twice daily for 3 days", price: "â‚¹285" }, { name: "Paromomycin", dosage: "500mg thrice daily", price: "â‚¹385" }, { name: "Supportive Care", dosage: "Fluid replacement", price: "â‚¹200" }], description: "Cryptosporidium infection treatment" },
+            "toxoplasmosis": { medicines: [{ name: "Sulfadiazine", dosage: "4-6g daily in 4 doses", price: "â‚¹185" }, { name: "Pyrimethamine", dosage: "50-75mg daily", price: "â‚¹285" }, { name: "Leucovorin", dosage: "15mg daily", price: "â‚¹125" }], description: "Toxoplasma gondii treatment" },
+            "babesiosis": { medicines: [{ name: "Atovaquone", dosage: "750mg twice daily", price: "â‚¹485" }, { name: "Azithromycin", dosage: "500mg daily", price: "â‚¹125" }, { name: "Clindamycin", dosage: "600mg thrice daily", price: "â‚¹185" }], description: "Babesia microti treatment" },
+            "vitamin_d_deficiency": { medicines: [{ name: "Cholecalciferol", dosage: "60,000 IU weekly for 8 weeks", price: "â‚¹125" }, { name: "Calcium Carbonate", dosage: "1000mg daily", price: "â‚¹65" }, { name: "Calcitriol", dosage: "0.25mcg twice daily", price: "â‚¹185" }], description: "Vitamin D deficiency correction" },
+            "vitamin_b12_deficiency": { medicines: [{ name: "Cyanocobalamin", dosage: "1000mcg IM weekly", price: "â‚¹125" }, { name: "Methylcobalamin", dosage: "1500mcg daily", price: "â‚¹185" }, { name: "Folic Acid", dosage: "5mg daily", price: "â‚¹25" }], description: "B12 deficiency and pernicious anemia" },
+            "iron_deficiency_anemia": { medicines: [{ name: "Ferrous Sulfate", dosage: "325mg thrice daily", price: "â‚¹45" }, { name: "Ferrous Fumarate", dosage: "200mg thrice daily", price: "â‚¹65" }, { name: "Iron Sucrose", dosage: "200mg IV weekly", price: "â‚¹485" }], description: "Iron deficiency anemia treatment" },
+            "scurvy": { medicines: [{ name: "Vitamin C", dosage: "1000mg daily", price: "â‚¹45" }, { name: "Ascorbic Acid", dosage: "500mg twice daily", price: "â‚¹35" }, { name: "Citrus Fruits", dosage: "Daily consumption", price: "â‚¹50" }], description: "Vitamin C deficiency treatment" },
+            "rickets": { medicines: [{ name: "Vitamin D3", dosage: "60,000 IU weekly", price: "â‚¹125" }, { name: "Calcium", dosage: "1000mg daily", price: "â‚¹65" }, { name: "Phosphorus", dosage: "500mg daily", price: "â‚¹85" }], description: "Childhood rickets treatment" },
+            "pellagra": { medicines: [{ name: "Niacin", dosage: "500mg daily", price: "â‚¹85" }, { name: "Nicotinamide", dosage: "100mg thrice daily", price: "â‚¹65" }, { name: "Vitamin B Complex", dosage: "1 tablet daily", price: "â‚¹45" }], description: "Niacin deficiency treatment" },
+            "beriberi": { medicines: [{ name: "Thiamine", dosage: "100mg thrice daily", price: "â‚¹65" }, { name: "Vitamin B1 Injection", dosage: "100mg IM daily", price: "â‚¹125" }, { name: "Multivitamin", dosage: "1 tablet daily", price: "â‚¹85" }], description: "Thiamine deficiency treatment" },
+            "kwashiorkor": { medicines: [{ name: "Protein Supplements", dosage: "2-3g/kg daily", price: "â‚¹285" }, { name: "Vitamin A", dosage: "200,000 IU", price: "â‚¹125" }, { name: "Zinc", dosage: "20mg daily", price: "â‚¹45" }], description: "Protein-energy malnutrition" },
+            "marasmus": { medicines: [{ name: "Therapeutic Milk", dosage: "150ml/kg daily", price: "â‚¹185" }, { name: "Multivitamins", dosage: "Age-appropriate doses", price: "â‚¹85" }, { name: "Gradual Refeeding", dosage: "Controlled calorie increase", price: "â‚¹500" }], description: "Severe malnutrition treatment" },
+            "metabolic_syndrome": { medicines: [{ name: "Metformin", dosage: "500mg twice daily", price: "â‚¹65" }, { name: "Atorvastatin", dosage: "20mg daily", price: "â‚¹185" }, { name: "Lifestyle Counseling", dosage: "Monthly sessions", price: "â‚¹500" }], description: "Metabolic syndrome management" },
+            "cushing_syndrome": { medicines: [{ name: "Ketoconazole", dosage: "200mg twice daily", price: "â‚¹285" }, { name: "Metyrapone", dosage: "750mg every 6 hours", price: "â‚¹485" }, { name: "Mifepristone", dosage: "300mg daily", price: "â‚¹2500" }], description: "Hypercortisolism treatment" },
+            "addison_disease": { medicines: [{ name: "Hydrocortisone", dosage: "20mg morning, 10mg evening", price: "â‚¹125" }, { name: "Fludrocortisone", dosage: "0.1mg daily", price: "â‚¹185" }, { name: "Salt Supplements", dosage: "As needed", price: "â‚¹25" }], description: "Adrenal insufficiency treatment" },
+            "hyperthyroidism": { medicines: [{ name: "Methimazole", dosage: "15mg thrice daily", price: "â‚¹125" }, { name: "Propylthiouracil", dosage: "100mg thrice daily", price: "â‚¹185" }, { name: "Propranolol", dosage: "40mg thrice daily", price: "â‚¹45" }], description: "Overactive thyroid treatment" },
+            "hypothyroidism": { medicines: [{ name: "Levothyroxine", dosage: "50-150mcg daily", price: "â‚¹95" }, { name: "Liothyronine", dosage: "25mcg twice daily", price: "â‚¹185" }, { name: "Thyroid Extract", dosage: "60mg daily", price: "â‚¹285" }], description: "Underactive thyroid treatment" },
+            "goiter": { medicines: [{ name: "Iodine Supplements", dosage: "150mcg daily", price: "â‚¹45" }, { name: "Levothyroxine", dosage: "50-100mcg daily", price: "â‚¹95" }, { name: "Surgical Evaluation", dosage: "If indicated", price: "â‚¹5000" }], description: "Thyroid enlargement treatment" },
+            "hyperparathyroidism": { medicines: [{ name: "Cinacalcet", dosage: "30mg twice daily", price: "â‚¹485" }, { name: "Bisphosphonates", dosage: "Weekly dosing", price: "â‚¹285" }, { name: "Surgical Evaluation", dosage: "If severe", price: "â‚¹10000" }], description: "Elevated parathyroid hormone treatment" },
+            "hypoparathyroidism": { medicines: [{ name: "Calcium Carbonate", dosage: "2000mg daily", price: "â‚¹65" }, { name: "Calcitriol", dosage: "0.5mcg twice daily", price: "â‚¹185" }, { name: "Magnesium", dosage: "400mg daily", price: "â‚¹85" }], description: "Low parathyroid hormone treatment" },
+            "diabetes_insipidus": { medicines: [{ name: "Desmopressin", dosage: "0.1mg twice daily", price: "â‚¹485" }, { name: "Hydrochlorothiazide", dosage: "25mg daily", price: "â‚¹45" }, { name: "Amiloride", dosage: "5mg twice daily", price: "â‚¹125" }], description: "ADH deficiency treatment" },
+            "acromegaly": { medicines: [{ name: "Octreotide", dosage: "100mcg thrice daily", price: "â‚¹2500" }, { name: "Pegvisomant", dosage: "10mg daily", price: "â‚¹5000" }, { name: "Cabergoline", dosage: "0.5mg twice weekly", price: "â‚¹485" }], description: "Growth hormone excess treatment" },
+            "gigantism": { medicines: [{ name: "Octreotide", dosage: "100mcg thrice daily", price: "â‚¹2500" }, { name: "Lanreotide", dosage: "90mg monthly", price: "â‚¹8500" }, { name: "Surgical Consultation", dosage: "Pituitary surgery", price: "â‚¹50000" }], description: "Childhood growth hormone excess" },
+            "dwarfism": { medicines: [{ name: "Growth Hormone", dosage: "0.3mg/kg weekly", price: "â‚¹15000" }, { name: "IGF-1", dosage: "40-120mcg/kg twice daily", price: "â‚¹20000" }, { name: "Nutritional Support", dosage: "High protein diet", price: "â‚¹500" }], description: "Growth hormone deficiency treatment" },
+            "precocious_puberty": { medicines: [{ name: "Leuprolide", dosage: "7.5mg monthly", price: "â‚¹2850" }, { name: "Triptorelin", dosage: "3.75mg monthly", price: "â‚¹3500" }, { name: "Psychological Support", dosage: "Regular counseling", price: "â‚¹750" }], description: "Early puberty suppression" },
+            "delayed_puberty": { medicines: [{ name: "Testosterone", dosage: "50mg monthly IM", price: "â‚¹285" }, { name: "Estradiol", dosage: "5mcg daily", price: "â‚¹185" }, { name: "HCG", dosage: "1500 IU thrice weekly", price: "â‚¹1250" }], description: "Pubertal induction therapy" },
+            "turner_syndrome": { medicines: [{ name: "Growth Hormone", dosage: "0.375mg/kg weekly", price: "â‚¹15000" }, { name: "Estrogen", dosage: "Start with 5mcg daily", price: "â‚¹185" }, { name: "Cardiac Monitoring", dosage: "Annual echocardiogram", price: "â‚¹2000" }], description: "Turner syndrome management" },
+            "klinefelter_syndrome": { medicines: [{ name: "Testosterone", dosage: "200mg every 2 weeks", price: "â‚¹285" }, { name: "Speech Therapy", dosage: "As needed", price: "â‚¹1000" }, { name: "Fertility Counseling", dosage: "If desired", price: "â‚¹2000" }], description: "Klinefelter syndrome hormone therapy" },
+            "down_syndrome": { medicines: [{ name: "Multivitamin", dosage: "Age-appropriate", price: "â‚¹85" }, { name: "Thyroid Monitoring", dosage: "Annual screening", price: "â‚¹200" }, { name: "Developmental Support", dosage: "Ongoing therapy", price: "â‚¹1500" }], description: "Down syndrome supportive care" },
+            "cystic_fibrosis": { medicines: [{ name: "Pancreatic Enzymes", dosage: "With each meal", price: "â‚¹485" }, { name: "Ivacaftor", dosage: "150mg twice daily", price: "â‚¹25000" }, { name: "Dornase Alfa", dosage: "2.5mg daily nebulized", price: "â‚¹5000" }], description: "Cystic fibrosis comprehensive care" },
+            "sickle_cell_disease": { medicines: [{ name: "Hydroxyurea", dosage: "15mg/kg daily", price: "â‚¹285" }, { name: "Folic Acid", dosage: "5mg daily", price: "â‚¹25" }, { name: "Pain Management", dosage: "As needed", price: "â‚¹125" }], description: "Sickle cell disease management" },
+            "thalassemia": { medicines: [{ name: "Deferasirox", dosage: "20mg/kg daily", price: "â‚¹1500" }, { name: "Deferoxamine", dosage: "20-40mg/kg daily", price: "â‚¹850" }, { name: "Blood Transfusion", dosage: "Every 3-4 weeks", price: "â‚¹2000" }], description: "Thalassemia iron chelation" },
+            "hemophilia": { medicines: [{ name: "Factor VIII Concentrate", dosage: "25-50 IU/kg", price: "â‚¹15000" }, { name: "Factor IX Concentrate", dosage: "50-100 IU/kg", price: "â‚¹20000" }, { name: "Desmopressin", dosage: "0.3mcg/kg", price: "â‚¹485" }], description: "Hemophilia clotting factor replacement" },
+            "von_willebrand_disease": { medicines: [{ name: "Desmopressin", dosage: "0.3mcg/kg IV", price: "â‚¹485" }, { name: "Aminocaproic Acid", dosage: "100mg/kg every 6 hours", price: "â‚¹185" }, { name: "Factor VIII/vWF", dosage: "40-60 IU/kg", price: "â‚¹12000" }], description: "von Willebrand factor deficiency" },
+            "idiopathic_thrombocytopenic_purpura": { medicines: [{ name: "Prednisolone", dosage: "1mg/kg daily", price: "â‚¹45" }, { name: "Immunoglobulin", dosage: "1g/kg daily for 2 days", price: "â‚¹15000" }, { name: "Rituximab", dosage: "375mg/m2 weekly", price: "â‚¹25000" }], description: "ITP platelet support" },
+            "aplastic_anemia": { medicines: [{ name: "Antithymocyte Globulin", dosage: "15mg/kg daily for 5 days", price: "â‚¹50000" }, { name: "Cyclosporine", dosage: "5mg/kg twice daily", price: "â‚¹1500" }, { name: "Eltrombopag", dosage: "50mg daily", price: "â‚¹2500" }], description: "Bone marrow failure treatment" },
+            "leukemia_acute": { medicines: [{ name: "Cytarabine", dosage: "100mg/m2 daily for 7 days", price: "â‚¹2500" }, { name: "Daunorubicin", dosage: "60mg/m2 for 3 days", price: "â‚¹5000" }, { name: "Allopurinol", dosage: "300mg daily", price: "â‚¹85" }], description: "Acute leukemia chemotherapy" },
+            "leukemia_chronic": { medicines: [{ name: "Imatinib", dosage: "400mg daily", price: "â‚¹15000" }, { name: "Dasatinib", dosage: "100mg daily", price: "â‚¹25000" }, { name: "Nilotinib", dosage: "300mg twice daily", price: "â‚¹35000" }], description: "Chronic myeloid leukemia targeted therapy" },
+            "lymphoma_hodgkin": { medicines: [{ name: "Doxorubicin", dosage: "25mg/m2", price: "â‚¹2150" }, { name: "Bleomycin", dosage: "10 units/m2", price: "â‚¹1500" }, { name: "Vinblastine", dosage: "6mg/m2", price: "â‚¹850" }], description: "Hodgkin lymphoma ABVD protocol" },
+            "lymphoma_non_hodgkin": { medicines: [{ name: "Rituximab", dosage: "375mg/m2", price: "â‚¹25000" }, { name: "Cyclophosphamide", dosage: "750mg/m2", price: "â‚¹485" }, { name: "Vincristine", dosage: "1.4mg/m2", price: "â‚¹285" }], description: "Non-Hodgkin lymphoma R-CHOP" },
+            "multiple_myeloma": { medicines: [{ name: "Lenalidomide", dosage: "25mg daily", price: "â‚¹15000" }, { name: "Bortezomib", dosage: "1.3mg/m2", price: "â‚¹20000" }, { name: "Dexamethasone", dosage: "40mg weekly", price: "â‚¹125" }], description: "Multiple myeloma targeted therapy" },
+            "breast_cancer": { medicines: [{ name: "Tamoxifen", dosage: "20mg daily", price: "â‚¹485" }, { name: "Anastrozole", dosage: "1mg daily", price: "â‚¹850" }, { name: "Trastuzumab", dosage: "6mg/kg every 3 weeks", price: "â‚¹50000" }], description: "Breast cancer hormonal and targeted therapy" },
+            "prostate_cancer": { medicines: [{ name: "Bicalutamide", dosage: "50mg daily", price: "â‚¹485" }, { name: "Leuprolide", dosage: "7.5mg monthly", price: "â‚¹2850" }, { name: "Docetaxel", dosage: "75mg/m2 every 3 weeks", price: "â‚¹5000" }], description: "Prostate cancer hormone therapy" },
+            "lung_cancer": { medicines: [{ name: "Carboplatin", dosage: "AUC 6 every 3 weeks", price: "â‚¹2500" }, { name: "Paclitaxel", dosage: "200mg/m2 every 3 weeks", price: "â‚¹3500" }, { name: "Erlotinib", dosage: "150mg daily", price: "â‚¹15000" }], description: "Lung cancer chemotherapy and targeted therapy" },
+            "colon_cancer": { medicines: [{ name: "5-Fluorouracil", dosage: "425mg/m2 daily for 5 days", price: "â‚¹850" }, { name: "Oxaliplatin", dosage: "85mg/m2 every 2 weeks", price: "â‚¹5000" }, { name: "Bevacizumab", dosage: "5mg/kg every 2 weeks", price: "â‚¹25000" }], description: "Colorectal cancer FOLFOX + Bevacizumab" },
+            "liver_cancer": { medicines: [{ name: "Sorafenib", dosage: "400mg twice daily", price: "â‚¹15000" }, { name: "Lenvatinib", dosage: "12mg daily", price: "â‚¹25000" }, { name: "Regorafenib", dosage: "160mg daily", price: "â‚¹35000" }], description: "Hepatocellular carcinoma targeted therapy" },
+            "pancreatic_cancer": { medicines: [{ name: "Gemcitabine", dosage: "1000mg/m2 weekly", price: "â‚¹2500" }, { name: "Erlotinib", dosage: "100mg daily", price: "â‚¹15000" }, { name: "FOLFIRINOX", dosage: "Per protocol", price: "â‚¹10000" }], description: "Pancreatic adenocarcinoma treatment" },
+            "kidney_cancer": { medicines: [{ name: "Sunitinib", dosage: "50mg daily", price: "â‚¹20000" }, { name: "Pazopanib", dosage: "800mg daily", price: "â‚¹25000" }, { name: "Nivolumab", dosage: "3mg/kg every 2 weeks", price: "â‚¹50000" }], description: "Renal cell carcinoma targeted therapy" },
+            "bladder_cancer": { medicines: [{ name: "BCG Immunotherapy", dosage: "Weekly instillations", price: "â‚¹5000" }, { name: "Mitomycin C", dosage: "40mg instillation", price: "â‚¹2500" }, { name: "Cisplatin", dosage: "70mg/m2 every 3 weeks", price: "â‚¹1250" }], description: "Bladder cancer intravesical and systemic therapy" },
+            "ovarian_cancer": { medicines: [{ name: "Carboplatin", dosage: "AUC 6 every 3 weeks", price: "â‚¹2500" }, { name: "Paclitaxel", dosage: "175mg/m2 every 3 weeks", price: "â‚¹3500" }, { name: "Olaparib", dosage: "300mg twice daily", price: "â‚¹40000" }], description: "Ovarian cancer chemotherapy and PARP inhibitor" },
+            "cervical_cancer": { medicines: [{ name: "Cisplatin", dosage: "40mg/m2 weekly", price: "â‚¹1250" }, { name: "5-Fluorouracil", dosage: "1000mg/m2 daily for 4 days", price: "â‚¹850" }, { name: "Bevacizumab", dosage: "15mg/kg every 3 weeks", price: "â‚¹25000" }], description: "Cervical cancer chemoradiation" },
+            "skin_cancer_melanoma": { medicines: [{ name: "Pembrolizumab", dosage: "2mg/kg every 3 weeks", price: "â‚¹50000" }, { name: "Ipilimumab", dosage: "3mg/kg every 3 weeks", price: "â‚¹75000" }, { name: "Vemurafenib", dosage: "960mg twice daily", price: "â‚¹30000" }], description: "Melanoma immunotherapy and targeted therapy" },
+            "brain_tumor": { medicines: [{ name: "Temozolomide", dosage: "150mg/m2 daily for 5 days", price: "â‚¹5000" }, { name: "Carmustine", dosage: "200mg/m2 every 6 weeks", price: "â‚¹8000" }, { name: "Bevacizumab", dosage: "10mg/kg every 2 weeks", price: "â‚¹25000" }], description: "Glioblastoma chemotherapy" },
+            "systemic_lupus_erythematosus": { medicines: [{ name: "Hydroxychloroquine", dosage: "400mg daily", price: "â‚¹185" }, { name: "Methotrexate", dosage: "15mg weekly", price: "â‚¹185" }, { name: "Prednisone", dosage: "10-60mg daily", price: "â‚¹45" }], description: "SLE immunosuppressive therapy" },
+            "rheumatoid_arthritis": { medicines: [{ name: "Methotrexate", dosage: "15mg weekly", price: "â‚¹185" }, { name: "Adalimumab", dosage: "40mg every 2 weeks", price: "â‚¹25000" }, { name: "Sulfasalazine", dosage: "2g daily", price: "â‚¹125" }], description: "RA disease-modifying therapy" },
+            "multiple_sclerosis": { medicines: [{ name: "Interferon Beta", dosage: "30mcg weekly", price: "â‚¹15000" }, { name: "Glatiramer Acetate", dosage: "20mg daily", price: "â‚¹12000" }, { name: "Methylprednisolone", dosage: "1g daily for 3 days", price: "â‚¹485" }], description: "MS disease-modifying treatment" },
+            "myasthenia_gravis": { medicines: [{ name: "Pyridostigmine", dosage: "60mg every 4 hours", price: "â‚¹185" }, { name: "Prednisone", dosage: "60mg daily", price: "â‚¹45" }, { name: "Azathioprine", dosage: "2mg/kg daily", price: "â‚¹285" }], description: "Myasthenia gravis neuromuscular therapy" },
+            "guillain_barre_syndrome": { medicines: [{ name: "Immunoglobulin", dosage: "2g/kg over 5 days", price: "â‚¹50000" }, { name: "Plasmapheresis", dosage: "5 exchanges", price: "â‚¹25000" }, { name: "Supportive Care", dosage: "Respiratory monitoring", price: "â‚¹5000" }], description: "GBS acute inflammatory demyelination" },
+            "inflammatory_bowel_disease": { medicines: [{ name: "Mesalamine", dosage: "2.4g daily", price: "â‚¹485" }, { name: "Azathioprine", dosage: "2mg/kg daily", price: "â‚¹285" }, { name: "Infliximab", dosage: "5mg/kg at weeks 0,2,6", price: "â‚¹50000" }], description: "Crohn's disease and ulcerative colitis" },
+            "celiac_disease": { medicines: [{ name: "Gluten-free Diet", dosage: "Strict adherence", price: "â‚¹500" }, { name: "Vitamin D", dosage: "2000 IU daily", price: "â‚¹125" }, { name: "Iron Supplements", dosage: "325mg daily", price: "â‚¹45" }], description: "Celiac disease gluten-free management" },
+            "autoimmune_hepatitis": { medicines: [{ name: "Prednisone", dosage: "30mg daily", price: "â‚¹45" }, { name: "Azathioprine", dosage: "50mg daily", price: "â‚¹285" }, { name: "Mycophenolate", dosage: "1g twice daily", price: "â‚¹485" }], description: "Autoimmune hepatitis immunosuppression" },
+            "primary_biliary_cholangitis": { medicines: [{ name: "Ursodeoxycholic Acid", dosage: "13-15mg/kg daily", price: "â‚¹285" }, { name: "Obeticholic Acid", dosage: "5-10mg daily", price: "â‚¹2500" }, { name: "Vitamin Supplements", dosage: "A, D, E, K", price: "â‚¹185" }], description: "PBC bile acid therapy" },
+            "sjogren_syndrome": { medicines: [{ name: "Pilocarpine", dosage: "5mg four times daily", price: "â‚¹285" }, { name: "Cevimeline", dosage: "30mg thrice daily", price: "â‚¹485" }, { name: "Artificial Tears", dosage: "As needed", price: "â‚¹125" }], description: "Sjogren's syndrome secretory support" },
+            "scleroderma": { medicines: [{ name: "Methotrexate", dosage: "15mg weekly", price: "â‚¹185" }, { name: "Cyclophosphamide", dosage: "2mg/kg daily", price: "â‚¹485" }, { name: "Bosentan", dosage: "125mg twice daily", price: "â‚¹2500" }], description: "Systemic sclerosis treatment" },
+            "vasculitis": { medicines: [{ name: "Cyclophosphamide", dosage: "2mg/kg daily", price: "â‚¹485" }, { name: "Prednisone", dosage: "1mg/kg daily", price: "â‚¹45" }, { name: "Rituximab", dosage: "375mg/m2 weekly", price: "â‚¹25000" }], description: "Systemic vasculitis immunosuppression" },
+            "behcet_disease": { medicines: [{ name: "Colchicine", dosage: "1.2mg daily", price: "â‚¹185" }, { name: "Azathioprine", dosage: "2.5mg/kg daily", price: "â‚¹285" }, { name: "Adalimumab", dosage: "40mg every 2 weeks", price: "â‚¹25000" }], description: "Behcet's disease anti-inflammatory therapy" },
+            "antiphospholipid_syndrome": { medicines: [{ name: "Warfarin", dosage: "Target INR 2-3", price: "â‚¹45" }, { name: "Aspirin", dosage: "81mg daily", price: "â‚¹25" }, { name: "Hydroxychloroquine", dosage: "200mg twice daily", price: "â‚¹185" }], description: "APS anticoagulation therapy" },
+            "polymyalgia_rheumatica": { medicines: [{ name: "Prednisone", dosage: "15mg daily", price: "â‚¹45" }, { name: "Methotrexate", dosage: "10mg weekly", price: "â‚¹185" }, { name: "Calcium + Vitamin D", dosage: "1200mg + 800 IU", price: "â‚¹125" }], description: "PMR corticosteroid therapy" },
+            "fibromyalgia": { medicines: [{ name: "Pregabalin", dosage: "150mg twice daily", price: "â‚¹385" }, { name: "Duloxetine", dosage: "60mg daily", price: "â‚¹285" }, { name: "Amitriptyline", dosage: "25mg at bedtime", price: "â‚¹85" }], description: "Fibromyalgia pain management" },
+            "chronic_fatigue_syndrome": { medicines: [{ name: "Modafinil", dosage: "200mg daily", price: "â‚¹485" }, { name: "Coenzyme Q10", dosage: "200mg daily", price: "â‚¹285" }, { name: "Graded Exercise", dosage: "Progressive program", price: "â‚¹500" }], description: "CFS symptom management" },
+            "lyme_disease": { medicines: [{ name: "Doxycycline", dosage: "100mg twice daily for 21 days", price: "â‚¹85" }, { name: "Amoxicillin", dosage: "500mg thrice daily for 21 days", price: "â‚¹75" }, { name: "Ceftriaxone", dosage: "2g daily for 14-28 days", price: "â‚¹285" }], description: "Lyme disease antibiotic therapy" },
+            "rocky_mountain_spotted_fever": { medicines: [{ name: "Doxycycline", dosage: "100mg twice daily", price: "â‚¹85" }, { name: "Chloramphenicol", dosage: "50mg/kg daily", price: "â‚¹185" }, { name: "Tetracycline", dosage: "25mg/kg daily", price: "â‚¹65" }], description: "RMSF rickettsial treatment" },
+            "q_fever": { medicines: [{ name: "Doxycycline", dosage: "100mg twice daily for 14 days", price: "â‚¹85" }, { name: "Hydroxychloroquine", dosage: "600mg daily", price: "â‚¹185" }, { name: "Rifampin", dosage: "300mg twice daily", price: "â‚¹125" }], description: "Q fever coxiella treatment" },
+            "brucellosis": { medicines: [{ name: "Doxycycline", dosage: "100mg twice daily for 6 weeks", price: "â‚¹85" }, { name: "Rifampin", dosage: "600mg daily for 6 weeks", price: "â‚¹125" }, { name: "Streptomycin", dosage: "1g daily for 2-3 weeks", price: "â‚¹285" }], description: "Brucella species treatment" },
+            "tularemia": { medicines: [{ name: "Streptomycin", dosage: "1g twice daily for 10 days", price: "â‚¹285" }, { name: "Gentamicin", dosage: "5mg/kg daily for 10 days", price: "â‚¹185" }, { name: "Ciprofloxacin", dosage: "500mg twice daily for 10 days", price: "â‚¹85" }], description: "Francisella tularensis treatment" },
+            "plague": { medicines: [{ name: "Streptomycin", dosage: "1g twice daily for 10 days", price: "â‚¹285" }, { name: "Gentamicin", dosage: "5mg/kg daily", price: "â‚¹185" }, { name: "Doxycycline", dosage: "100mg twice daily", price: "â‚¹85" }], description: "Yersinia pestis treatment" },
+            "anthrax": { medicines: [{ name: "Ciprofloxacin", dosage: "500mg twice daily for 60 days", price: "â‚¹85" }, { name: "Doxycycline", dosage: "100mg twice daily for 60 days", price: "â‚¹85" }, { name: "Anthrax Vaccine", dosage: "Post-exposure prophylaxis", price: "â‚¹5000" }], description: "Bacillus anthracis treatment" },
+            "botulism": { medicines: [{ name: "Botulism Antitoxin", dosage: "1 vial IV", price: "â‚¹50000" }, { name: "Supportive Care", dosage: "Mechanical ventilation", price: "â‚¹10000" }, { name: "Rehabilitation", dosage: "Physical therapy", price: "â‚¹1500" }], description: "Clostridium botulinum toxin neutralization" },
+            "gas_gangrene": { medicines: [{ name: "Penicillin G", dosage: "4 million units every 4 hours", price: "â‚¹185" }, { name: "Clindamycin", dosage: "600mg every 8 hours", price: "â‚¹185" }, { name: "Hyperbaric Oxygen", dosage: "2.4 ATA for 90 minutes", price: "â‚¹5000" }], description: "Clostridial myonecrosis treatment" },
+            "necrotizing_fasciitis": { medicines: [{ name: "Vancomycin", dosage: "15mg/kg every 12 hours", price: "â‚¹485" }, { name: "Piperacillin-Tazobactam", dosage: "4.5g every 6 hours", price: "â‚¹385" }, { name: "Surgical Debridement", dosage: "Emergency procedure", price: "â‚¹25000" }], description: "Severe soft tissue infection" },
+            "toxic_shock_syndrome": { medicines: [{ name: "Clindamycin", dosage: "900mg every 8 hours", price: "â‚¹185" }, { name: "Vancomycin", dosage: "15mg/kg every 12 hours", price: "â‚¹485" }, { name: "Immunoglobulin", dosage: "2g/kg", price: "â‚¹15000" }], description: "TSS toxin-mediated shock" },
+            "scarlet_fever": { medicines: [{ name: "Penicillin V", dosage: "500mg twice daily for 10 days", price: "â‚¹75" }, { name: "Erythromycin", dosage: "500mg four times daily", price: "â‚¹125" }, { name: "Azithromycin", dosage: "500mg daily for 5 days", price: "â‚¹125" }], description: "Group A streptococcal infection" },
+            "rheumatic_fever": { medicines: [{ name: "Penicillin G", dosage: "1.2 million units IM monthly", price: "â‚¹185" }, { name: "Aspirin", dosage: "80-100mg/kg daily", price: "â‚¹25" }, { name: "Prednisone", dosage: "2mg/kg daily", price: "â‚¹45" }], description: "Post-streptococcal rheumatic fever" },
+            "endocarditis": { medicines: [{ name: "Vancomycin", dosage: "15mg/kg every 12 hours", price: "â‚¹485" }, { name: "Gentamicin", dosage: "3mg/kg daily", price: "â‚¹185" }, { name: "Rifampin", dosage: "300mg every 8 hours", price: "â‚¹125" }], description: "Infective endocarditis treatment" },
+            "pericarditis": { medicines: [{ name: "Ibuprofen", dosage: "600mg every 8 hours", price: "â‚¹35" }, { name: "Colchicine", dosage: "0.6mg twice daily", price: "â‚¹185" }, { name: "Prednisone", dosage: "1mg/kg daily", price: "â‚¹45" }], description: "Acute pericarditis anti-inflammatory" },
+            "myocarditis": { medicines: [{ name: "Supportive Care", dosage: "Heart failure management", price: "â‚¹2000" }, { name: "ACE Inhibitors", dosage: "As tolerated", price: "â‚¹125" }, { name: "Beta Blockers", dosage: "As tolerated", price: "â‚¹85" }], description: "Viral myocarditis supportive treatment" },
+            "arrhythmia": { medicines: [{ name: "Amiodarone", dosage: "200mg thrice daily", price: "â‚¹285" }, { name: "Metoprolol", dosage: "50mg twice daily", price: "â‚¹85" }, { name: "Warfarin", dosage: "Target INR 2-3", price: "â‚¹45" }], description: "Cardiac arrhythmia management" },
+            "atrial_fibrillation": { medicines: [{ name: "Digoxin", dosage: "0.25mg daily", price: "â‚¹45" }, { name: "Warfarin", dosage: "Target INR 2-3", price: "â‚¹45" }, { name: "Diltiazem", dosage: "120mg daily", price: "â‚¹125" }], description: "AFib rate and rhythm control" },
+            "heart_failure": { medicines: [{ name: "Lisinopril", dosage: "10mg twice daily", price: "â‚¹75" }, { name: "Metoprolol", dosage: "25mg twice daily", price: "â‚¹85" }, { name: "Furosemide", dosage: "40mg daily", price: "â‚¹45" }], description: "CHF guideline-directed therapy" },
+            "pulmonary_embolism": { medicines: [{ name: "Heparin", dosage: "80 units/kg bolus", price: "â‚¹285" }, { name: "Warfarin", dosage: "Target INR 2-3", price: "â‚¹45" }, { name: "Rivaroxaban", dosage: "15mg twice daily", price: "â‚¹485" }], description: "PE anticoagulation therapy" },
+            "deep_vein_thrombosis": { medicines: [{ name: "Enoxaparin", dosage: "1mg/kg twice daily", price: "â‚¹485" }, { name: "Warfarin", dosage: "Target INR 2-3", price: "â‚¹45" }, { name: "Compression Stockings", dosage: "30-40 mmHg", price: "â‚¹285" }], description: "DVT anticoagulation and compression" },
+            "peripheral_arterial_disease": { medicines: [{ name: "Aspirin", dosage: "81mg daily", price: "â‚¹25" }, { name: "Clopidogrel", dosage: "75mg daily", price: "â‚¹125" }, { name: "Atorvastatin", dosage: "80mg daily", price: "â‚¹185" }], description: "PAD antiplatelet and statin therapy" },
+            "varicose_veins": { medicines: [{ name: "Compression Stockings", dosage: "15-20 mmHg", price: "â‚¹185" }, { name: "Diosmin", dosage: "500mg twice daily", price: "â‚¹285" }, { name: "Horse Chestnut Extract", dosage: "300mg twice daily", price: "â‚¹185" }], description: "Venous insufficiency treatment" },
+            "lymphedema": { medicines: [{ name: "Compression Garments", dosage: "20-30 mmHg", price: "â‚¹485" }, { name: "Manual Lymph Drainage", dosage: "3 times weekly", price: "â‚¹1500" }, { name: "Diuretics", dosage: "As needed", price: "â‚¹45" }], description: "Lymphatic drainage support" },
+            "raynaud_phenomenon": { medicines: [{ name: "Nifedipine", dosage: "30mg daily", price: "â‚¹125" }, { name: "Amlodipine", dosage: "5mg daily", price: "â‚¹55" }, { name: "Sildenafil", dosage: "20mg thrice daily", price: "â‚¹485" }], description: "Raynaud's vasodilator therapy" },
+            "huntington_disease": { medicines: [{ name: "Tetrabenazine", dosage: "25mg thrice daily", price: "â‚¹485" }, { name: "Haloperidol", dosage: "5mg twice daily", price: "â‚¹85" }, { name: "Speech Therapy", dosage: "Weekly sessions", price: "â‚¹750" }], description: "Huntington's chorea management" },
+            "amyotrophic_lateral_sclerosis": { medicines: [{ name: "Riluzole", dosage: "50mg twice daily", price: "â‚¹2500" }, { name: "Edaravone", dosage: "60mg IV daily", price: "â‚¹15000" }, { name: "Respiratory Support", dosage: "As needed", price: "â‚¹5000" }], description: "ALS neuroprotective therapy" },
+            "spinal_muscular_atrophy": { medicines: [{ name: "Nusinersen", dosage: "12mg intrathecal", price: "â‚¹500000" }, { name: "Risdiplam", dosage: "5mg daily", price: "â‚¹250000" }, { name: "Physical Therapy", dosage: "Daily sessions", price: "â‚¹1000" }], description: "SMA gene therapy and support" },
+            "muscular_dystrophy": { medicines: [{ name: "Prednisone", dosage: "0.75mg/kg daily", price: "â‚¹45" }, { name: "Deflazacort", dosage: "0.9mg/kg daily", price: "â‚¹285" }, { name: "Physical Therapy", dosage: "Daily exercises", price: "â‚¹1000" }], description: "Duchenne muscular dystrophy treatment" },
+            "cerebral_palsy": { medicines: [{ name: "Baclofen", dosage: "10mg thrice daily", price: "â‚¹125" }, { name: "Botulinum Toxin", dosage: "Injection every 3 months", price: "â‚¹15000" }, { name: "Physical Therapy", dosage: "5 times weekly", price: "â‚¹2000" }], description: "Cerebral palsy spasticity management" },
+            "spina_bifida": { medicines: [{ name: "Folic Acid", dosage: "5mg daily", price: "â‚¹25" }, { name: "Multivitamin", dosage: "Daily supplement", price: "â‚¹85" }, { name: "Urological Care", dosage: "Regular monitoring", price: "â‚¹1500" }], description: "Spina bifida comprehensive care" },
+            "hydrocephalus": { medicines: [{ name: "Acetazolamide", dosage: "250mg twice daily", price: "â‚¹125" }, { name: "Furosemide", dosage: "1mg/kg daily", price: "â‚¹45" }, { name: "Shunt Monitoring", dosage: "Regular assessment", price: "â‚¹2000" }], description: "Hydrocephalus pressure management" },
+            "tourette_syndrome": { medicines: [{ name: "Haloperidol", dosage: "0.5mg twice daily", price: "â‚¹85" }, { name: "Risperidone", dosage: "0.5mg twice daily", price: "â‚¹185" }, { name: "Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹750" }], description: "Tourette's tic suppression" },
+            "restless_leg_syndrome": { medicines: [{ name: "Ropinirole", dosage: "0.25mg daily", price: "â‚¹285" }, { name: "Pramipexole", dosage: "0.125mg daily", price: "â‚¹385" }, { name: "Gabapentin", dosage: "300mg at bedtime", price: "â‚¹185" }], description: "RLS dopaminergic therapy" },
+            "sleep_apnea": { medicines: [{ name: "CPAP Therapy", dosage: "Nightly use", price: "â‚¹15000" }, { name: "Modafinil", dosage: "200mg daily", price: "â‚¹485" }, { name: "Weight Loss Program", dosage: "Structured plan", price: "â‚¹1000" }], description: "Obstructive sleep apnea treatment" },
+            "narcolepsy": { medicines: [{ name: "Modafinil", dosage: "200mg daily", price: "â‚¹485" }, { name: "Sodium Oxybate", dosage: "4.5g at bedtime", price: "â‚¹15000" }, { name: "Methylphenidate", dosage: "10mg twice daily", price: "â‚¹285" }], description: "Narcolepsy wakefulness promotion" },
+            "periodic_limb_movement": { medicines: [{ name: "Pramipexole", dosage: "0.125mg at bedtime", price: "â‚¹385" }, { name: "Gabapentin", dosage: "300mg at bedtime", price: "â‚¹185" }, { name: "Clonazepam", dosage: "0.5mg at bedtime", price: "â‚¹85" }], description: "PLMD movement suppression" },
+            "jet_lag": { medicines: [{ name: "Melatonin", dosage: "3mg at destination bedtime", price: "â‚¹285" }, { name: "Light Therapy", dosage: "Morning exposure", price: "â‚¹500" }, { name: "Sleep Hygiene", dosage: "Behavioral modification", price: "â‚¹200" }], description: "Circadian rhythm adjustment" },
+            "seasonal_affective_disorder": { medicines: [{ name: "Light Therapy", dosage: "10,000 lux for 30 minutes", price: "â‚¹500" }, { name: "Sertraline", dosage: "50mg daily", price: "â‚¹145" }, { name: "Vitamin D", dosage: "2000 IU daily", price: "â‚¹125" }], description: "SAD light and antidepressant therapy" },
+            "panic_disorder": { medicines: [{ name: "Alprazolam", dosage: "0.5mg thrice daily", price: "â‚¹55" }, { name: "Sertraline", dosage: "50mg daily", price: "â‚¹145" }, { name: "Cognitive Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹750" }], description: "Panic disorder anxiolytic and SSRI" },
+            "social_anxiety_disorder": { medicines: [{ name: "Paroxetine", dosage: "20mg daily", price: "â‚¹185" }, { name: "Propranolol", dosage: "40mg before events", price: "â‚¹45" }, { name: "Exposure Therapy", dosage: "Gradual progression", price: "â‚¹500" }], description: "Social phobia treatment" },
+            "generalized_anxiety_disorder": { medicines: [{ name: "Buspirone", dosage: "15mg twice daily", price: "â‚¹85" }, { name: "Venlafaxine", dosage: "75mg daily", price: "â‚¹185" }, { name: "Relaxation Training", dosage: "Daily practice", price: "â‚¹300" }], description: "GAD comprehensive treatment" },
+            "obsessive_compulsive_disorder": { medicines: [{ name: "Fluoxetine", dosage: "60mg daily", price: "â‚¹95" }, { name: "Clomipramine", dosage: "150mg daily", price: "â‚¹185" }, { name: "Exposure Response Prevention", dosage: "Weekly therapy", price: "â‚¹750" }], description: "OCD SSRI and behavioral therapy" },
+            "post_traumatic_stress_disorder": { medicines: [{ name: "Sertraline", dosage: "100mg daily", price: "â‚¹145" }, { name: "Prazosin", dosage: "2mg at bedtime", price: "â‚¹125" }, { name: "EMDR Therapy", dosage: "Bi-weekly sessions", price: "â‚¹1000" }], description: "PTSD trauma-focused treatment" },
+            "eating_disorders_anorexia": { medicines: [{ name: "Olanzapine", dosage: "2.5mg daily", price: "â‚¹285" }, { name: "Nutritional Rehabilitation", dosage: "Supervised refeeding", price: "â‚¹2000" }, { name: "Family Therapy", dosage: "Weekly sessions", price: "â‚¹1000" }], description: "Anorexia nervosa treatment" },
+            "eating_disorders_bulimia": { medicines: [{ name: "Fluoxetine", dosage: "60mg daily", price: "â‚¹95" }, { name: "Topiramate", dosage: "100mg twice daily", price: "â‚¹285" }, { name: "Cognitive Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹750" }], description: "Bulimia nervosa treatment" },
+            "binge_eating_disorder": { medicines: [{ name: "Lisdexamfetamine", dosage: "50mg daily", price: "â‚¹485" }, { name: "Topiramate", dosage: "100mg twice daily", price: "â‚¹285" }, { name: "Dialectical Behavioral Therapy", dosage: "Group sessions", price: "â‚¹500" }], description: "BED appetite and behavior modification" },
+            "substance_abuse_alcohol": { medicines: [{ name: "Naltrexone", dosage: "50mg daily", price: "â‚¹285" }, { name: "Acamprosate", dosage: "666mg thrice daily", price: "â‚¹485" }, { name: "Disulfiram", dosage: "250mg daily", price: "â‚¹185" }], description: "Alcohol use disorder treatment" },
+            "substance_abuse_opioid": { medicines: [{ name: "Methadone", dosage: "60-120mg daily", price: "â‚¹185" }, { name: "Buprenorphine", dosage: "16mg daily", price: "â‚¹485" }, { name: "Naloxone", dosage: "Emergency use", price: "â‚¹125" }], description: "Opioid use disorder MAT" },
+            "substance_abuse_cocaine": { medicines: [{ name: "Supportive Care", dosage: "Symptomatic treatment", price: "â‚¹500" }, { name: "Behavioral Therapy", dosage: "Intensive program", price: "â‚¹1500" }, { name: "Contingency Management", dosage: "Reward-based treatment", price: "â‚¹750" }], description: "Cocaine use disorder behavioral intervention" },
+            "nicotine_addiction": { medicines: [{ name: "Nicotine Patch", dosage: "21mg daily", price: "â‚¹185" }, { name: "Varenicline", dosage: "1mg twice daily", price: "â‚¹485" }, { name: "Bupropion", dosage: "150mg twice daily", price: "â‚¹285" }], description: "Smoking cessation therapy" },
+            "gambling_addiction": { medicines: [{ name: "Naltrexone", dosage: "50mg daily", price: "â‚¹285" }, { name: "Cognitive Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹750" }, { name: "Support Groups", dosage: "Regular attendance", price: "â‚¹100" }], description: "Pathological gambling treatment" },
+            "internet_gaming_disorder": { medicines: [{ name: "Bupropion", dosage: "300mg daily", price: "â‚¹285" }, { name: "Digital Detox", dosage: "Structured program", price: "â‚¹500" }, { name: "Family Therapy", dosage: "Bi-weekly sessions", price: "â‚¹1000" }], description: "Gaming addiction behavioral intervention" },
+            "hoarding_disorder": { medicines: [{ name: "Sertraline", dosage: "100mg daily", price: "â‚¹145" }, { name: "Cognitive Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹750" }, { name: "Organizing Support", dosage: "Professional assistance", price: "â‚¹1000" }], description: "Hoarding disorder treatment" },
+            "trichotillomania": { medicines: [{ name: "Clomipramine", dosage: "150mg daily", price: "â‚¹185" }, { name: "N-Acetylcysteine", dosage: "1200mg twice daily", price: "â‚¹285" }, { name: "Habit Reversal Training", dosage: "Weekly sessions", price: "â‚¹500" }], description: "Hair-pulling disorder treatment" },
+            "body_dysmorphic_disorder": { medicines: [{ name: "Fluoxetine", dosage: "60mg daily", price: "â‚¹95" }, { name: "Cognitive Behavioral Therapy", dosage: "Weekly sessions", price: "â‚¹750" }, { name: "Exposure Prevention", dosage: "Behavioral exercises", price: "â‚¹300" }], description: "BDD appearance preoccupation treatment" },
+            "gender_dysphoria": { medicines: [{ name: "Hormone Therapy", dosage: "Individualized regimen", price: "â‚¹1500" }, { name: "Mental Health Support", dosage: "Regular counseling", price: "â‚¹750" }, { name: "Surgical Consultation", dosage: "If appropriate", price: "â‚¹5000" }], description: "Gender affirming care" },
+            "intellectual_disability": { medicines: [{ name: "Behavioral Support", dosage: "Individualized plan", price: "â‚¹1000" }, { name: "Educational Support", dosage: "Special education", price: "â‚¹1500" }, { name: "Medication Management", dosage: "As needed for comorbidities", price: "â‚¹500" }], description: "Intellectual disability comprehensive support" },
+            "fetal_alcohol_syndrome": { medicines: [{ name: "Multivitamin", dosage: "Daily supplement", price: "â‚¹85" }, { name: "Developmental Support", dosage: "Early intervention", price: "â‚¹2000" }, { name: "Behavioral Therapy", dosage: "Structured program", price: "â‚¹1000" }], description: "FAS developmental support" },
+            "lead_poisoning": { medicines: [{ name: "Succimer", dosage: "10mg/kg thrice daily", price: "â‚¹485" }, { name: "EDTA", dosage: "50mg/kg daily", price: "â‚¹285" }, { name: "Environmental Remediation", dosage: "Source removal", price: "â‚¹5000" }], description: "Lead toxicity chelation therapy" },
+            "mercury_poisoning": { medicines: [{ name: "Dimercaprol", dosage: "3mg/kg every 4 hours", price: "â‚¹485" }, { name: "Succimer", dosage: "10mg/kg thrice daily", price: "â‚¹485" }, { name: "Supportive Care", dosage: "Neurological monitoring", price: "â‚¹1000" }], description: "Mercury toxicity chelation" },
+            "carbon_monoxide_poisoning": { medicines: [{ name: "100% Oxygen", dosage: "High flow for 6 hours", price: "â‚¹2000" }, { name: "Hyperbaric Oxygen", dosage: "2.8 ATA for 90 minutes", price: "â‚¹5000" }, { name: "Neurological Monitoring", dosage: "Serial assessments", price: "â‚¹1000" }], description: "CO poisoning oxygen therapy" },
+            "cyanide_poisoning": { medicines: [{ name: "Sodium Nitrite", dosage: "300mg IV", price: "â‚¹285" }, { name: "Sodium Thiosulfate", dosage: "12.5g IV", price: "â‚¹185" }, { name: "Hydroxocobalamin", dosage: "5g IV", price: "â‚¹15000" }], description: "Cyanide toxicity antidote therapy" },
+            "acetaminophen_overdose": { medicines: [{ name: "N-Acetylcysteine", dosage: "140mg/kg loading", price: "â‚¹285" }, { name: "Activated Charcoal", dosage: "50g if within 4 hours", price: "â‚¹125" }, { name: "Liver Function Monitoring", dosage: "Serial tests", price: "â‚¹500" }], description: "Acetaminophen hepatotoxicity treatment" },
+            "salicylate_poisoning": { medicines: [{ name: "Sodium Bicarbonate", dosage: "1-2 mEq/kg IV", price: "â‚¹125" }, { name: "Hemodialysis", dosage: "If severe", price: "â‚¹10000" }, { name: "Supportive Care", dosage: "Fluid and electrolyte management", price: "â‚¹1000" }], description: "Aspirin overdose alkalinization" },
+            "organophosphate_poisoning": { medicines: [{ name: "Atropine", dosage: "2mg IV every 15 minutes", price: "â‚¹125" }, { name: "Pralidoxime", dosage: "1-2g IV", price: "â‚¹485" }, { name: "Supportive Care", dosage: "Respiratory support", price: "â‚¹2000" }], description: "Pesticide poisoning antidote therapy" }
+        };
+        
+        const medicineWebsites = ["https://www.1mg.com/search/all?name=", "https://www.netmeds.com/catalogsearch/result/?q=", "https://pharmeasy.in/search/all?name="];
+        
+        function generateTreatment() {
+            const disease = document.getElementById("diseaseInput").value.trim().toLowerCase();
+            const resultDiv = document.getElementById("result");
+            
+            if (!disease) {
+                alert("Please enter a condition.");
+                return;
+            }
+            
+            if (medicineDatabase[disease]) {
+                displayResults(disease, medicineDatabase[disease]);
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="disease-section">
+                        <div class="section-title">
+                            <i class="fas fa-search"></i> NO TREATMENT FOUND
+                        </div>
+                        <div class="disease-description">
+                            We couldn't find a treatment plan for "<strong>${disease}</strong>". 
+                            Please try one of the available conditions below:
+                        </div>
+                        
+                        <div style="margin-top: var(--space-4); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-2);">
+                            ${Object.keys(medicineDatabase).slice(0, 12).map(condition => 
+                                `<button onclick="document.getElementById('diseaseInput').value='${condition}'; generateTreatment();" 
+                                        style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
+                                               color: white; padding: var(--space-2); border-radius: var(--radius-lg); 
+                                               cursor: pointer; transition: all 0.3s ease;" 
+                                        onmouseover="this.style.background='rgba(255,255,255,0.2)'" 
+                                        onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                                    ${condition.replace('_', ' ').toUpperCase()}
+                                </button>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            resultDiv.style.display = "block";
+        }
+        
+        function displayResults(disease, data) {
+            const resultDiv = document.getElementById("result");
+            let html = `
+                <div class="disease-section">
+                    <div class="section-title">
+                        <i class="fas fa-stethoscope"></i> ${disease.toUpperCase()} TREATMENT PLAN
+                    </div>
+                    <div class="disease-description">
+                        ${data.description}
+                    </div>
+                    
+                    <div class="section-title">
+                        <i class="fas fa-pills"></i> RECOMMENDED MEDICINES
+                    </div>
+            `;
+            
+            data.medicines.forEach((med, index) => {
+                html += `
+                    <div class="medicine-item">
+                        <div class="medicine-header">
+                            <div class="medicine-details">
+                                <div class="medicine-name">
+                                    <i class="fas fa-capsules"></i> ${med.name}
+                                </div>
+                                <div class="medicine-price">
+                                    <i class="fas fa-rupee-sign"></i> ${med.price}
+                                </div>
+                            </div>
+                            <button class="buy-btn" onclick="buyMedicine('${med.name}')">
+                                <i class="fas fa-shopping-cart"></i> Buy Now
+                            </button>
+                        </div>
+                        
+                        <div class="medicine-info">
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-clock"></i> Dosage
+                                </div>
+                                <div class="info-value">${med.dosage}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-hashtag"></i> Medicine #${index + 1}
+                                </div>
+                                <div class="info-value">Primary Treatment</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    <div class="warning-box">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Important Medical Disclaimer:</strong>
+                        <br><br>
+                        This is an AI-generated treatment suggestion for informational purposes only. 
+                        <strong>Always consult a qualified healthcare professional</strong> before starting any medication. 
+                        Dosages and treatments may vary based on your individual health condition, age, weight, and medical history.
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.innerHTML = html;
+        }
+        
+        function buyMedicine(name) {
+            const url = medicineWebsites[Math.floor(Math.random() * medicineWebsites.length)] + encodeURIComponent(name);
+            if (confirm(`Buy ${name}? You'll be redirected to an online pharmacy.`)) {
+                window.open(url, '_blank');
+            }
+        }
+        
+        function startVoiceInput() {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.onresult = function(event) {
+                    document.getElementById("diseaseInput").value = event.results[0][0].transcript;
+                };
+                recognition.start();
+            } else {
+                alert('Speech recognition not supported.');
+            }
+        }
+        
+        document.getElementById('diseaseInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') generateTreatment();
+        });
+    </script>
+</body>
+</html>
+
+
