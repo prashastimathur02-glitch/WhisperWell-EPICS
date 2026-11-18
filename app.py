@@ -7,6 +7,7 @@ import re
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, session, render_template, send_from_directory
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import uuid
 import numpy as np
@@ -30,6 +31,13 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "emotional-chat-secret-key-2024")
 
+# Private medical document storage
+MEDICAL_UPLOAD_DIR = os.path.join(app.root_path, "private_medical_uploads")
+os.makedirs(MEDICAL_UPLOAD_DIR, exist_ok=True)
+
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
+
+
 # Allow CORS for all origins (for development purposes)
 CORS(app)
 
@@ -46,8 +54,7 @@ db_conn = None
 API_KEY = os.getenv("API_KEY")
 if not API_KEY:
     raise ValueError("Missing API Key! Set it in the .env file.")
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={API_KEY}"
-
+API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={API_KEY}"
 # Initialize PostgreSQL connection with retry logic
 def init_postgresql():
     """Initialize PostgreSQL connection with database creation if needed"""
@@ -143,6 +150,27 @@ def init_postgresql():
                     )
                 """)
                 
+                # Medical records table
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS medical_records (
+                        id BIGSERIAL PRIMARY KEY,
+                        user_id TEXT NOT NULL,
+                        category TEXT NOT NULL
+                            CHECK (category IN ('report', 'prescription', 'other')),
+                        original_filename TEXT NOT NULL,
+                        stored_filename TEXT NOT NULL UNIQUE,
+                        mime_type TEXT NOT NULL,
+                        file_size BIGINT NOT NULL,
+                        description TEXT,
+                        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                """)
+
+                cur.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_medical_records_user
+                    ON medical_records (user_id, uploaded_at DESC)
+                """)
+
                 conn.commit()
             
             print("PostgreSQL initialized successfully")
@@ -1996,6 +2024,173 @@ def hospital():
 @app.route('/personalise')
 def personalise():
     return render_template('personalise.html')
+
+
+
+# ================= MEDICAL RECORDS =================
+
+@app.route('/medical-records')
+def medical_records_page():
+    get_user_session()
+    return render_template('medical_records.html')
+
+
+@app.route('/api/medical-records', methods=['GET', 'POST'])
+def medical_records_api():
+    if db_conn is None:
+        return jsonify({"error": "Database unavailable"}), 503
+
+    user_id = get_user_session()
+
+    if request.method == 'POST':
+        uploaded_file = request.files.get('file')
+        category = request.form.get('category', '').strip().lower()
+        description = request.form.get('description', '').strip()
+
+        if not uploaded_file or not uploaded_file.filename:
+            return jsonify({"error": "Please select a file"}), 400
+
+        if category not in ('report', 'prescription', 'other'):
+            return jsonify({"error": "Invalid record category"}), 400
+
+        original_filename = secure_filename(uploaded_file.filename)
+
+        if not original_filename:
+            return jsonify({"error": "Invalid filename"}), 400
+
+        extension = os.path.splitext(original_filename)[1].lower()
+
+        allowed_extensions = {'.pdf', '.jpg', '.jpeg', '.png'}
+
+        if extension not in allowed_extensions:
+            return jsonify({"error": "Only PDF, JPG, JPEG and PNG files are allowed"}), 400
+
+        file_data = uploaded_file.stream.read(10 * 1024 * 1024 + 1)
+
+        if not file_data:
+            return jsonify({"error": "The selected file is empty"}), 400
+
+        if len(file_data) > 10 * 1024 * 1024:
+            return jsonify({"error": "File exceeds the 10 MB limit"}), 413
+
+        # Validate actual file signatures, not just the extension.
+        signatures = {
+            '.pdf': lambda b: b.startswith(bytes.fromhex('255044462D')),
+            '.jpg': lambda b: b.startswith(bytes.fromhex('FFD8FF')),
+            '.jpeg': lambda b: b.startswith(bytes.fromhex('FFD8FF')),
+            '.png': lambda b: b.startswith(bytes.fromhex('89504E470D0A1A0A'))
+        }
+
+        if not signatures[extension](file_data):
+            return jsonify({"error": "File content does not match its extension"}), 400
+
+        mime_types = {
+            '.pdf': 'application/pdf',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png'
+        }
+
+        stored_filename = str(uuid.uuid4()) + extension
+        file_path = os.path.join(MEDICAL_UPLOAD_DIR, stored_filename)
+
+        try:
+            with open(file_path, 'xb') as stored_file:
+                stored_file.write(file_data)
+
+            with db_conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO medical_records
+                    (user_id, category, original_filename, stored_filename,
+                     mime_type, file_size, description)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    RETURNING id
+                """, (
+                    user_id,
+                    category,
+                    original_filename,
+                    stored_filename,
+                    mime_types[extension],
+                    len(file_data),
+                    description[:1000]
+                ))
+
+                record_id = cur.fetchone()[0]
+
+            db_conn.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Medical document uploaded",
+                "record_id": record_id
+            }), 201
+
+        except Exception:
+            db_conn.rollback()
+
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            logging.exception("Medical document upload failed")
+            return jsonify({"error": "Upload failed"}), 500
+
+    try:
+        with db_conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                SELECT id, category, original_filename,
+                       file_size, description, uploaded_at
+                FROM medical_records
+                WHERE user_id = %s
+                ORDER BY uploaded_at DESC
+            """, (user_id,))
+
+            records = cur.fetchall()
+
+        result = []
+        for record in records:
+            item = dict(record)
+            if item.get("uploaded_at"):
+                item["uploaded_at"] = item["uploaded_at"].isoformat()
+            result.append(item)
+
+        return jsonify({"records": result})
+
+    except Exception:
+        logging.exception("Could not retrieve medical records")
+        return jsonify({"error": "Could not retrieve records"}), 500
+
+
+@app.route('/api/medical-records/<int:record_id>/download')
+def download_medical_record(record_id):
+    if db_conn is None:
+        return jsonify({"error": "Database unavailable"}), 503
+
+    user_id = get_user_session()
+
+    try:
+        with db_conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                SELECT stored_filename, original_filename
+                FROM medical_records
+                WHERE id = %s AND user_id = %s
+            """, (record_id, user_id))
+
+            record = cur.fetchone()
+
+        if not record:
+            return jsonify({"error": "Record not found"}), 404
+
+        return send_from_directory(
+            MEDICAL_UPLOAD_DIR,
+            record["stored_filename"],
+            as_attachment=True,
+            download_name=record["original_filename"]
+        )
+
+    except Exception:
+        logging.exception("Medical document download failed")
+        return jsonify({"error": "Download failed"}), 500
+
 
 @app.route('/static/<path:path>')
 def send_static(path):

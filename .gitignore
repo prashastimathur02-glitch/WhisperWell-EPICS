@@ -1,2 +1,8 @@
-
 .env
+venv/
+__pycache__/
+*.py[cod]
+private_medical_uploads/
+*.backup*
+*.before_upload_routes
+tempCodeRunnerFile.py

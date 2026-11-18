@@ -392,6 +392,7 @@
                 <li><a href="/excise" class="nav-link"><i class="fas fa-dumbbell"></i> Fitness</a></li>
                 <li><a href="/ai" class="nav-link"><i class="fas fa-robot"></i> Medbot</a></li>
                 <li><a href="/disease" class="nav-link"><i class="fas fa-stethoscope"></i> Disease Prediction</a></li>
+                <li><a href="/medical-records" class="nav-link"><i class="fas fa-file-medical"></i> Medical Records</a></li>
                 <li><a href="/contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
             </ul>
         </div>
@@ -423,6 +424,210 @@
             </div>
         </div>
     </section>
+
+    <!-- PERSONAL MEDICAL VAULT SECTION -->
+    <style>
+        .ww-vault-section {
+            padding: 85px 6%;
+            background: linear-gradient(135deg, #071d2b, #103d4a, #12665f);
+            color: #ffffff;
+            overflow: hidden;
+        }
+        .ww-vault-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 55px;
+            align-items: center;
+        }
+        .ww-vault-tag {
+            display: inline-block;
+            padding: 9px 16px;
+            border: 1px solid rgba(255,255,255,.3);
+            border-radius: 30px;
+            color: #a8f0dc;
+            font-size: .85rem;
+            letter-spacing: 1px;
+            margin-bottom: 22px;
+        }
+        .ww-vault-section h2 {
+            font-size: clamp(2.2rem, 5vw, 3.7rem);
+            line-height: 1.12;
+            margin: 0 0 22px;
+            color: #ffffff;
+        }
+        .ww-vault-section .ww-vault-description {
+            color: #d2e8e8;
+            font-size: 1.08rem;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+        .ww-vault-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 28px;
+            padding: 16px 25px;
+            border-radius: 12px;
+            background: #a8f0dc;
+            color: #073b3b;
+            text-decoration: none;
+            font-weight: 800;
+            transition: transform .2s, background .2s;
+        }
+        .ww-vault-button:hover {
+            transform: translateY(-3px);
+            background: #ffffff;
+        }
+        .ww-vault-note {
+            margin-top: 18px;
+            color: #b9d6d6;
+            font-size: .85rem;
+        }
+        .ww-vault-panel {
+            padding: 30px;
+            border-radius: 24px;
+            background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.2);
+            box-shadow: 0 25px 70px rgba(0,0,0,.2);
+            backdrop-filter: blur(12px);
+        }
+        .ww-vault-panel-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 22px;
+        }
+        .ww-vault-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 17px 14px;
+            margin: 12px 0;
+            border-radius: 14px;
+            background: rgba(255,255,255,.09);
+        }
+        .ww-vault-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: rgba(168,240,220,.17);
+            color: #a8f0dc;
+            font-size: 1.25rem;
+        }
+        .ww-vault-item strong {
+            display: block;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .ww-vault-item small {
+            color: #c5dddd;
+            line-height: 1.5;
+        }
+        .ww-vault-coming {
+            display: inline-block;
+            margin-top: 18px;
+            color: #a8f0dc;
+            font-size: .85rem;
+        }
+        @media (max-width: 800px) {
+            .ww-vault-container {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+            .ww-vault-section {
+                padding: 65px 6%;
+            }
+        }
+    </style>
+
+    <section class="ww-vault-section" id="personal-medical-vault">
+        <div class="ww-vault-container">
+            <div>
+                <span class="ww-vault-tag">
+                    <i class="fas fa-heartbeat"></i>
+                    A CORE WHISPERWELL EXPERIENCE
+                </span>
+
+                <h2>Your Health Story.<br>All in One Place.</h2>
+
+                <p class="ww-vault-description">
+                    Your medical journey deserves more than scattered papers
+                    and forgotten prescriptions. Bring your medical reports,
+                    prescriptions and health documents together in your
+                    personal medical records space.
+                </p>
+
+                <a href="/medical-records" class="ww-vault-button">
+                    <i class="fas fa-folder-open"></i>
+                    Open My Medical Records
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+                <p class="ww-vault-note">
+                    Your personal space for organizing medical documents.
+                    Prototype mode: use dummy documents only.
+                </p>
+            </div>
+
+            <div class="ww-vault-panel">
+                <div class="ww-vault-panel-title">
+                    <i class="fas fa-layer-group"></i>
+                    Your Personal Medical Vault
+                </div>
+
+                <div class="ww-vault-item">
+                    <div class="ww-vault-icon">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <div>
+                        <strong>Medical Reports</strong>
+                        <small>Keep lab reports, scans and test results together.</small>
+                    </div>
+                </div>
+
+                <div class="ww-vault-item">
+                    <div class="ww-vault-icon">
+                        <i class="fas fa-prescription"></i>
+                    </div>
+                    <div>
+                        <strong>Prescriptions & Medicine Slips</strong>
+                        <small>Organize prescriptions and pharmacy documents.</small>
+                    </div>
+                </div>
+
+                <div class="ww-vault-item">
+                    <div class="ww-vault-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div>
+                        <strong>Medical History</strong>
+                        <small>Access your uploaded records in one history.</small>
+                    </div>
+                </div>
+
+                <div class="ww-vault-item">
+                    <div class="ww-vault-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div>
+                        <strong>Doctor's View</strong>
+                        <small>Designed for future patient-controlled, read-only sharing.</small>
+                    </div>
+                </div>
+
+                <span class="ww-vault-coming">
+                    <i class="fas fa-shield-alt"></i>
+                    A more connected medical experience is coming.
+                </span>
+            </div>
+        </div>
+    </section>
+    <!-- END PERSONAL MEDICAL VAULT SECTION -->
+
     <!-- Features Section -->
     <main style="padding: var(--space-16) 0;">
         <div class="features-grid">

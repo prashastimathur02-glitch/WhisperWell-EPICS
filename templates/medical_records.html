@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Medical Records | WhisperWell</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #243047;
+        }
+        header {
+            background: #176b62;
+            color: white;
+            padding: 22px 7%;
+        }
+        header a { color: white; text-decoration: none; }
+        main { max-width: 1000px; margin: 35px auto; padding: 0 18px; }
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.05);
+        }
+        h1, h2 { margin-top: 0; }
+        label { display: block; margin: 15px 0 7px; font-weight: bold; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd5df;
+            border-radius: 8px;
+            font: inherit;
+        }
+        button {
+            margin-top: 18px;
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 8px;
+            background: #176b62;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #10564f; }
+        .record {
+            padding: 16px 0;
+            border-bottom: 1px solid #e5eaf0;
+        }
+        .record:last-child { border-bottom: 0; }
+        .record a { color: #176b62; }
+        .muted { color: #718096; font-size: 14px; }
+        #status { margin-top: 15px; }
+        .warning {
+            background: #fff7e6;
+            padding: 13px;
+            border-radius: 8px;
+            color: #805b13;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="/">? WhisperWell Home</a>
+</header>
+
+<main>
+    <h1>My Medical Records</h1>
+    <p class="muted">Keep your medical reports and prescriptions organized in one place.</p>
+
+    <div class="card">
+        <h2>Upload a medical document</h2>
+
+        <div class="warning">
+            Prototype mode: use dummy documents only. Do not upload real medical
+            records until account authentication and production security are implemented.
+        </div>
+
+        <form id="uploadForm">
+            <label for="category">Document type</label>
+            <select id="category" name="category" required>
+                <option value="report">Medical report</option>
+                <option value="prescription">Prescription / Pharmacy slip</option>
+                <option value="other">Other medical document</option>
+            </select>
+
+            <label for="file">Choose document (PDF, JPG, JPEG or PNG; maximum 10 MB)</label>
+            <input id="file" name="file" type="file"
+                   accept=".pdf,.jpg,.jpeg,.png" required>
+
+            <label for="description">Description (optional)</label>
+            <textarea id="description" name="description" rows="3"
+                      maxlength="1000" placeholder="e.g. Blood test report"></textarea>
+
+            <button type="submit">Upload document</button>
+        </form>
+
+        <p id="status" role="status"></p>
+    </div>
+
+    <div class="card">
+        <h2>My document history</h2>
+        <div id="records">Loading records...</div>
+        <button type="button" id="refreshButton">Refresh records</button>
+    </div>
+</main>
+
+<script>
+const recordsContainer = document.getElementById('records');
+const statusElement = document.getElementById('status');
+
+async function loadRecords() {
+    recordsContainer.textContent = 'Loading records...';
+
+    try {
+        const response = await fetch('/api/medical-records');
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.error || 'Could not load records');
+
+        recordsContainer.replaceChildren();
+
+        if (!data.records.length) {
+            recordsContainer.textContent = 'No medical documents uploaded yet.';
+            return;
+        }
+
+        data.records.forEach(record => {
+            const item = document.createElement('div');
+            item.className = 'record';
+
+            const title = document.createElement('strong');
+            title.textContent = record.original_filename;
+
+            const details = document.createElement('p');
+            details.className = 'muted';
+            details.textContent =
+                record.category + ' ? ' +
+                new Date(record.uploaded_at).toLocaleString() +
+                ' ? ' + Math.round(record.file_size / 1024) + ' KB';
+
+            const description = document.createElement('p');
+            description.textContent = record.description || '';
+
+            const link = document.createElement('a');
+            link.href = '/api/medical-records/' + encodeURIComponent(record.id) + '/download';
+            link.textContent = 'Download document';
+
+            item.append(title, details, description, link);
+            recordsContainer.appendChild(item);
+        });
+    } catch (error) {
+        recordsContainer.textContent = error.message;
+    }
+}
+
+document.getElementById('uploadForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    statusElement.textContent = 'Uploading...';
+
+    const formData = new FormData(event.target);
+
+    try {
+        const response = await fetch('/api/medical-records', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.error || 'Upload failed');
+
+        statusElement.textContent = 'Document uploaded successfully.';
+        event.target.reset();
+        await loadRecords();
+    } catch (error) {
+        statusElement.textContent = error.message;
+    }
+});
+
+document.getElementById('refreshButton').addEventListener('click', loadRecords);
+
+loadRecords();
+</script>
+</body>
+</html>
